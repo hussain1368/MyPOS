@@ -8,10 +8,10 @@ namespace POS.WPF.ViewModels
         private string code { get; set; }
         private byte codeStatus { get; set; }
         private string name { get; set; }
-        private int initialQuantity { get; set; }
-        private int cost { get; set; }
-        private int profit { get; set; }
-        private int price { get; set; }
+        private int? initialQuantity { get; set; }
+        private int? cost { get; set; }
+        //private int? profit { get; set; }
+        private int? price { get; set; }
         private int? categoryId { get; set; }
 
         public int Id
@@ -34,25 +34,29 @@ namespace POS.WPF.ViewModels
             get { return name; }
             set { name = value; OnPropertyChanged(); }
         }
-        public int InitialQuantity
+        public int? InitialQuantity
         {
             get { return initialQuantity; }
             set { initialQuantity = value; OnPropertyChanged(); }
         }
-        public int Cost
+        public int? Cost
         {
             get { return cost; }
-            set { cost = value; OnPropertyChanged(); }
+            set { cost = value; OnPropertyChanged(); OnPropertyChanged(nameof(Profit)); }
         }
-        public int Profit
-        {
-            get { return profit; }
-            set { profit = value; OnPropertyChanged(); }
-        }
-        public int Price
+        public int? Price
         {
             get { return price; }
-            set { price = value; OnPropertyChanged(); }
+            set { price = value; OnPropertyChanged(); OnPropertyChanged(nameof(Profit)); }
+        }
+        public int? Profit
+        {
+            get
+            {
+                var val = (Price ?? 0) - (Cost ?? 0);
+                return val;
+            }
+            //set { profit = value; OnPropertyChanged(); }
         }
         public int? CategoryId
         {

@@ -35,10 +35,19 @@
                     </Behaviors:EventTrigger>
                 </Behaviors:Interaction.Triggers>
 
-                <!--<DataGrid.Columns>
-                    <DataGridTextColumn Header="Product Name" Width="Auto" Binding="{Binding Name}"/>
-                    <DataGridTextColumn Header="Sale Price" Width="Auto" Binding="{Binding Price}"/>
-                </DataGrid.Columns>-->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Code" Width="Auto" Binding="{Binding Code}"/>
+                    <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Cost" Width="Auto" Binding="{Binding Cost}"/>
+                    <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}"/>
+                    <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}"/>
+                    <DataGridTextColumn Header="Alert Qty" Width="Auto" Binding="{Binding AlertQuantity}"/>
+                    <DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}"/>
+                    <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}"/>
+                    <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}"/>
+                    <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyName}"/>
+                </DataGrid.Columns>
             </DataGrid>
         </Grid>
             

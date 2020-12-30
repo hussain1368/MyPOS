@@ -32,8 +32,8 @@ namespace POS.WPF.ViewModels
             set { product = value; OnPropertyChanged(); }
         }
 
-        private ObservableCollection<ProductModel> productsList;
-        public ObservableCollection<ProductModel> ProductsList
+        private ObservableCollection<ProductDT> productsList;
+        public ObservableCollection<ProductDT> ProductsList
         {
             get { return productsList; }
             set { productsList = value; OnPropertyChanged(); }
@@ -51,20 +51,12 @@ namespace POS.WPF.ViewModels
             LoadListCmd = new RelayCommandAsync(async () =>
             {
                 var data = await productQuery.GetList();
-                var _data = data.Select(x => new ProductModel
-                {
-                })
-                .ToList();
-                ProductsList = new ObservableCollection<ProductModel>(_data);
+                ProductsList = new ObservableCollection<ProductDT>(data);
             });
 
             LoadOptionsCmd = new RelayCommandAsync(async () =>
             {
                 CategoryList = await optionQuery.OptionsByTypeId(1);
-
-                Product.CategoryId = 5;
-                Product.Name = "iPhone 12";
-                Product.Profit = 100;
             });
 
             SaveCmd = new RelayCommandAsync(async () =>
@@ -74,9 +66,9 @@ namespace POS.WPF.ViewModels
                     Code = Product.Code,
                     CodeStatus = Product.CodeStatus,
                     Name = Product.Name,
-                    Cost = Product.Cost,
-                    Profit = Product.Profit,
-                    Price = Product.Price,
+                    Cost = Product.Cost.Value,
+                    Profit = Product.Profit.Value,
+                    Price = Product.Price.Value,
                     Discount = 0,
                     AlertQuantity = 0,
                     UnitId = null,
@@ -93,6 +85,8 @@ namespace POS.WPF.ViewModels
                 };
 
                 await productQuery.Create(data);
+
+                LoadListCmd.Execute(null);
             });
         }
     }
