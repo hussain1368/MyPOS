@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded" SourceName="CategoryComboBox">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
@@ -26,7 +32,7 @@
             <materialDesign:PackIcon Kind="Table" Width="30" Height="30"/>
         </Button>
 
-        <GroupBox Grid.Row="1" Margin="20 10" BorderThickness="1" Header="Product Details" 
+        <GroupBox Grid.Row="1" Margin="20 10" BorderThickness="1" Header="Product Details"
                   Style="{DynamicResource MaterialDesignGroupBox}"
                   materialDesign:ColorZoneAssist.Mode="Custom"
                   materialDesign:ColorZoneAssist.Background="Gray"
@@ -51,94 +57,95 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="Barcode" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="Barcode Status" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                <TextBlock Text="Code" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBlock Text="Code Status" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="Product Name" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="Initial Quantity" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="Purchase Price" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="Sale Price" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
                 <TextBlock Text="Pure Income" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
 
-                <ComboBox materialDesign:HintAssist.Hint="Category" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
-                    <ComboBoxItem>Electronics</ComboBoxItem>
-                    <ComboBoxItem>Food</ComboBoxItem>
-                    <ComboBoxItem>Ferniture</ComboBoxItem>
+                <ComboBox materialDesign:HintAssist.Hint="Category" Grid.Row="0" 
+                          Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
+                          x:Name="CategoryComboBox"
+                          SelectedValue="{Binding Product.CategoryId}"
+                          SelectedValuePath="Id"
+                          ItemsSource="{Binding CategoryList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <!--<Behaviors:Interaction.Triggers>
+                        <Behaviors:EventTrigger EventName="Loaded">
+                            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
+                        </Behaviors:EventTrigger>
+                    </Behaviors:Interaction.Triggers>-->
                 </ComboBox>
 
-                <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Barcode" Grid.ColumnSpan="3" Margin="10">
+                <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Code" Grid.ColumnSpan="3" Margin="10">
                     <TextBox.Text>
-                        <Binding Path="Name" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
+                        <Binding Path="Product.Code" UpdateSourceTrigger="PropertyChanged"/>
                     </TextBox.Text>
                 </TextBox>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
                     <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True">
                         <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}">
-                            </Binding>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
                         </RadioButton.IsChecked>
-                        Has Barcode
+                        <TextBlock Text="Has Code"/>
                     </RadioButton>
                     <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0">
                         <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}">
-                            </Binding>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
                         </RadioButton.IsChecked>
-                        New Barcode
+                        <TextBlock Text="New Code"/>
                     </RadioButton>
                     <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True">
                         <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}">
-                            </Binding>
+                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
                         </RadioButton.IsChecked>
-                        No Barcode
+                        <TextBlock Text="No Code"/>
                     </RadioButton>
                 </StackPanel>
 
                 <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Product Name" Margin="10">
                     <TextBox.Text>
-                        <Binding Path="Name" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
+                        <Binding Path="Product.Name" UpdateSourceTrigger="PropertyChanged"/>
                     </TextBox.Text>
                 </TextBox>
 
                 <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Initial Quantity" Margin="10">
                     <TextBox.Text>
-                        <Binding Path="Name" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
+                        <Binding Path="Product.InitialQuantity" UpdateSourceTrigger="PropertyChanged"/>
                     </TextBox.Text>
                 </TextBox>
 
                 <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Purchase Price" Margin="10">
                     <TextBox.Text>
-                        <Binding Path="Name" UpdateSourceTrigger="PropertyChanged">
-                        </Binding>
+                        <Binding Path="Product.Cost" UpdateSourceTrigger="PropertyChanged"/>
                     </TextBox.Text>
                 </TextBox>
 
-                <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Sale Price" Margin="10"/>
-                
-                <TextBox Grid.Row="6" Grid.Column="3" materialDesign:HintAssist.Hint="Pure Income" Margin="10"/>
-                
-                <!--<StackPanel Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Width="100" ToolTip="Click to Submit" HorizontalAlignment="Left">
-                        Submit
-                    </Button>
-                    <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Width="100" ToolTip="Click to Submit" HorizontalAlignment="Left" Margin="10 0 10 0">
-                        Cancel
-                    </Button>
-                </StackPanel>-->
+                <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Sale Price" Margin="10">
+                    <TextBox.Text>
+                        <Binding Path="Product.Price" UpdateSourceTrigger="PropertyChanged"/>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBox Grid.Row="6" Grid.Column="3" materialDesign:HintAssist.Hint="Pure Income" Margin="10"
+                         Text="{Binding Path=Product.Profit, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </GroupBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
-                    Margin="20 10">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20 10">
             <Button Margin="10 0"
                     Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">Cancel</Button>
             <Button Margin="0"
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                    Command="{Binding SaveCmd}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">Save</Button>
         </StackPanel>
     </Grid>

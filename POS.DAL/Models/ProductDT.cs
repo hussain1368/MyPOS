@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-#nullable disable
-
-namespace POS.DAL.Domain
+namespace POS.DAL.Models
 {
-    public partial class Product
+    public class ProductDT
     {
-        public Product()
-        {
-            InvoiceItems = new HashSet<InvoiceItem>();
-        }
-
         public int Id { get; set; }
         public string Code { get; set; }
         public byte CodeStatus { get; set; }
@@ -20,7 +14,6 @@ namespace POS.DAL.Domain
         public int Profit { get; set; }
         public int Price { get; set; }
         public int Discount { get; set; }
-        public int InitialQuantity { get; set; }
         public int AlertQuantity { get; set; }
         public int? UnitId { get; set; }
         public int? BrandId { get; set; }
@@ -34,10 +27,9 @@ namespace POS.DAL.Domain
         public DateTime? UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
-        public virtual OptionValue Brand { get; set; }
-        public virtual OptionValue Category { get; set; }
-        public virtual OptionValue Currency { get; set; }
-        public virtual OptionValue Unit { get; set; }
-        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
+        public string UnitName { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryName { get; set; }
+        public string CurrencyName { get; set; }
     }
 }

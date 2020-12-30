@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using POS.DAL.DataQuery;
+using POS.DAL.Query;
 using POS.DAL.Domain;
 using POS.WPF.ViewModels;
 using System;
@@ -27,10 +27,11 @@ namespace POS.WPF
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<POSContext>();
+            services.AddDbContext<POSContext>(ServiceLifetime.Transient);
             services.AddScoped<ProductQuery>();
-            services.AddScoped<ProductContext>();
-
+            services.AddScoped<OptionQuery>();
+            services.AddScoped<ProductViewModel>();
+            
             services.AddTransient<MainWindow>();
             services.AddTransient<Pages.Products>();
             services.AddTransient<Pages.Home>();
