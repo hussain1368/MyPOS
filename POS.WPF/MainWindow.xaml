@@ -9,9 +9,9 @@
     
     <Window.Resources>
         <!--Global style for TextBox and Transition issue-->
-        <Style TargetType="materialDesign:BottomDashedLineAdorner">
+        <!--<Style TargetType="materialDesign:BottomDashedLineAdorner">
             <Setter Property="Visibility" Value="Collapsed"/>
-        </Style>
+        </Style>-->
         
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">

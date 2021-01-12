@@ -6,10 +6,12 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:conv="clr-namespace:POS.WPF.Converters"
+             xmlns:val="clr-namespace:POS.WPF.Validators"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:IntegerConverter x:Key="IntegerConverter"/>
+        <conv:RadioConverter x:Key="RadioConverter"/>
     </UserControl.Resources>
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="Loaded" SourceName="CategoryComboBox">
@@ -19,6 +21,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -80,12 +83,6 @@
                             <TextBlock Text="{Binding Name}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-
-                    <!--<Behaviors:Interaction.Triggers>
-                        <Behaviors:EventTrigger EventName="Loaded">
-                            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
-                        </Behaviors:EventTrigger>
-                    </Behaviors:Interaction.Triggers>-->
                 </ComboBox>
 
                 <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Code" Grid.ColumnSpan="3" Margin="10">
@@ -95,22 +92,16 @@
                 </TextBox>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True">
-                        <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
-                        </RadioButton.IsChecked>
+                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
+                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
                         <TextBlock Text="Has Code"/>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0">
-                        <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
-                        </RadioButton.IsChecked>
+                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0"
+                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NewCode }">
                         <TextBlock Text="New Code"/>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True">
-                        <RadioButton.IsChecked>
-                            <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
-                        </RadioButton.IsChecked>
+                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
+                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NoCode }">
                         <TextBlock Text="No Code"/>
                     </RadioButton>
                 </StackPanel>
@@ -123,11 +114,16 @@
 
                 <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Initial Quantity" Margin="10">
                     <TextBox.Text>
-                        <Binding Path="Product.InitialQuantity" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Product.InitialQuantity" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <val:IntegerValidator/>
+                            </Binding.ValidationRules>
+                        </Binding>
                     </TextBox.Text>
                 </TextBox>
 
-                <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Purchase Price" Margin="10">
+                <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
+                         materialDesign:HintAssist.Hint="Purchase Price" materialDesign:ValidationAssist.UsePopup="True" >
                     <TextBox.Text>
                         <Binding Path="Product.Cost" UpdateSourceTrigger="PropertyChanged" TargetNullValue="" Converter="{StaticResource IntegerConverter}"/>
                     </TextBox.Text>
@@ -146,11 +142,13 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20 10">
             <Button Margin="10 0"
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                    Command="{Binding CancelCmd}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">Cancel</Button>
             <Button Margin="0"
                     Command="{Binding SaveCmd}"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom">Save</Button>
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" IsEnabled="{Binding Product.IsValid}">Save</Button>
         </StackPanel>
+
+        
     </Grid>
 </UserControl>

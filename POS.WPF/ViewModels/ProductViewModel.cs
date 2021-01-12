@@ -3,9 +3,8 @@ using POS.DAL.Models;
 using POS.WPF.Commands;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using POS.WPF.Models;
 using System.Threading.Tasks;
-using System;
 
 namespace POS.WPF.ViewModels
 {
@@ -17,12 +16,13 @@ namespace POS.WPF.ViewModels
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsync LoadOptionsCmd { get; set; }
         public RelayCommandAsync SaveCmd { get; set; }
+        public RelayCommandAsync CancelCmd { get; set; }
 
         public ProductViewModel(ProductQuery productQuery, OptionQuery optionQuery)
         {
             this.productQuery = productQuery;
             this.optionQuery = optionQuery;
-            AssignCommands();
+            CreateCommands();
         }
 
         private ProductModel product = new ProductModel();
@@ -46,12 +46,15 @@ namespace POS.WPF.ViewModels
             set { categoryList = value; OnPropertyChanged(); }
         }
 
-        private void AssignCommands()
+        private void CreateCommands()
         {
             LoadListCmd = new RelayCommandAsync(async () =>
             {
+                ListLoadingShow = true;
                 var data = await productQuery.GetList();
                 ProductsList = new ObservableCollection<ProductDT>(data);
+                await Task.Delay(5000);
+                ListLoadingShow = false;
             });
 
             LoadOptionsCmd = new RelayCommandAsync(async () =>
@@ -61,33 +64,50 @@ namespace POS.WPF.ViewModels
 
             SaveCmd = new RelayCommandAsync(async () =>
             {
-                var data = new ProductDT
-                {
-                    Code = Product.Code,
-                    CodeStatus = Product.CodeStatus,
-                    Name = Product.Name,
-                    Cost = Product.Cost.Value,
-                    Profit = Product.Profit.Value,
-                    Price = Product.Price.Value,
-                    Discount = 0,
-                    AlertQuantity = 0,
-                    UnitId = null,
-                    BrandId = null,
-                    CategoryId = Product.CategoryId,
-                    CurrencyId = 2,
-                    ExpiryDate = null,
-                    Note = null,
-                    InsertedBy = 1,
-                    InsertedDate = DateTime.Now,
-                    UpdatedBy = null ,
-                    UpdatedDate = null,
-                    IsDeleted = false,
-                };
+                Product.ValidateModel();
 
-                await productQuery.Create(data);
+                //var data = new ProductDT
+                //{
+                //    Code = Product.Code,
+                //    CodeStatus = (byte) Product.CodeStatus,
+                //    Name = Product.Name,
+                //    Cost = Product.Cost.Value,
+                //    Profit = Product.Profit.Value,
+                //    Price = Product.Price.Value,
+                //    Discount = 0,
+                //    AlertQuantity = 0,
+                //    UnitId = null,
+                //    BrandId = null,
+                //    CategoryId = Product.CategoryId,
+                //    CurrencyId = 2,
+                //    ExpiryDate = null,
+                //    Note = null,
+                //    InsertedBy = 1,
+                //    InsertedDate = DateTime.Now,
+                //    UpdatedBy = null ,
+                //    UpdatedDate = null,
+                //    IsDeleted = false,
+                //};
 
-                LoadListCmd.Execute(null);
+                //await productQuery.Create(data);
+                //Product = new ProductModel();
+                //LoadListCmd.Execute(null);
+            });
+
+            CancelCmd = new RelayCommandAsync(async () =>
+            {
+                await Task.Delay(0);
+                Product = new ProductModel();
             });
         }
+
+        private bool listLoadingShow;
+
+        public bool ListLoadingShow
+        {
+            get { return listLoadingShow; }
+            set { listLoadingShow = value; OnPropertyChanged(); }
+        }
+
     }
 }
