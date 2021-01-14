@@ -26,7 +26,7 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
-                <Button>
+                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Trash"/>
                         <TextBlock>Delete</TextBlock>
