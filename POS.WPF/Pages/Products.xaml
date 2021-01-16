@@ -13,6 +13,7 @@
         <Grid Background="White">
         <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
             <Grid>
+                <!--<local:ConfirmDialog />-->
                 <local:ProductsList />
             </Grid>
             <materialDesign:TransitionerSlide>

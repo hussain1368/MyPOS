@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using POS.WPF.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using POS.WPF.Controls;
+using MaterialDesignThemes.Wpf;
 
 namespace POS.WPF.ViewModels
 {
@@ -17,6 +19,7 @@ namespace POS.WPF.ViewModels
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsync LoadOptionsCmd { get; set; }
         public RelayCommandAsync SaveCmd { get; set; }
+        public RelayCommandVoid DeleteCmd { get; set; }
         public RelayCommandVoid CancelCmd { get; set; }
         public RelayCommandParam CheckAllCmd { get; set; }
 
@@ -110,6 +113,23 @@ namespace POS.WPF.ViewModels
                     return p;
                 }));
                 OnPropertyChanged(nameof(ProductsList));
+            });
+
+            DeleteCmd = new RelayCommandVoid(async () =>
+            {
+                var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
+                if (ids.Length == 0) return;
+                var view = new ConfirmDialog(new ConfirmDialogVM { Message = $"Are you sure to delete {ids.Length} records?" });
+                var obj = await DialogHost.Show(view, "RootDialog", null, async (object sender, DialogClosingEventArgs eventArgs) =>
+                {
+                    if (eventArgs.Parameter is bool param && param == false) return;
+                    eventArgs.Cancel();
+                    eventArgs.Session.UpdateContent(new LoadingDialog());
+                    await productQuery.DeleteProducts(ids);
+                    var data = await productQuery.GetList();
+                    ProductsList = new ObservableCollection<ProductDT>(data);
+                    eventArgs.Session.Close(false);
+                });
             });
         }
 

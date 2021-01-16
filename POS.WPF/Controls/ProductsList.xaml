@@ -13,12 +13,6 @@
         <Behaviors:EventTrigger EventName="Loaded" SourceName="ProductTable">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
         </Behaviors:EventTrigger>
-        <!--<Behaviors:EventTrigger EventName="Checked" SourceName="CheckAllCheckBox">
-            <Behaviors:InvokeCommandAction Command="{Binding CheckAllCmd}"/>
-        </Behaviors:EventTrigger>
-        <Behaviors:EventTrigger EventName="Unchecked" SourceName="CheckAllCheckBox">
-            <Behaviors:InvokeCommandAction Command="{Binding CheckAllCmd}"/>
-        </Behaviors:EventTrigger>-->
     </Behaviors:Interaction.Triggers>
     <Grid>
         <Grid>
@@ -39,18 +33,16 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
-                <Button Style="{StaticResource MaterialDesignRaisedButton}">
+                <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteCmd}">
                     Delete
                     <Button.Resources>
                         <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="Red"/>
                         <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF"/>
                     </Button.Resources>
                 </Button>
-                <!--<CheckBox x:Name="CheckAllCheckBox" 
-                                              Command="{Binding CheckAllCmd}"
-                                              CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>-->
+                <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
             </StackPanel>
-            <materialDesign:DialogHost DialogTheme="Light" IsOpen="{Binding ListLoadingShow}" Grid.Row="2">
+            <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" IsOpen="{Binding ListLoadingShow}" Identifier="RootDialog" Grid.Row="2">
                 <materialDesign:DialogHost.DialogContent>
                     <ProgressBar Width="24" Height="24" Margin="16"
                                  Style="{DynamicResource MaterialDesignCircularProgressBar}"
@@ -58,7 +50,7 @@
                 </materialDesign:DialogHost.DialogContent>
 
                 <DataGrid x:Name="ProductTable" 
-                            Margin="20 10"
+                            
                             CanUserAddRows="False"
                             SelectionUnit="Cell"
                             AutoGenerateColumns="False"

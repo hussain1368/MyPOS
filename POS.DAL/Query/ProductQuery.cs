@@ -76,5 +76,12 @@ namespace POS.DAL.Query
             })
             .ToListAsync();
         }
+
+        public async Task DeleteProducts(int[] ids)
+        {
+            var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();
+            dbContext.Products.RemoveRange(products);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
