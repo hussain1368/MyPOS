@@ -7,6 +7,19 @@
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <!--Event To Commands-->
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded" SourceName="ProductTable">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
+        </Behaviors:EventTrigger>
+        <!--<Behaviors:EventTrigger EventName="Checked" SourceName="CheckAllCheckBox">
+            <Behaviors:InvokeCommandAction Command="{Binding CheckAllCmd}"/>
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="Unchecked" SourceName="CheckAllCheckBox">
+            <Behaviors:InvokeCommandAction Command="{Binding CheckAllCmd}"/>
+        </Behaviors:EventTrigger>-->
+    </Behaviors:Interaction.Triggers>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -26,12 +39,16 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
-                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Trash"/>
-                        <TextBlock>Delete</TextBlock>
-                    </StackPanel>
+                <Button Style="{StaticResource MaterialDesignRaisedButton}">
+                    Delete
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="Red"/>
+                        <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF"/>
+                    </Button.Resources>
                 </Button>
+                <!--<CheckBox x:Name="CheckAllCheckBox" 
+                                              Command="{Binding CheckAllCmd}"
+                                              CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>-->
             </StackPanel>
             <materialDesign:DialogHost DialogTheme="Light" IsOpen="{Binding ListLoadingShow}" Grid.Row="2">
                 <materialDesign:DialogHost.DialogContent>
@@ -47,23 +64,30 @@
                             AutoGenerateColumns="False"
                             SelectionMode="Single"
                             ItemsSource="{Binding ProductsList}">
-                    <Behaviors:Interaction.Triggers>
-                        <Behaviors:EventTrigger EventName="Loaded">
-                            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
-                        </Behaviors:EventTrigger>
-                    </Behaviors:Interaction.Triggers>
 
                     <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                            <DataGridCheckBoxColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <CheckBox x:Name="CheckAllCheckBox" 
+                                        Command="{Binding DataContext.CheckAllCmd,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        RelativeSource={RelativeSource FindAncestor,
+                                        AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+                                </DataTemplate>
+                            </DataGridCheckBoxColumn.HeaderTemplate>
+                        </DataGridCheckBoxColumn>
                         <DataGridTextColumn Header="Code" Width="Auto" Binding="{Binding Code}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Cost" Width="Auto" Binding="{Binding Cost}"/>
-                        <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}"/>
-                        <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}"/>
-                        <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}"/>
-                        <DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}"/>
-                        <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}"/>
-                        <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}"/>
-                        <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyName}"/>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+                        <DataGridTextColumn Header="Cost" Width="Auto" Binding="{Binding Cost}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyName}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </materialDesign:DialogHost>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using POS.WPF.Models;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace POS.WPF.ViewModels
 {
@@ -16,7 +17,8 @@ namespace POS.WPF.ViewModels
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsync LoadOptionsCmd { get; set; }
         public RelayCommandAsync SaveCmd { get; set; }
-        public RelayCommandAsync CancelCmd { get; set; }
+        public RelayCommandVoid CancelCmd { get; set; }
+        public RelayCommandParam CheckAllCmd { get; set; }
 
         public ProductViewModel(ProductQuery productQuery, OptionQuery optionQuery)
         {
@@ -53,7 +55,7 @@ namespace POS.WPF.ViewModels
                 ListLoadingShow = true;
                 var data = await productQuery.GetList();
                 ProductsList = new ObservableCollection<ProductDT>(data);
-                await Task.Delay(5000);
+                //await Task.Delay(2000);
                 ListLoadingShow = false;
             });
 
@@ -94,10 +96,20 @@ namespace POS.WPF.ViewModels
                 //LoadListCmd.Execute(null);
             });
 
-            CancelCmd = new RelayCommandAsync(async () =>
+            CancelCmd = new RelayCommandVoid(() =>
             {
-                await Task.Delay(0);
                 Product = new ProductModel();
+            });
+
+            CheckAllCmd = new RelayCommandParam((isChecked) =>
+            {
+                bool _isChecked = (bool)isChecked;
+                ProductsList = new ObservableCollection<ProductDT>(ProductsList.Select(p =>
+                {
+                    p.IsChecked = _isChecked;
+                    return p;
+                }));
+                OnPropertyChanged(nameof(ProductsList));
             });
         }
 
@@ -109,5 +121,12 @@ namespace POS.WPF.ViewModels
             set { listLoadingShow = value; OnPropertyChanged(); }
         }
 
+        //private bool checkAll;
+
+        //public bool CheckAll
+        //{
+        //    get { return checkAll; }
+        //    set { checkAll = value; OnPropertyChanged(); }
+        //}
     }
 }
