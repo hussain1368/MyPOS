@@ -27,7 +27,7 @@ namespace POS.DAL.Domain
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=KBL-DTM-HUSSAIN\\SQL2017;Database=POS;User ID=sa;Password=welcome;");
+                optionsBuilder.UseSqlServer("Server=KBL-DTM-HUSSAIN\\SQL17;Database=POS;User ID=sa;Password=welcome;");
             }
         }
 
