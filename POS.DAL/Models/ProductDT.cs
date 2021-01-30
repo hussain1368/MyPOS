@@ -15,6 +15,7 @@ namespace POS.DAL.Models
         public int Price { get; set; }
         public int Discount { get; set; }
         public int AlertQuantity { get; set; }
+        public int InitialQuantity { get; set; }
         public int? UnitId { get; set; }
         public int? BrandId { get; set; }
         public int? CategoryId { get; set; }

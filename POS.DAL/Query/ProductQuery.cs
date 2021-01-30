@@ -27,6 +27,7 @@ namespace POS.DAL.Query
                     Price = data.Price,
                     Discount = data.Discount,
                     AlertQuantity = data.AlertQuantity,
+                    InitialQuantity = data.InitialQuantity,
                     UnitId = data.UnitId,
                     BrandId = data.BrandId,
                     CategoryId = data.CategoryId,
@@ -48,10 +49,43 @@ namespace POS.DAL.Query
             }
         }
 
+        public async Task<ProductDT> GetById(int id)
+        {
+            var product = await dbContext.Products.FindAsync(id);
+            if (product != null)
+            {
+                return new ProductDT
+                {
+                    Id = product.Id,
+                    Code = product.Code,
+                    CodeStatus = product.CodeStatus,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Profit = product.Profit,
+                    Price = product.Price,
+                    Discount = product.Discount,
+                    AlertQuantity = product.AlertQuantity,
+                    InitialQuantity = product.InitialQuantity,
+                    UnitId = product.UnitId,
+                    BrandId = product.BrandId,
+                    CategoryId = product.CategoryId,
+                    CurrencyId = product.CurrencyId,
+                    ExpiryDate = product.ExpiryDate,
+                    Note = product.Note,
+                    InsertedBy = product.InsertedBy,
+                    InsertedDate = product.InsertedDate,
+                    UpdatedBy = product.UpdatedBy,
+                    UpdatedDate = product.UpdatedDate,
+                    IsDeleted = product.IsDeleted,
+                };
+            }
+            return null;
+        }
+
         public async Task<IEnumerable<ProductDT>> GetList()
         {
             return await dbContext.Products
-            .Where(x=>x.IsDeleted==false)
+            .Where(x => x.IsDeleted == false)
             .Select(x => new ProductDT
             {
                 Id = x.Id,
@@ -77,7 +111,7 @@ namespace POS.DAL.Query
             .ToListAsync();
         }
 
-        public async Task DeleteProducts(int[] ids)
+        public async Task Delete(int[] ids)
         {
             var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();
             dbContext.Products.RemoveRange(products);

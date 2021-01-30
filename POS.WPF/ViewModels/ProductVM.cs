@@ -9,6 +9,7 @@ using System.Linq;
 using POS.WPF.Controls;
 using MaterialDesignThemes.Wpf;
 using System;
+using MaterialDesignThemes.Wpf.Transitions;
 
 namespace POS.WPF.ViewModels
 {
@@ -19,6 +20,7 @@ namespace POS.WPF.ViewModels
 
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsync LoadOptionsCmd { get; set; }
+        public RelayCommandAsyncParam ShowFormCmd { get; set; }
         public RelayCommandAsync SaveCmd { get; set; }
         public RelayCommandAsync DeleteCmd { get; set; }
         public RelayCommandSyncVoid CancelCmd { get; set; }
@@ -61,6 +63,37 @@ namespace POS.WPF.ViewModels
 
         private void CreateCommands()
         {
+            ShowFormCmd = new RelayCommandAsyncParam(async id =>
+            {
+                Transitioner.MoveNextCommand.Execute(null, null);
+
+                if (id == null)
+                {
+                    CurrentProduct = new ProductModel();
+                    return;
+                }
+            
+                await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+                {
+                    int _id = (int)id;
+                    var product = await productQuery.GetById(_id);
+                    CurrentProduct = new ProductModel
+                    {
+                        Id = product.Id,
+                        Code = product.Code,
+                        CodeStatus = (Enums.CodeStatus)product.CodeStatus,
+                        Name = product.Name,
+                        InitialQuantity = product.InitialQuantity,
+                        Cost = product.Cost,
+                        Price = product.Price,
+                        Discount = product.Discount,
+                        CategoryId = product.CategoryId,
+                    };
+                    eventArgs.Session.Close(false);
+
+                }, null);
+            });
+
             LoadListCmd = new RelayCommandAsync(async () =>
             {
                 IsListLoading = true;
@@ -79,7 +112,7 @@ namespace POS.WPF.ViewModels
                 CurrentProduct.ValidateModel();
                 if (CurrentProduct.HasErrors) return;
 
-                await DialogHost.Show(new LoadingDialog(), "FormDialog", async (object sender, DialogOpenedEventArgs eventArgs) =>
+                await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
                 {
                     var data = new ProductDT
                     {
@@ -91,6 +124,7 @@ namespace POS.WPF.ViewModels
                         Price = CurrentProduct.Price.Value,
                         Discount = 0,
                         AlertQuantity = 0,
+                        InitialQuantity = CurrentProduct.InitialQuantity.Value,
                         UnitId = null,
                         BrandId = null,
                         CategoryId = CurrentProduct.CategoryId,
@@ -108,7 +142,7 @@ namespace POS.WPF.ViewModels
                     CurrentProduct = new ProductModel();
                     LoadListCmd.Execute(null);
                     eventArgs.Session.Close(false);
-                });
+                }, null);
             });
 
             CancelCmd = new RelayCommandSyncVoid(() =>
@@ -116,7 +150,7 @@ namespace POS.WPF.ViewModels
                 CurrentProduct = new ProductModel();
             });
 
-            CheckAllCmd = new RelayCommandSyncParam((isChecked) =>
+            CheckAllCmd = new RelayCommandSyncParam(isChecked =>
             {
                 bool _isChecked = (bool)isChecked;
                 foreach (var obj in ProductsList) obj.IsChecked = _isChecked;
@@ -126,14 +160,14 @@ namespace POS.WPF.ViewModels
             {
                 var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
                 if (ids.Length == 0) return;
-                string message = $"Are you sure to delete {ids.Length} records?";
+                string message = $"Are you sure to delete ({ids.Length}) records?";
                 var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-                var obj = await DialogHost.Show(view, "GridDialog", null, async (object sender, DialogClosingEventArgs eventArgs) =>
+                var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, eventArgs) =>
                 {
                     if (eventArgs.Parameter is bool param && param == false) return;
                     eventArgs.Cancel();
                     eventArgs.Session.UpdateContent(new LoadingDialog());
-                    await productQuery.DeleteProducts(ids);
+                    await productQuery.Delete(ids);
                     await LoadProducts();
                     eventArgs.Session.Close(false);
                 });

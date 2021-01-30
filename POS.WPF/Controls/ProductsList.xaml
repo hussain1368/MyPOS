@@ -27,9 +27,9 @@
                            FontSize="30" FontWeight="Bold" FontStyle="Italic" FontFamily="Calibri" />
             </materialDesign:ColorZone>
             <Button Style="{DynamicResource MaterialDesignFloatingActionButton}"
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Panel.ZIndex="1000"
-                    Grid.Row="0" Margin="20 -20">
+                    Command="{Binding ShowFormCmd}"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Panel.ZIndex="1000" Grid.Row="0" Margin="20 -20">
                 <materialDesign:PackIcon Kind="Add" Width="30" Height="30"/>
             </Button>
 
@@ -69,10 +69,26 @@
                         <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}" IsReadOnly="True"/>
+                        <!--<DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}" IsReadOnly="True"/>-->
                         <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyName}" IsReadOnly="True"/>
+                        <DataGridTemplateColumn>
+                            <!--<DataGridTemplateColumn.HeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTemplateColumn.HeaderStyle>-->
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Width="50" Height="20" FontSize="8" Content="Edit"
+                                            Command="{Binding DataContext.ShowFormCmd,
+                                            RelativeSource={RelativeSource FindAncestor,
+                                            AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding Id}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </materialDesign:DialogHost>
