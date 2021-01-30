@@ -31,7 +31,5 @@ namespace POS.DAL.Models
         public string BrandName { get; set; }
         public string CategoryName { get; set; }
         public string CurrencyName { get; set; }
-
-        public bool IsChecked { get; set; }
     }
 }

@@ -9,16 +9,15 @@ using POS.WPF.ViewModels;
 
 namespace POS.WPF.Models
 {
-    public class BaseModel<T> : BaseViewModel, INotifyDataErrorInfo where T : BaseViewModel
+    public class BaseModelWithError<T> : BaseViewModel, INotifyDataErrorInfo where T : BaseViewModel
     {
         private readonly T model;
         private readonly AbstractValidator<T> validator;
         private ValidationResult valResult = new ValidationResult();
         public bool HasErrors => !valResult.IsValid;
-        public bool IsValid => valResult.IsValid;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public BaseModel(AbstractValidator<T> validator)
+        public BaseModelWithError(AbstractValidator<T> validator)
         {
             model = this as T;
             this.validator = validator;
@@ -33,7 +32,7 @@ namespace POS.WPF.Models
         {
             valResult = validator.Validate(model, options => options.IncludeProperties(propName));
             OnErrorsChanged(propName);
-            OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(HasErrors));
         }
 
         public void ValidateModel()
@@ -43,7 +42,7 @@ namespace POS.WPF.Models
             {
                 OnErrorsChanged(prop);
             }
-            OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(HasErrors));
         }
 
         public void OnErrorsChanged(string propName)

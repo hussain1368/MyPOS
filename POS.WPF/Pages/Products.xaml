@@ -9,11 +9,9 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Home"
       ShowsNavigationUI="False">
-    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.8}">
-        <Grid Background="White">
+    <Grid Background="White">
         <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
             <Grid>
-                <!--<local:ConfirmDialog />-->
                 <local:ProductsList />
             </Grid>
             <materialDesign:TransitionerSlide>
@@ -26,7 +24,7 @@
                 <local:ProductForm/>
             </materialDesign:TransitionerSlide>
         </materialDesign:Transitioner>
-        
+
         <!--<StackPanel Orientation="Vertical" Margin="25 0">
             <StackPanel Orientation="Horizontal">
                 <Button HorizontalAlignment="Left" Click="ToggleListForm" x:Name="FormToggleButton">Add New Product</Button>
@@ -34,5 +32,4 @@
             <Frame x:Name="_productFrame" Source="ProductList.xaml" NavigationUIVisibility="Hidden" />
         </StackPanel>-->
     </Grid>
-    </materialDesign:TransitioningContent>
 </Page>

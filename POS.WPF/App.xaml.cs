@@ -30,7 +30,7 @@ namespace POS.WPF
             services.AddDbContext<POSContext>(ServiceLifetime.Transient);
             services.AddScoped<ProductQuery>();
             services.AddScoped<OptionQuery>();
-            services.AddScoped<ProductViewModel>();
+            services.AddScoped<ProductVM>();
             
             services.AddTransient<MainWindow>();
             services.AddTransient<Pages.Products>();

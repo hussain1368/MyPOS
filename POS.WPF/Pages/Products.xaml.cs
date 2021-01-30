@@ -4,7 +4,7 @@ namespace POS.WPF.Pages
 {
     public partial class Products : Page
     {
-        public Products(ViewModels.ProductViewModel context)
+        public Products(ViewModels.ProductVM context)
         {
             InitializeComponent();
             DataContext = context;

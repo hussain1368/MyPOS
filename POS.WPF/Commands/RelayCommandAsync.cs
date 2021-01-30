@@ -1,28 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace POS.WPF.Commands
 {
-    public class RelayCommandAsync : ICommand
+    public class RelayCommandAsync : RelayCommandBase
     {
-        private readonly Func<Task> Work;
+        private readonly Func<Task> _toExecute;
 
-        public event EventHandler CanExecuteChanged;
-
-        public RelayCommandAsync(Func<Task> work)
+        public RelayCommandAsync(Func<Task> toExecute)
         {
-            Work = work;
+            _toExecute = toExecute;
         }
 
-        public bool CanExecute(object parameter)
+        public override async void Run(object param)
         {
-            return true;
-        }
-
-        public void Execute(object parameter)
-        {
-            Task.Run(async () => await Work());
+            IsExecuting = true;
+            await _toExecute();
+            IsExecuting = false;
         }
     }
 }

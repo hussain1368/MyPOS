@@ -3,77 +3,97 @@ using POS.WPF.ModelValidators;
 
 namespace POS.WPF.Models
 {
-    public class ProductModel : BaseModel<ProductModel>
+    public class ProductModel : BaseModelWithError<ProductModel>
     {
-        private int id { get; set; }
-        private string code { get; set; }
-        private CodeStatus codeStatus { get; set; }
-        private string name { get; set; }
-        private int? initialQuantity { get; set; }
-        private int? cost { get; set; }
-        private int? price { get; set; }
-        private int? categoryId { get; set; }
-
         public ProductModel() : base(new ProductValidator()) { }
 
+        private int _id { get; set; }
         public int Id
         {
-            get { return id; }
-            set { id = value; OnPropertyChanged(); }
+            get { return _id; }
+            set { _id = value; OnPropertyChanged(); }
         }
+
+        private string _code { get; set; }
         public string Code
         {
-            get { return code; }
+            get { return _code; }
             set
             {
-                code = value;
+                _code = value;
                 ValidateField();
                 OnPropertyChanged();
             }
         }
+
+        private CodeStatus _codeStatus { get; set; }
         public CodeStatus CodeStatus
         {
-            get { return codeStatus; }
-            set { codeStatus = value; OnPropertyChanged(); }
+            get { return _codeStatus; }
+            set { _codeStatus = value; OnPropertyChanged(); }
         }
+
+        private string _name { get; set; }
         public string Name
         {
-            get { return name; }
-            set { name = value; ValidateField(); OnPropertyChanged(); }
+            get { return _name; }
+            set { _name = value; ValidateField(); OnPropertyChanged(); }
         }
+
+        private int? _initialQuantity { get; set; }
         public int? InitialQuantity
         {
-            get { return initialQuantity; }
-            set { initialQuantity = value; OnPropertyChanged(); }
+            get { return _initialQuantity; }
+            set { _initialQuantity = value; OnPropertyChanged(); }
         }
+
+        private int? _cost { get; set; }
         public int? Cost
         {
-            get { return cost; }
+            get { return _cost; }
             set
             {
-                cost = value;
+                _cost = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Profit));
             }
         }
+
+        private int? _price { get; set; }
         public int? Price
         {
-            get { return price; }
+            get { return _price; }
             set
             {
-                price = value;
+                _price = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Profit));
             }
         }
+
         public int? Profit
         {
             get { return (Price ?? 0) - (Cost ?? 0); }
         }
+
+        private int? _categoryId { get; set; }
         public int? CategoryId
         {
-            get { return categoryId; }
-            set { categoryId = value; OnPropertyChanged(); }
+            get { return _categoryId; }
+            set { _categoryId = value; OnPropertyChanged(); }
+        }
+
+        public int Discount { get; set; }
+        public string UnitName { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryName { get; set; }
+        public string CurrencyName { get; set; }
+
+        private bool _isChecked;
+        public bool IsChecked
+        {
+            get { return _isChecked; }
+            set { _isChecked = value; OnPropertyChanged(); }
         }
     }
 }

@@ -38,115 +38,117 @@
                     Grid.Row="0" Margin="20 -20" Panel.ZIndex="1000">
             <materialDesign:PackIcon Kind="Table" Width="30" Height="30"/>
         </Button>
+        
+        <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" Identifier="FormDialog" Grid.Row="1">
+            <GroupBox BorderThickness="1" Header="Product Details"
+                      Style="{DynamicResource MaterialDesignGroupBox}"
+                      materialDesign:ColorZoneAssist.Mode="Custom"
+                      materialDesign:ColorZoneAssist.Background="Gray"
+                      materialDesign:ColorZoneAssist.Foreground="Black">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="1" Margin="20 10" BorderThickness="1" Header="Product Details"
-                  Style="{DynamicResource MaterialDesignGroupBox}"
-                  materialDesign:ColorZoneAssist.Mode="Custom"
-                  materialDesign:ColorZoneAssist.Background="Gray"
-                  materialDesign:ColorZoneAssist.Foreground="Black">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!--<RowDefinition Height="Auto"/>-->
+                    </Grid.RowDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="Auto"/>-->
-                </Grid.RowDefinitions>
+                    <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                    <TextBlock Text="Code" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                    <TextBlock Text="Code Status" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Product Name" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Initial Quantity" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Purchase Price" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Sale Price" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Pure Income" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
 
-                <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="Code" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="Code Status" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Text="Product Name" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Text="Initial Quantity" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Text="Purchase Price" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Text="Sale Price" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Text="Pure Income" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
+                    <ComboBox materialDesign:HintAssist.Hint="Category" Grid.Row="0" 
+                              Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
+                              x:Name="CategoryComboBox"
+                              SelectedValue="{Binding CurrentProduct.CategoryId}"
+                              SelectedValuePath="Id"
+                              ItemsSource="{Binding CategoryList}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                <ComboBox materialDesign:HintAssist.Hint="Category" Grid.Row="0" 
-                          Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
-                          x:Name="CategoryComboBox"
-                          SelectedValue="{Binding Product.CategoryId}"
-                          SelectedValuePath="Id"
-                          ItemsSource="{Binding CategoryList}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Code" Grid.ColumnSpan="3" Margin="10">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Code" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
 
-                <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Code" Grid.ColumnSpan="3" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="Product.Code" UpdateSourceTrigger="PropertyChanged"/>
-                    </TextBox.Text>
-                </TextBox>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
+                        <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
+                                     IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
+                            <TextBlock Text="Has Code"/>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0"
+                                     IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NewCode }">
+                            <TextBlock Text="New Code"/>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
+                                     IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NoCode }">
+                            <TextBlock Text="No Code"/>
+                        </RadioButton>
+                    </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
-                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
-                        <TextBlock Text="Has Code"/>
-                    </RadioButton>
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0"
-                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NewCode }">
-                        <TextBlock Text="New Code"/>
-                    </RadioButton>
-                    <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
-                                 IsChecked="{Binding Path=Product.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NoCode }">
-                        <TextBlock Text="No Code"/>
-                    </RadioButton>
-                </StackPanel>
+                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Product Name" Margin="10">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Name" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                    </TextBox>
 
-                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Product Name" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="Product.Name" UpdateSourceTrigger="PropertyChanged"/>
-                    </TextBox.Text>
-                </TextBox>
+                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Initial Quantity" Margin="10">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.InitialQuantity" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Initial Quantity" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="Product.InitialQuantity" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <val:IntegerValidator/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
+                    <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
+                             materialDesign:HintAssist.Hint="Purchase Price" materialDesign:ValidationAssist.UsePopup="True" >
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Cost" UpdateSourceTrigger="PropertyChanged" TargetNullValue="" Converter="{StaticResource IntegerConverter}"/>
+                        </TextBox.Text>
+                    </TextBox>
 
-                <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
-                         materialDesign:HintAssist.Hint="Purchase Price" materialDesign:ValidationAssist.UsePopup="True" >
-                    <TextBox.Text>
-                        <Binding Path="Product.Cost" UpdateSourceTrigger="PropertyChanged" TargetNullValue="" Converter="{StaticResource IntegerConverter}"/>
-                    </TextBox.Text>
-                </TextBox>
+                    <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Sale Price" Margin="10">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Price" UpdateSourceTrigger="PropertyChanged" TargetNullValue="" Converter="{StaticResource IntegerConverter}"/>
+                        </TextBox.Text>
+                    </TextBox>
 
-                <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Sale Price" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="Product.Price" UpdateSourceTrigger="PropertyChanged" TargetNullValue="" Converter="{StaticResource IntegerConverter}"/>
-                    </TextBox.Text>
-                </TextBox>
-
-                <TextBox Grid.Row="6" Grid.Column="3" materialDesign:HintAssist.Hint="Pure Income" Margin="10" IsReadOnly="True"
-                         Text="{Binding Path=Product.Profit, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
-            </Grid>
-        </GroupBox>
-
+                    <TextBox Grid.Row="6" Grid.Column="3" materialDesign:HintAssist.Hint="Pure Income" Margin="10" IsReadOnly="True"
+                             Text="{Binding Path=CurrentProduct.Profit, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+                </Grid>
+            </GroupBox>
+        </materialDesign:DialogHost>
+        
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20 10">
             <Button Margin="10 0"
                     Command="{Binding CancelCmd}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">Cancel</Button>
             <Button Margin="0"
                     Command="{Binding SaveCmd}"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom" IsEnabled="{Binding Product.IsValid}">Save</Button>
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom">Save</Button>
         </StackPanel>
 
         

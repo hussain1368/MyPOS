@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:POS.WPF.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     
-    <!--Event To Commands-->
+    <!--Events To Commands-->
     <Behaviors:Interaction.Triggers>
-        <Behaviors:EventTrigger EventName="Loaded" SourceName="ProductTable">
+        <Behaviors:EventTrigger EventName="Loaded" SourceName="ProductsGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
@@ -33,24 +34,16 @@
             </Button>
 
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
-                <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding DeleteCmd}">
-                    Delete
-                    <Button.Resources>
-                        <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="Red"/>
-                        <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF"/>
-                    </Button.Resources>
-                </Button>
+                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
                 <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
             </StackPanel>
-            <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" IsOpen="{Binding ListLoadingShow}" Identifier="RootDialog" Grid.Row="2">
+
+            <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" Identifier="GridDialog" IsOpen="{Binding IsListLoading}" Grid.Row="2">
                 <materialDesign:DialogHost.DialogContent>
-                    <ProgressBar Width="24" Height="24" Margin="16"
-                                 Style="{DynamicResource MaterialDesignCircularProgressBar}"
-                                 IsIndeterminate="True" Value="33"/>
+                    <local:LoadingDialog />
                 </materialDesign:DialogHost.DialogContent>
 
-                <DataGrid x:Name="ProductTable" 
-                            
+                <DataGrid x:Name="ProductsGrid"
                             CanUserAddRows="False"
                             SelectionUnit="Cell"
                             AutoGenerateColumns="False"
@@ -84,6 +77,5 @@
                 </DataGrid>
             </materialDesign:DialogHost>
         </Grid>
-            
     </Grid>
 </UserControl>
