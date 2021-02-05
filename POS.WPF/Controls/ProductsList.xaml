@@ -22,7 +22,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <materialDesign:ColorZone Grid.Row="0" Mode="Dark" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <materialDesign:ColorZone Grid.Row="0" Mode="PrimaryMid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <TextBlock Text="List of Products" VerticalAlignment="Bottom" Margin="20"
                            FontSize="30" FontWeight="Bold" FontStyle="Italic" FontFamily="Calibri" />
             </materialDesign:ColorZone>
@@ -45,7 +45,7 @@
 
                 <DataGrid x:Name="ProductsGrid"
                             CanUserAddRows="False"
-                            SelectionUnit="Cell"
+                            SelectionUnit="FullRow"
                             AutoGenerateColumns="False"
                             SelectionMode="Single"
                             ItemsSource="{Binding ProductsList}">
@@ -81,7 +81,7 @@
                             </DataGridTemplateColumn.HeaderStyle>-->
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Width="50" Height="20" FontSize="8" Content="Edit"
+                                    <Button Width="50" Height="20" FontSize="8" FontWeight="Bold" Content="EDIT"
                                             Command="{Binding DataContext.ShowFormCmd,
                                             RelativeSource={RelativeSource FindAncestor,
                                             AncestorType={x:Type UserControl}}}"

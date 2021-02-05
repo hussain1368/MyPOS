@@ -31,7 +31,7 @@ namespace POS.WPF
             services.AddScoped<ProductQuery>();
             services.AddScoped<OptionQuery>();
             services.AddScoped<ProductVM>();
-            
+
             services.AddTransient<MainWindow>();
             services.AddTransient<Pages.Products>();
             services.AddTransient<Pages.Home>();

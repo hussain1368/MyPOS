@@ -15,38 +15,41 @@ namespace POS.DAL.Query
 
         public async Task Create(ProductDT data)
         {
-            try
-            {
-                var model = new Product
-                {
-                    Code = data.Code,
-                    CodeStatus = data.CodeStatus,
-                    Name = data.Name,
-                    Cost = data.Cost,
-                    Profit = data.Profit,
-                    Price = data.Price,
-                    Discount = data.Discount,
-                    AlertQuantity = data.AlertQuantity,
-                    InitialQuantity = data.InitialQuantity,
-                    UnitId = data.UnitId,
-                    BrandId = data.BrandId,
-                    CategoryId = data.CategoryId,
-                    CurrencyId = data.CurrencyId,
-                    ExpiryDate = data.ExpiryDate,
-                    Note = data.Note,
-                    InsertedBy = data.InsertedBy,
-                    InsertedDate = data.InsertedDate,
-                    UpdatedBy = data.UpdatedBy,
-                    UpdatedDate = data.UpdatedDate,
-                    IsDeleted = data.IsDeleted,
-                };
-                await dbContext.Products.AddAsync(model);
-                await dbContext.SaveChangesAsync();
-            }
-            catch (System.Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
+            var model = new Product();
+            LoadProduct(data, model);
+            await dbContext.Products.AddAsync(model);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task Update(ProductDT data)
+        {
+            var model = await dbContext.Products.FindAsync(data.Id);
+            LoadProduct(data, model);
+            await dbContext.SaveChangesAsync();
+        }
+
+        private void LoadProduct(ProductDT data, Product model)
+        {
+            model.Code = data.Code;
+            model.CodeStatus = data.CodeStatus;
+            model.Name = data.Name;
+            model.Cost = data.Cost;
+            model.Profit = data.Profit;
+            model.Price = data.Price;
+            model.Discount = data.Discount;
+            model.AlertQuantity = data.AlertQuantity;
+            model.InitialQuantity = data.InitialQuantity;
+            model.UnitId = data.UnitId;
+            model.BrandId = data.BrandId;
+            model.CategoryId = data.CategoryId;
+            model.CurrencyId = data.CurrencyId;
+            model.ExpiryDate = data.ExpiryDate;
+            model.Note = data.Note;
+            model.InsertedBy = data.InsertedBy;
+            model.InsertedDate = data.InsertedDate;
+            model.UpdatedBy = data.UpdatedBy;
+            model.UpdatedDate = data.UpdatedDate;
+            model.IsDeleted = data.IsDeleted;
         }
 
         public async Task<ProductDT> GetById(int id)

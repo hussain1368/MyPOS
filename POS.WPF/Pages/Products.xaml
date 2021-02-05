@@ -10,6 +10,17 @@
       Title="Home"
       ShowsNavigationUI="False">
     <Grid Background="White">
+        <materialDesign:Snackbar 
+            MessageQueue="{Binding MessageQueue}"
+            HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1000" Margin="10">
+            <materialDesign:SnackbarMessage>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CheckBold"/>
+                    <TextBlock Margin="10 0">Excellent!</TextBlock>
+                </StackPanel>
+            </materialDesign:SnackbarMessage>
+        </materialDesign:Snackbar>
+
         <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
             <Grid>
                 <local:ProductsList />
@@ -24,12 +35,5 @@
                 <local:ProductForm/>
             </materialDesign:TransitionerSlide>
         </materialDesign:Transitioner>
-
-        <!--<StackPanel Orientation="Vertical" Margin="25 0">
-            <StackPanel Orientation="Horizontal">
-                <Button HorizontalAlignment="Left" Click="ToggleListForm" x:Name="FormToggleButton">Add New Product</Button>
-            </StackPanel>
-            <Frame x:Name="_productFrame" Source="ProductList.xaml" NavigationUIVisibility="Hidden" />
-        </StackPanel>-->
     </Grid>
 </Page>
