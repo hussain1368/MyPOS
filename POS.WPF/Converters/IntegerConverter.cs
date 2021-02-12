@@ -8,15 +8,13 @@ namespace POS.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.ToString();
+            if (value != null) return string.Format("{0:n0}", value);
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return null;
-            var _value = System.Text.RegularExpressions.Regex.Match(value as string, @"\d+").Value;
-            if (string.IsNullOrWhiteSpace(_value)) return null;
-            return _value;
+            return value;
         }
     }
 }

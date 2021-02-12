@@ -110,6 +110,7 @@ namespace POS.DAL.Query
                 BrandName = x.BrandId != null ? x.Brand.Name : null,
                 CategoryName = x.CategoryId != null ? x.Category.Name : null,
                 CurrencyName = x.Currency.Name,
+                CurrencyCode = x.Currency.Code,
             })
             .ToListAsync();
         }

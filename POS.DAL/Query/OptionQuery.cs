@@ -16,16 +16,46 @@ namespace POS.DAL.Query
 
         public async Task<IList<OptionValueDT>> OptionsByTypeId(int typeId)
         {
-            return await dbContext.OptionValues
-                .Where(x => x.IsDeleted == false)
-                .Where(x => x.TypeId == typeId)
-                .Select(x => new OptionValueDT
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Code = x.Code
-                })
-                .ToListAsync();
+            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false).Where(x => x.TypeId == typeId);
+            return await SelectOptions(query);
+        }
+
+        public async Task<IList<OptionValueDT>> OptionsByTypeCode(string typeCode)
+        {
+            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false).Where(x => x.Type.Code == typeCode);
+            return await SelectOptions(query);
+        }
+
+        public async Task<IList<OptionValueDT>> OptionsAll()
+        {
+            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false);
+            return await SelectOptions(query);
+        }
+
+        private async Task<IList<OptionValueDT>> SelectOptions(IQueryable<OptionValue> query)
+        {
+            return await query.Select(x => new OptionValueDT
+            {
+                Id = x.Id,
+                TypeId = x.TypeId,
+                TypeCode = x.Type.Code,
+                Name = x.Name,
+                Code = x.Code
+            })
+            .ToListAsync();
+        }
+
+        public async Task<OptionValueDT> OptionByCode(string code)
+        {
+            return await dbContext.OptionValues.Where(x => x.Code == code).Select(x => new OptionValueDT
+            {
+                Id = x.Id,
+                TypeId = x.TypeId,
+                TypeCode = x.Type.Code,
+                Name = x.Name,
+                Code = x.Code
+            })
+            .SingleOrDefaultAsync();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using POS.WPF.Enums;
 using POS.WPF.ModelValidators;
+using System;
 
 namespace POS.WPF.Models
 {
@@ -21,8 +22,8 @@ namespace POS.WPF.Models
             set
             {
                 _code = value;
-                ValidateField();
                 OnPropertyChanged();
+                ValidateField();
             }
         }
 
@@ -30,21 +31,35 @@ namespace POS.WPF.Models
         public CodeStatus CodeStatus
         {
             get { return _codeStatus; }
-            set { _codeStatus = value; OnPropertyChanged(); }
+            set
+            {
+                _codeStatus = value;
+                OnPropertyChanged();
+                ValidateField();
+            }
         }
 
         private string _name { get; set; }
         public string Name
         {
             get { return _name; }
-            set { _name = value; ValidateField(); OnPropertyChanged(); }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+                ValidateField();
+            }
         }
 
         private int? _initialQuantity { get; set; }
         public int? InitialQuantity
         {
             get { return _initialQuantity; }
-            set { _initialQuantity = value; OnPropertyChanged(); }
+            set {
+                _initialQuantity = value;
+                OnPropertyChanged();
+                ValidateField();
+            }
         }
 
         private int? _cost { get; set; }
@@ -56,6 +71,7 @@ namespace POS.WPF.Models
                 _cost = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Profit));
+                ValidateField();
             }
         }
 
@@ -68,6 +84,7 @@ namespace POS.WPF.Models
                 _price = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Profit));
+                ValidateField();
             }
         }
 
@@ -80,14 +97,66 @@ namespace POS.WPF.Models
         public int? CategoryId
         {
             get { return _categoryId; }
-            set { _categoryId = value; OnPropertyChanged(); }
+            set
+            {
+                _categoryId = value;
+                OnPropertyChanged();
+                ValidateField();
+            }
         }
 
-        public int Discount { get; set; }
-        public string UnitName { get; set; }
-        public string BrandName { get; set; }
-        public string CategoryName { get; set; }
-        public string CurrencyName { get; set; }
+        private int? _currencyId;
+        public int? CurrencyId
+        {
+            get { return _currencyId; }
+            set { _currencyId = value; OnPropertyChanged(); }
+        }
+
+        private int? _unitId;
+        public int? UnitId
+        {
+            get { return _unitId; }
+            set { _unitId = value; OnPropertyChanged(); }
+        }
+
+        private int? _brandId;
+        public int? BrandId
+        {
+            get { return _brandId; }
+            set { _brandId = value; OnPropertyChanged(); }
+        }
+
+        private int? _alertQuantity;
+        public int? AlertQuantity
+        {
+            get { return _alertQuantity; }
+            set { _alertQuantity = value; OnPropertyChanged(); }
+        }
+
+        private int? _discount;
+        public int? Discount
+        {
+            get { return _discount; }
+            set {
+                _discount = value;
+                OnPropertyChanged();
+                ValidateField();
+            }
+        }
+
+        private DateTime? _expiryDate;
+        public DateTime? ExpiryDate
+        {
+            get { return _expiryDate; }
+            set { _expiryDate = value; OnPropertyChanged(); }
+        }
+
+        private string _note;
+        public string Note
+        {
+            get { return _note; }
+            set { _note = value; OnPropertyChanged(); }
+        }
 
         private bool _isChecked;
         public bool IsChecked
@@ -95,5 +164,11 @@ namespace POS.WPF.Models
             get { return _isChecked; }
             set { _isChecked = value; OnPropertyChanged(); }
         }
+
+        public string UnitName { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryName { get; set; }
+        public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

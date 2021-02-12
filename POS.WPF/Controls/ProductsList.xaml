@@ -72,13 +72,8 @@
                         <!--<DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}" IsReadOnly="True"/>-->
                         <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyName}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyCode}" IsReadOnly="True"/>
                         <DataGridTemplateColumn>
-                            <!--<DataGridTemplateColumn.HeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                </Style>
-                            </DataGridTemplateColumn.HeaderStyle>-->
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Width="50" Height="20" FontSize="8" FontWeight="Bold" Content="EDIT"

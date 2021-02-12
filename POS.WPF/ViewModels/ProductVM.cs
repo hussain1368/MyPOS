@@ -18,6 +18,7 @@ namespace POS.WPF.ViewModels
         private readonly ProductQuery productQuery;
         private readonly OptionQuery optionQuery;
         private ProductDT theProduct;
+        private OptionValueDT defaultCurrency;
 
         public ISnackbarMessageQueue MessageQueue { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
@@ -50,12 +51,23 @@ namespace POS.WPF.ViewModels
             set { _productsList = value; OnPropertyChanged(); }
         }
 
-        private IList<OptionValueDT> _categoryList;
-        public IList<OptionValueDT> CategoryList
+        private IList<OptionValueDT> _comboOptions;
+        public IList<OptionValueDT> ComboOptions
         {
-            get { return _categoryList; }
-            set { _categoryList = value; OnPropertyChanged(); }
+            get { return _comboOptions; }
+            set {
+                _comboOptions = value;
+                OnPropertyChanged(nameof(CategoryList));
+                OnPropertyChanged(nameof(CurrencyList));
+                OnPropertyChanged(nameof(UnitList));
+                OnPropertyChanged(nameof(BrandList));
+            }
         }
+
+        public IList<OptionValueDT> CategoryList => ComboOptions?.Where(op => op.TypeCode == "CAT").ToList();
+        public IList<OptionValueDT> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
+        public IList<OptionValueDT> UnitList => ComboOptions?.Where(op => op.TypeCode == "UNT").ToList();
+        public IList<OptionValueDT> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
 
         private bool _isListLoading;
         public bool IsListLoading
@@ -66,6 +78,19 @@ namespace POS.WPF.ViewModels
 
         private void CreateCommands()
         {
+            LoadListCmd = new RelayCommandAsync(async () =>
+            {
+                IsListLoading = true;
+                await LoadProductsList();
+                IsListLoading = false;
+            });
+
+            LoadOptionsCmd = new RelayCommandAsync(async () =>
+            {
+                ComboOptions = await optionQuery.OptionsAll();
+                defaultCurrency = await optionQuery.OptionByCode("AFN");
+            });
+
             ShowFormCmd = new RelayCommandAsyncParam(async id =>
             {
                 Transitioner.MoveNextCommand.Execute(null, null);
@@ -87,18 +112,6 @@ namespace POS.WPF.ViewModels
                 }
             });
 
-            LoadListCmd = new RelayCommandAsync(async () =>
-            {
-                IsListLoading = true;
-                await LoadProductsList();
-                IsListLoading = false;
-            });
-
-            LoadOptionsCmd = new RelayCommandAsync(async () =>
-            {
-                CategoryList = await optionQuery.OptionsByTypeId(1);
-            });
-
             SaveCmd = new RelayCommandAsync(async () =>
             {
                 CurrentProduct.ValidateModel();
@@ -111,23 +124,25 @@ namespace POS.WPF.ViewModels
                         Id = CurrentProduct.Id,
                         Code = CurrentProduct.Code,
                         CodeStatus = (byte)CurrentProduct.CodeStatus,
+                        CategoryId = CurrentProduct.CategoryId,
                         Name = CurrentProduct.Name,
                         Cost = CurrentProduct.Cost.Value,
                         Profit = CurrentProduct.Profit.Value,
                         Price = CurrentProduct.Price.Value,
-                        Discount = 0,
-                        AlertQuantity = 0,
                         InitialQuantity = CurrentProduct.InitialQuantity.Value,
-                        UnitId = null,
-                        BrandId = null,
-                        CategoryId = CurrentProduct.CategoryId,
-                        CurrencyId = 2,
-                        ExpiryDate = null,
-                        Note = null,
+
+                        CurrencyId = CurrentProduct.CurrencyId ?? defaultCurrency.Id,
+                        UnitId = CurrentProduct.UnitId,
+                        BrandId = CurrentProduct.BrandId,
+                        AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
+                        Discount = CurrentProduct.Discount ?? 0,
+                        ExpiryDate = CurrentProduct.ExpiryDate,
+                        Note = CurrentProduct.Note,
+
                         InsertedBy = 1,
                         InsertedDate = DateTime.Now,
-                        UpdatedBy = null,
-                        UpdatedDate = null,
+                        UpdatedBy = 1,
+                        UpdatedDate = DateTime.Now,
                         IsDeleted = false,
                     };
 
@@ -139,6 +154,7 @@ namespace POS.WPF.ViewModels
                     else
                     {
                         await productQuery.Update(data);
+                        theProduct = data;
                     }
                     eventArgs.Session.Close(false);
                     var content = getMsg("Product Saved!");
@@ -192,8 +208,15 @@ namespace POS.WPF.ViewModels
                 InitialQuantity = theProduct.InitialQuantity,
                 Cost = theProduct.Cost,
                 Price = theProduct.Price,
-                Discount = theProduct.Discount,
                 CategoryId = theProduct.CategoryId,
+
+                CurrencyId = theProduct.CurrencyId,
+                UnitId = theProduct.UnitId,
+                BrandId = theProduct.BrandId,
+                AlertQuantity = theProduct.AlertQuantity,
+                Discount = theProduct.Discount,
+                ExpiryDate = theProduct.ExpiryDate,
+                Note = theProduct.Note,
             };
         }
 
@@ -212,6 +235,7 @@ namespace POS.WPF.ViewModels
                 BrandName = p.BrandName,
                 CategoryName = p.CategoryName,
                 CurrencyName = p.CurrencyName,
+                CurrencyCode = p.CurrencyCode,
             });
             ProductsList = new ObservableCollection<ProductModel>(_data);
         }
