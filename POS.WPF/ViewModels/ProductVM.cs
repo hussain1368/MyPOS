@@ -17,8 +17,8 @@ namespace POS.WPF.ViewModels
     {
         private readonly ProductQuery productQuery;
         private readonly OptionQuery optionQuery;
-        private ProductDT theProduct;
-        private OptionValueDT defaultCurrency;
+        private ProductDTM theProduct;
+        private OptionValueDTM defaultCurrency;
 
         public ISnackbarMessageQueue MessageQueue { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
@@ -51,8 +51,8 @@ namespace POS.WPF.ViewModels
             set { _productsList = value; OnPropertyChanged(); }
         }
 
-        private IList<OptionValueDT> _comboOptions;
-        public IList<OptionValueDT> ComboOptions
+        private IList<OptionValueDTM> _comboOptions;
+        public IList<OptionValueDTM> ComboOptions
         {
             get { return _comboOptions; }
             set {
@@ -64,10 +64,10 @@ namespace POS.WPF.ViewModels
             }
         }
 
-        public IList<OptionValueDT> CategoryList => ComboOptions?.Where(op => op.TypeCode == "CAT").ToList();
-        public IList<OptionValueDT> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
-        public IList<OptionValueDT> UnitList => ComboOptions?.Where(op => op.TypeCode == "UNT").ToList();
-        public IList<OptionValueDT> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
+        public IList<OptionValueDTM> CategoryList => ComboOptions?.Where(op => op.TypeCode == "CAT").ToList();
+        public IList<OptionValueDTM> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
+        public IList<OptionValueDTM> UnitList => ComboOptions?.Where(op => op.TypeCode == "UNT").ToList();
+        public IList<OptionValueDTM> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
 
         private bool _isListLoading;
         public bool IsListLoading
@@ -119,7 +119,7 @@ namespace POS.WPF.ViewModels
 
                 await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
                 {
-                    var data = new ProductDT
+                    var data = new ProductDTM
                     {
                         Id = CurrentProduct.Id,
                         Code = CurrentProduct.Code,

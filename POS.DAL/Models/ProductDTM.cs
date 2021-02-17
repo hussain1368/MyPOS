@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace POS.DAL.Models
 {
-    public class ProductDT
+    public class ProductDTM
     {
         public int Id { get; set; }
         public string Code { get; set; }

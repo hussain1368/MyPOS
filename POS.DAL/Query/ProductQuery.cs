@@ -13,22 +13,22 @@ namespace POS.DAL.Query
         {
         }
 
-        public async Task Create(ProductDT data)
+        public async Task Create(ProductDTM data)
         {
             var model = new Product();
-            LoadProduct(data, model);
+            MapSingle(data, model);
             await dbContext.Products.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(ProductDT data)
+        public async Task Update(ProductDTM data)
         {
             var model = await dbContext.Products.FindAsync(data.Id);
-            LoadProduct(data, model);
+            MapSingle(data, model);
             await dbContext.SaveChangesAsync();
         }
 
-        private void LoadProduct(ProductDT data, Product model)
+        private void MapSingle(ProductDTM data, Product model)
         {
             model.Code = data.Code;
             model.CodeStatus = data.CodeStatus;
@@ -52,44 +52,39 @@ namespace POS.DAL.Query
             model.IsDeleted = data.IsDeleted;
         }
 
-        public async Task<ProductDT> GetById(int id)
+        public async Task<ProductDTM> GetById(int id)
         {
             var product = await dbContext.Products.FindAsync(id);
-            if (product != null)
+            if (product == null) return null;
+            return new ProductDTM
             {
-                return new ProductDT
-                {
-                    Id = product.Id,
-                    Code = product.Code,
-                    CodeStatus = product.CodeStatus,
-                    Name = product.Name,
-                    Cost = product.Cost,
-                    Profit = product.Profit,
-                    Price = product.Price,
-                    Discount = product.Discount,
-                    AlertQuantity = product.AlertQuantity,
-                    InitialQuantity = product.InitialQuantity,
-                    UnitId = product.UnitId,
-                    BrandId = product.BrandId,
-                    CategoryId = product.CategoryId,
-                    CurrencyId = product.CurrencyId,
-                    ExpiryDate = product.ExpiryDate,
-                    Note = product.Note,
-                    InsertedBy = product.InsertedBy,
-                    InsertedDate = product.InsertedDate,
-                    UpdatedBy = product.UpdatedBy,
-                    UpdatedDate = product.UpdatedDate,
-                    IsDeleted = product.IsDeleted,
-                };
-            }
-            return null;
+                Id = product.Id,
+                Code = product.Code,
+                CodeStatus = product.CodeStatus,
+                Name = product.Name,
+                Cost = product.Cost,
+                Profit = product.Profit,
+                Price = product.Price,
+                Discount = product.Discount,
+                AlertQuantity = product.AlertQuantity,
+                InitialQuantity = product.InitialQuantity,
+                UnitId = product.UnitId,
+                BrandId = product.BrandId,
+                CategoryId = product.CategoryId,
+                CurrencyId = product.CurrencyId,
+                ExpiryDate = product.ExpiryDate,
+                Note = product.Note,
+                InsertedBy = product.InsertedBy,
+                InsertedDate = product.InsertedDate,
+                UpdatedBy = product.UpdatedBy,
+                UpdatedDate = product.UpdatedDate,
+                IsDeleted = product.IsDeleted,
+            };
         }
 
-        public async Task<IEnumerable<ProductDT>> GetList()
+        public async Task<IEnumerable<ProductDTM>> GetList()
         {
-            return await dbContext.Products
-            .Where(x => x.IsDeleted == false)
-            .Select(x => new ProductDT
+            return await dbContext.Products.Where(x => x.IsDeleted == false).Select(x => new ProductDTM
             {
                 Id = x.Id,
                 Code = x.Code,

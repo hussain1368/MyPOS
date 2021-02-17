@@ -8,14 +8,14 @@ namespace POS.WPF.Models
     {
         public ProductModel() : base(new ProductValidator()) { }
 
-        private int _id { get; set; }
+        private int _id;
         public int Id
         {
             get { return _id; }
             set { _id = value; OnPropertyChanged(); }
         }
 
-        private string _code { get; set; }
+        private string _code;
         public string Code
         {
             get { return _code; }
@@ -27,7 +27,7 @@ namespace POS.WPF.Models
             }
         }
 
-        private CodeStatus _codeStatus { get; set; }
+        private CodeStatus _codeStatus;
         public CodeStatus CodeStatus
         {
             get { return _codeStatus; }
@@ -39,7 +39,7 @@ namespace POS.WPF.Models
             }
         }
 
-        private string _name { get; set; }
+        private string _name;
         public string Name
         {
             get { return _name; }
@@ -51,7 +51,7 @@ namespace POS.WPF.Models
             }
         }
 
-        private int? _initialQuantity { get; set; }
+        private int? _initialQuantity;
         public int? InitialQuantity
         {
             get { return _initialQuantity; }
@@ -62,7 +62,7 @@ namespace POS.WPF.Models
             }
         }
 
-        private int? _cost { get; set; }
+        private int? _cost;
         public int? Cost
         {
             get { return _cost; }
@@ -75,7 +75,7 @@ namespace POS.WPF.Models
             }
         }
 
-        private int? _price { get; set; }
+        private int? _price;
         public int? Price
         {
             get { return _price; }
@@ -93,7 +93,7 @@ namespace POS.WPF.Models
             get { return (Price ?? 0) - (Cost ?? 0); }
         }
 
-        private int? _categoryId { get; set; }
+        private int? _categoryId;
         public int? CategoryId
         {
             get { return _categoryId; }

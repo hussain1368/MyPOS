@@ -1,6 +1,6 @@
 ﻿namespace POS.DAL.Models
 {
-    public class OptionValueDT
+    public class OptionValueDTM
     {
         public int Id { get; set; }
         public int TypeId { get; set; }
