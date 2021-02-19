@@ -64,7 +64,7 @@
                 </materialDesign:ColorZone>
                 <Image Height="110" Source="/Abuly.jpg" Stretch="UniformToFill"/>
                     <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="1"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="0"
                               SelectionChanged="ListView_SelectionChanged">
                         <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
@@ -78,10 +78,10 @@
                                 <TextBlock Text="Products" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
+                        <ListViewItem Name="Accounts" Height="45" Padding="0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
                                 <materialDesign:PackIcon Kind="Lightbulb" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Send Feedback" Margin="10"/>
+                                <TextBlock Text="Accounts" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Height="45" Padding="0">

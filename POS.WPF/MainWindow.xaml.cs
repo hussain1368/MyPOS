@@ -9,8 +9,9 @@ namespace POS.WPF
     {
         private readonly IServiceProvider serviceProvider;
 
-        public Pages.Products ProductsPage { get; set; }
         public Pages.Home HomePage { get; set; }
+        public Pages.Products ProductsPage { get; set; }
+        public Pages.Accounts AccountsPage { get; set; }
 
         public MainWindow(IServiceProvider serviceProvider)
         {
@@ -21,9 +22,10 @@ namespace POS.WPF
 
         private void GetPages()
         {
-            ProductsPage = serviceProvider.GetRequiredService<Pages.Products>();
             HomePage = serviceProvider.GetRequiredService<Pages.Home>();
-            MainFrame.Content = ProductsPage;
+            ProductsPage = serviceProvider.GetRequiredService<Pages.Products>();
+            AccountsPage = serviceProvider.GetRequiredService<Pages.Accounts>();
+            MainFrame.Content = HomePage;
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -34,6 +36,7 @@ namespace POS.WPF
             {
                 case "Home": MainFrame.Navigate(HomePage); break;
                 case "Products": MainFrame.Navigate(ProductsPage); break;
+                case "Accounts": MainFrame.Navigate(AccountsPage); break;
             }
         }
     }

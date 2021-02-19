@@ -21,6 +21,12 @@
     <Compile Update="Controls\ProductsList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\HeaderBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Accounts.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -41,10 +47,16 @@
     <Page Update="Controls\ProductsList.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Controls\HeaderBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Dictionaries\MyBrushes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Accounts.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\Home.xaml">

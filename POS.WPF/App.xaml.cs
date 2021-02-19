@@ -29,12 +29,16 @@ namespace POS.WPF
         {
             services.AddDbContext<POSContext>(ServiceLifetime.Transient);
             services.AddScoped<ProductQuery>();
+            services.AddScoped<AccountQuery>();
             services.AddScoped<OptionQuery>();
-            services.AddScoped<ProductVM>();
+
+            services.AddScoped<ProductsVM>();
+            services.AddScoped<AccountsVM>();
 
             services.AddTransient<MainWindow>();
-            services.AddTransient<Pages.Products>();
             services.AddTransient<Pages.Home>();
+            services.AddTransient<Pages.Products>();
+            services.AddTransient<Pages.Accounts>();
         }
     }
 }

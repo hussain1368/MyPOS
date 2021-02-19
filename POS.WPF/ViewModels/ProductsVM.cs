@@ -13,8 +13,16 @@ using POS.WPF.Controls;
 
 namespace POS.WPF.ViewModels
 {
-    public class ProductVM : BaseViewModel
+    public class ProductsVM : BaseViewModel
     {
+        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery)
+        {
+            this.productQuery = productQuery;
+            this.optionQuery = optionQuery;
+            MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
+            CreateCommands();
+        }
+
         private readonly ProductQuery productQuery;
         private readonly OptionQuery optionQuery;
         private ProductDTM theProduct;
@@ -29,12 +37,39 @@ namespace POS.WPF.ViewModels
         public RelayCommandSyncVoid CancelCmd { get; set; }
         public RelayCommandSyncParam CheckAllCmd { get; set; }
 
-        public ProductVM(ProductQuery productQuery, OptionQuery optionQuery)
+        public HeaderBarVM FormHeader => new HeaderBarVM
         {
-            this.productQuery = productQuery;
-            this.optionQuery = optionQuery;
-            MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
-            CreateCommands();
+            HeaderText = "Product Details",
+            IconKind = "ArrowBack",
+            ButtonCommand = new RelayCommandSyncVoid(() =>
+            {
+                Transitioner.MovePreviousCommand.Execute(null, null);
+            })
+        };
+
+        public HeaderBarVM GridHeader => new HeaderBarVM
+        {
+            HeaderText = "List of Products",
+            IconKind = "Add",
+            ButtonCommand = new RelayCommandAsyncParam(ShowForm),
+        };
+
+        private async Task ShowForm(object id)
+        {
+            Transitioner.MoveNextCommand.Execute(null, null);
+            if (id == null)
+            {
+                CurrentProduct = new ProductModel();
+                theProduct = null;
+                return;
+            }
+            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+            {
+                int _id = (int)id;
+                theProduct = await productQuery.GetById(_id);
+                LoadCurrentProduct();
+                eventArgs.Session.Close(false);
+            }, null);
         }
 
         private ProductModel _currentProduct = new ProductModel();
@@ -91,26 +126,7 @@ namespace POS.WPF.ViewModels
                 defaultCurrency = await optionQuery.OptionByCode("AFN");
             });
 
-            ShowFormCmd = new RelayCommandAsyncParam(async id =>
-            {
-                Transitioner.MoveNextCommand.Execute(null, null);
-                if (id == null)
-                {
-                    CurrentProduct = new ProductModel();
-                    theProduct = null;
-                }
-                else
-                {
-                    await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
-                    {
-                        int _id = (int)id;
-                        theProduct = await productQuery.GetById(_id);
-                        LoadCurrentProduct();
-                        eventArgs.Session.Close(false);
-
-                    }, null);
-                }
-            });
+            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
 
             SaveCmd = new RelayCommandAsync(async () =>
             {
