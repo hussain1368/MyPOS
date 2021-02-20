@@ -27,7 +27,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <local:HeaderBar Grid.Row="0" DataContext="{Binding FormHeader}"/>
+        <local:HeaderBar Grid.Row="0" DataContext="{Binding FormHeader}" Panel.ZIndex="1000"/>
 
         <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" Identifier="FormDialog" Grid.Row="1">
             <Grid x:Name="FormGrid">
@@ -35,11 +35,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <GroupBox BorderThickness="1" Header="Product Details" Grid.Column="0" Margin="0 0 5 0"
-                      Style="{DynamicResource MaterialDesignGroupBox}"
-                      materialDesign:ColorZoneAssist.Mode="Custom"
-                      materialDesign:ColorZoneAssist.Background="Gray"
-                      materialDesign:ColorZoneAssist.Foreground="Black">
+                <GroupBox Header="Product Details" Grid.Column="0" Margin="0 0 5 0"
+                      Style="{DynamicResource MaterialDesignCardGroupBox}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -157,8 +154,11 @@
                         </TextBox>
                     </Grid>
                 </GroupBox>
-                <GroupBox BorderThickness="1" Header="More Details" Margin="5 0 0 0" Grid.Column="1"
-                          Style="{DynamicResource MaterialDesignGroupBox}">
+                <GroupBox Header="More Details" Margin="5 0 0 0" Grid.Column="1"
+                          Style="{DynamicResource MaterialDesignCardGroupBox}"
+                          materialDesign:ColorZoneAssist.Mode="Custom"
+                          materialDesign:ColorZoneAssist.Background="Gray"
+                          materialDesign:ColorZoneAssist.Foreground="Black">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>

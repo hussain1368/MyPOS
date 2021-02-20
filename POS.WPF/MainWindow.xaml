@@ -13,19 +13,10 @@
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
     <Window.Resources>
-        <!--Global style for TextBox and Transition issue (after updating was not required)-->
-        <!--<Style TargetType="materialDesign:BottomDashedLineAdorner">
-            <Setter Property="Visibility" Value="Collapsed"/>
-        </Style>-->
-        
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="250"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
-                <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="MainPanel">
                 <SplineThicknessKeyFrame KeyTime="0" Value="250 0 0 0"/>
@@ -36,10 +27,6 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="50"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="250"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="GridBackground">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="MainPanel">
                 <SplineThicknessKeyFrame KeyTime="0" Value="50 0 0 0"/>
@@ -56,20 +43,18 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid>
-        <Grid x:Name="GridBackground" Background="#55313131" Opacity="0"/>
-
         <Border BorderBrush="Gray" BorderThickness="1 0 0 0" Margin="50 0 0 0" x:Name="MainPanel">
             <ContentControl x:Name="BodyContent" Content="{Binding BodyContent}"/>
         </Border>
-
         <Grid x:Name="GridMenu" Width="50" HorizontalAlignment="Left" Background="White">
             <StackPanel>
                 <materialDesign:ColorZone Mode="PrimaryDark" MinHeight="50">
                     <!--<TextBlock Text="POS" Margin="5" Foreground="White" FontSize="23"/>-->
                 </materialDesign:ColorZone>
                 <Image Height="110" Source="/Abuly.jpg" Stretch="UniformToFill"/>
-                    <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="{Binding SelectedIndex}">
+                    <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Calibri" FontSize="18" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                              SelectedIndex="{Binding SelectedIndex}">
                         <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
                                 <materialDesign:PackIcon Kind="Home" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
@@ -78,37 +63,43 @@
                         </ListViewItem>
                         <ListViewItem Name="Products" Height="45" Padding="0" BorderThickness="0 0 0 0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="HelpCircleOutline" Width="20" Height="20" Foreground="#FFF08033" Margin="5" VerticalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="PackageVariant" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
                                 <TextBlock Text="Products" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Name="Accounts" Height="45" Padding="0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Lightbulb" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="BusinessCardOutline" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
                                 <TextBlock Text="Accounts" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Height="45" Padding="0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Recycle" Width="20" Height="20" Foreground="Green" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Recycle" Margin="10"/>
+                                <materialDesign:PackIcon Kind="Cart" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Invoices" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Height="45" Padding="0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Heart" Width="20" Height="20" Foreground="#FFD41515" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Recommend" Margin="10"/>
+                                <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Transactions" Margin="10"/>
+                            </StackPanel>
+                        </ListViewItem>
+                    <ListViewItem Height="45" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="Poll" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Reports" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0">
+                            <StackPanel Orientation="Horizontal" Margin="10 0">
+                                <materialDesign:PackIcon Kind="Account" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                                <TextBlock Text="Users" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
                         <ListViewItem Height="45" Padding="0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="StarCircle" Width="20" Height="20" Foreground="#FFE6A701" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Premium Subscription" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Foreground="#FF0069C1" Margin="5" VerticalAlignment="Center"/>
+                                <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
                                 <TextBlock Text="Settings" Margin="10"/>
                             </StackPanel>
                         </ListViewItem>
