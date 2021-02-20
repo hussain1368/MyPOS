@@ -32,13 +32,12 @@ namespace POS.WPF
             services.AddScoped<AccountQuery>();
             services.AddScoped<OptionQuery>();
 
+            services.AddScoped<MainVM>();
+            services.AddScoped<HomeVM>();
             services.AddScoped<ProductsVM>();
             services.AddScoped<AccountsVM>();
 
             services.AddTransient<MainWindow>();
-            services.AddTransient<Pages.Home>();
-            services.AddTransient<Pages.Products>();
-            services.AddTransient<Pages.Accounts>();
         }
     }
 }

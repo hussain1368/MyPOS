@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d" Height="600" Width="1080" ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen" WindowStyle="ThreeDBorderWindow">
-    
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="SideMenu">
+            <Behaviors:InvokeCommandAction Command="{Binding ViewChangedCmd}"/>
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
     <Window.Resources>
         <!--Global style for TextBox and Transition issue (after updating was not required)-->
         <!--<Style TargetType="materialDesign:BottomDashedLineAdorner">
@@ -54,7 +59,7 @@
         <Grid x:Name="GridBackground" Background="#55313131" Opacity="0"/>
 
         <Border BorderBrush="Gray" BorderThickness="1 0 0 0" Margin="50 0 0 0" x:Name="MainPanel">
-            <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+            <ContentControl x:Name="BodyContent" Content="{Binding BodyContent}"/>
         </Border>
 
         <Grid x:Name="GridMenu" Width="50" HorizontalAlignment="Left" Background="White">
@@ -64,8 +69,7 @@
                 </materialDesign:ColorZone>
                 <Image Height="110" Source="/Abuly.jpg" Stretch="UniformToFill"/>
                     <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="0"
-                              SelectionChanged="ListView_SelectionChanged">
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedIndex="{Binding SelectedIndex}">
                         <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
                             <StackPanel Orientation="Horizontal" Margin="10 0">
                                 <materialDesign:PackIcon Kind="Home" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>

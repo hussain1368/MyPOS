@@ -13,7 +13,7 @@ using POS.WPF.Controls;
 
 namespace POS.WPF.ViewModels
 {
-    public class ProductsVM : BaseViewModel
+    public class ProductsVM : BaseVM
     {
         public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery)
         {

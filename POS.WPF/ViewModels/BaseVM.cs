@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace POS.WPF.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

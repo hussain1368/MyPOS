@@ -2,12 +2,11 @@
 
 namespace POS.WPF.Pages
 {
-    public partial class Products : Page
+    public partial class Products : UserControl
     {
-        public Products(ViewModels.ProductsVM context)
+        public Products()
         {
             InitializeComponent();
-            DataContext = context;
         }
     }
 }

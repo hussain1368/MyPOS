@@ -2,7 +2,7 @@
 
 namespace POS.WPF.ViewModels
 {
-    public class AccountsVM : BaseViewModel
+    public class AccountsVM : BaseVM
     {
         public AccountsVM(AccountQuery accountQuery, OptionQuery optionQuery)
         {

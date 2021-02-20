@@ -2,7 +2,7 @@
 
 namespace POS.WPF.Pages
 {
-    public partial class Home : Page
+    public partial class Home : UserControl
     {
         public Home()
         {

@@ -9,7 +9,7 @@ using POS.WPF.ViewModels;
 
 namespace POS.WPF.Models
 {
-    public class BaseModelWithError<T> : BaseViewModel, INotifyDataErrorInfo where T : BaseViewModel
+    public class BaseModelWithError<T> : BaseVM, INotifyDataErrorInfo where T : BaseVM
     {
         private readonly T model;
         private readonly AbstractValidator<T> validator;

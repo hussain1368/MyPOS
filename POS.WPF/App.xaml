@@ -1,9 +1,21 @@
 ﻿<Application x:Class="POS.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:POS.WPF">
+             xmlns:local="clr-namespace:POS.WPF"
+             xmlns:views="clr-namespace:POS.WPF.Pages"
+             xmlns:viewModels="clr-namespace:POS.WPF.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewModels:HomeVM}">
+                <views:Home/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ProductsVM}">
+                <views:Products/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:AccountsVM}">
+                <views:Accounts/>
+            </DataTemplate>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
