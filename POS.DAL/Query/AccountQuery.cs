@@ -28,17 +28,24 @@ namespace POS.DAL.Query
 
         private void MapSingle(AccountDTM data, Account model)
         {
+            model.Id = data.Id;
             model.Name = data.Name;
             model.Phone = data.Phone;
             model.Address = data.Address;
             model.Note = data.Note;
             model.CurrencyId = data.CurrencyId;
             model.CurrentBalance = data.CurrentBalance;
-            model.AccountType = data.AccountType;
-            model.InsertedBy = data.InsertedBy;
-            model.InsertedDate = data.InsertedDate;
-            model.UpdatedBy = data.UpdatedBy;
-            model.UpdatedDate = data.UpdatedDate;
+            model.AccountTypeId = data.AccountTypeId;
+            if (data.Id == 0)
+            {
+                model.InsertedBy = data.InsertedBy;
+                model.InsertedDate = data.InsertedDate;
+            }
+            else
+            {
+                model.UpdatedBy = data.UpdatedBy;
+                model.UpdatedDate = data.UpdatedDate;
+            }
             model.IsDeleted = data.IsDeleted;
         }
 
@@ -48,13 +55,14 @@ namespace POS.DAL.Query
             if (model == null) return null;
             return new AccountDTM
             {
+                Id = model.Id,
                 Name = model.Name,
                 Phone = model.Phone,
                 Address = model.Address,
                 Note = model.Note,
                 CurrencyId = model.CurrencyId,
                 CurrentBalance = model.CurrentBalance,
-                AccountType = model.AccountType,
+                AccountTypeId = model.AccountTypeId,
                 InsertedBy = model.InsertedBy,
                 InsertedDate = model.InsertedDate,
                 UpdatedBy = model.UpdatedBy,
@@ -68,18 +76,20 @@ namespace POS.DAL.Query
             return await dbContext.Accounts.Where(x => !x.IsDeleted)
             .Select(x => new AccountDTM
             {
+                Id = x.Id,
                 Name = x.Name,
                 Phone = x.Phone,
                 Address = x.Address,
                 Note = x.Note,
                 CurrencyId = x.CurrencyId,
                 CurrentBalance = x.CurrentBalance,
-                AccountType = x.AccountType,
+                AccountTypeId = x.AccountTypeId,
                 InsertedBy = x.InsertedBy,
                 InsertedDate = x.InsertedDate,
                 UpdatedBy = x.UpdatedBy,
                 UpdatedDate = x.UpdatedDate,
                 IsDeleted = x.IsDeleted,
+                AccountTypeName = x.AccountType.Name,
                 CurrencyName = x.Currency.Name,
                 CurrencyCode = x.Currency.Code,
             })

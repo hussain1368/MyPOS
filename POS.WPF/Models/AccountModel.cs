@@ -17,7 +17,7 @@ namespace POS.WPF.Models
         public string Name
         {
             get { return _name; }
-            set { _name = value; OnPropertyChanged(); }
+            set { _name = value; OnPropertyChanged(); ValidateField(); }
         }
 
         private string _phone;
@@ -41,11 +41,18 @@ namespace POS.WPF.Models
             set { _note = value; OnPropertyChanged(); }
         }
 
-        private int _currencyId;
-        public int CurrencyId
+        private int? _currencyId;
+        public int? CurrencyId
         {
             get { return _currencyId; }
-            set { _currencyId = value; OnPropertyChanged(); }
+            set { _currencyId = value; OnPropertyChanged(); ValidateField(); }
+        }
+
+        private int? _accountTypeId;
+        public int? AccountTypeId
+        {
+            get { return _accountTypeId; }
+            set { _accountTypeId = value; OnPropertyChanged(); ValidateField(); }
         }
 
         private int _currentBalance;
@@ -55,11 +62,15 @@ namespace POS.WPF.Models
             set { _currentBalance = value; OnPropertyChanged(); }
         }
 
-        private int _accountType;
-        public int AccountType
+        private bool _isChecked;
+        public bool IsChecked
         {
-            get { return _accountType; }
-            set { _accountType = value; OnPropertyChanged(); }
+            get { return _isChecked; }
+            set { _isChecked = value; OnPropertyChanged(); }
         }
+
+        public string AccountTypeName { get; set; }
+        public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

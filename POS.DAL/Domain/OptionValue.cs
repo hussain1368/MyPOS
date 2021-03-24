@@ -9,7 +9,8 @@ namespace POS.DAL.Domain
     {
         public OptionValue()
         {
-            Accounts = new HashSet<Account>();
+            AccountAccountTypes = new HashSet<Account>();
+            AccountCurrencies = new HashSet<Account>();
             Invoices = new HashSet<Invoice>();
             ProductBrands = new HashSet<Product>();
             ProductCategories = new HashSet<Product>();
@@ -26,7 +27,8 @@ namespace POS.DAL.Domain
         public bool IsDeleted { get; set; }
 
         public virtual OptionType Type { get; set; }
-        public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<Account> AccountAccountTypes { get; set; }
+        public virtual ICollection<Account> AccountCurrencies { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<Product> ProductBrands { get; set; }
         public virtual ICollection<Product> ProductCategories { get; set; }

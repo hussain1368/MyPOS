@@ -9,6 +9,12 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Controls\AccountForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\AccountList.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -35,6 +41,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\AccountForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Controls\AccountList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Controls\ConfirmDialog.xaml">
       <SubType>Designer</SubType>
     </Page>

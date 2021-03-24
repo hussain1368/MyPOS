@@ -51,8 +51,14 @@ namespace POS.DAL.Domain
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
+                entity.HasOne(d => d.AccountType)
+                    .WithMany(p => p.AccountAccountTypes)
+                    .HasForeignKey(d => d.AccountTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Account_AccountType");
+
                 entity.HasOne(d => d.Currency)
-                    .WithMany(p => p.Accounts)
+                    .WithMany(p => p.AccountCurrencies)
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Account_Currency");
