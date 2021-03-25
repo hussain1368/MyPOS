@@ -71,10 +71,11 @@ namespace POS.DAL.Query
             };
         }
 
-        public async Task<IEnumerable<AccountDTM>> GetList()
+        public async Task<IEnumerable<AccountDTM>> GetList(int? accountTypeId)
         {
-            return await dbContext.Accounts.Where(x => !x.IsDeleted)
-            .Select(x => new AccountDTM
+            var query = dbContext.Accounts.Where(m => !m.IsDeleted);
+            if (accountTypeId != null) query = query.Where(m => m.AccountTypeId == accountTypeId);
+            return await query.Select(x => new AccountDTM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -94,6 +95,13 @@ namespace POS.DAL.Query
                 CurrencyCode = x.Currency.Code,
             })
             .ToListAsync();
+        }
+
+        public async Task Delete(int[] ids)
+        {
+            var rows = await dbContext.Accounts.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
+            foreach (var row in rows) row.IsDeleted = true;
+            await dbContext.SaveChangesAsync();
         }
     }
 }

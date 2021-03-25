@@ -19,10 +19,17 @@ namespace POS.WPF.ViewModels
             this.accountQuery = accountQuery;
             this.optionQuery = optionQuery;
 
-            LoadOptionsCmd = new RelayCommandAsync(doLoadOptions);
-            LoadListCmd = new RelayCommandAsync(doLoadList);
-            ShowFormCmd = new RelayCommandAsyncParam(doShowForm);
-            SaveCmd = new RelayCommandAsync(doSave);
+            LoadOptionsCmd = new RelayCommandAsync(loadOptions);
+            LoadListCmd = new RelayCommandAsync(async () =>
+            {
+                await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, eventArgs) =>
+                {
+                    await loadList();
+                    eventArgs.Session.Close(false);
+                }, null);
+            });
+            ShowFormCmd = new RelayCommandAsyncParam(showForm);
+            SaveCmd = new RelayCommandAsync(saveForm);
             CancelCmd = new RelayCommandSyncVoid(() =>
             {
                 CurrentAccount = new AccountModel();
@@ -33,6 +40,7 @@ namespace POS.WPF.ViewModels
                 bool _isChecked = (bool)isChecked;
                 foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
             });
+            DeleteCmd = new RelayCommandAsync(deleteRows);
         }
 
         private readonly AccountQuery accountQuery;
@@ -50,7 +58,7 @@ namespace POS.WPF.ViewModels
         {
             HeaderText = "List of Accounts",
             IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(doShowForm)
+            ButtonCommand = new RelayCommandAsyncParam(showForm)
         };
 
         private IList<OptionValueDTM> _comboOptions;
@@ -89,15 +97,21 @@ namespace POS.WPF.ViewModels
             set { _isFormOpen = value; OnPropertyChanged(); }
         }
 
-        private async Task doLoadOptions()
+        private int? _accountTypeId;
+        public int? AccountTypeId
+        {
+            get { return _accountTypeId; }
+            set { _accountTypeId = value; OnPropertyChanged(); }
+        }
+
+        private async Task loadOptions()
         {
             ComboOptions = await optionQuery.OptionsAll();
         }
 
-        private async Task doLoadList()
+        private async Task loadList()
         {
-            IsFormOpen = true;
-            var data = await accountQuery.GetList();
+            var data = await accountQuery.GetList(AccountTypeId);
             var _data = data.Select(m => new AccountModel
             {
                 Id = m.Id,
@@ -113,10 +127,9 @@ namespace POS.WPF.ViewModels
                 CurrencyCode = m.CurrencyCode,
             });
             AccountsList = new ObservableCollection<AccountModel>(_data);
-            IsFormOpen = false;
         }
 
-        private async Task doShowForm(object id)
+        private async Task showForm(object id)
         {
             if (id == null) CurrentAccount = new AccountModel();
             else
@@ -137,7 +150,7 @@ namespace POS.WPF.ViewModels
             await DialogHost.Show(new AccountForm(), "MainDialogHost", null, null);
         }
 
-        private async Task doSave()
+        private async Task saveForm()
         {
             CurrentAccount.ValidateModel();
             if (CurrentAccount.HasErrors) return;
@@ -169,8 +182,27 @@ namespace POS.WPF.ViewModels
                 await accountQuery.Update(data);
             }
 
-            LoadListCmd.Execute(null);
+            await loadList();
             DialogHost.CloseDialogCommand.Execute(null, null);
+        }
+
+        private async Task deleteRows()
+        {
+            var ids = AccountsList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
+            if (ids.Length == 0) return;
+            string message = $"Are you sure to delete ({ids.Length}) records?";
+            var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
+            var obj = await DialogHost.Show(view, "MainDialogHost", null, async (sender, eventArgs) =>
+            {
+                if (eventArgs.Parameter is bool param && param == false) return;
+                eventArgs.Cancel();
+                eventArgs.Session.UpdateContent(new LoadingDialog());
+                await accountQuery.Delete(ids);
+                await loadList();
+                eventArgs.Session.Close(false);
+                //var content = getMsg($"{ids.Length} Records Deleted!");
+                //MessageQueue.Enqueue(content);
+            });
         }
     }
 }

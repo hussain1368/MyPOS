@@ -8,77 +8,60 @@
              xmlns:local="clr-namespace:POS.WPF.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    <!--Events To Commands-->
     <Behaviors:Interaction.Triggers>
-        <Behaviors:EventTrigger EventName="Loaded" SourceName="ProductsGrid">
+        <Behaviors:EventTrigger EventName="Loaded" SourceName="ListGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <local:HeaderBar Grid.Row="0" DataContext="{Binding GridHeader}"/>
+        <local:HeaderBar Grid.Row="0" DataContext="{Binding GridHeader}"/>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
-                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
-                <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
-            </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
+            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
+            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
+        </StackPanel>
 
-            <materialDesign:DialogHost Margin="20 10" DialogTheme="Light" Identifier="GridDialog" IsOpen="{Binding IsListLoading}" Grid.Row="2">
-                <materialDesign:DialogHost.DialogContent>
-                    <local:LoadingDialog />
-                </materialDesign:DialogHost.DialogContent>
-
-                <DataGrid x:Name="ProductsGrid"
-                            CanUserAddRows="False"
-                            SelectionUnit="FullRow"
-                            AutoGenerateColumns="False"
-                            SelectionMode="Single"
-                            ItemsSource="{Binding ProductsList}">
-
-                    <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
-                            <DataGridCheckBoxColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <CheckBox x:Name="CheckAllCheckBox" 
-                                        Command="{Binding DataContext.CheckAllCmd,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        RelativeSource={RelativeSource FindAncestor,
-                                        AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
-                                </DataTemplate>
-                            </DataGridCheckBoxColumn.HeaderTemplate>
-                        </DataGridCheckBoxColumn>
-                        <DataGridTextColumn Header="Code" Width="Auto" Binding="{Binding Code}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
-                        <DataGridTextColumn Header="Cost" Width="Auto" Binding="{Binding Cost}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}" IsReadOnly="True"/>
-                        <!--<DataGridTextColumn Header="Unit" Width="Auto" Binding="{Binding UnitName}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Brand" Width="Auto" Binding="{Binding BrandName}" IsReadOnly="True"/>-->
-                        <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyCode}" IsReadOnly="True"/>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Width="50" Height="20" FontSize="8" FontWeight="Bold" Content="EDIT"
-                                            Command="{Binding DataContext.ShowFormCmd,
-                                            RelativeSource={RelativeSource FindAncestor,
-                                            AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding Id}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </materialDesign:DialogHost>
-        </Grid>
+        <DataGrid Grid.Row="2" x:Name="ListGrid" Margin="20 10" CanUserAddRows="False" SelectionUnit="FullRow" AutoGenerateColumns="False" SelectionMode="Single" ItemsSource="{Binding ProductsList}">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                    <DataGridCheckBoxColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox x:Name="CheckAllCheckBox" 
+                                Command="{Binding DataContext.CheckAllCmd,
+                                UpdateSourceTrigger=PropertyChanged,
+                                RelativeSource={RelativeSource FindAncestor,
+                                AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+                        </DataTemplate>
+                    </DataGridCheckBoxColumn.HeaderTemplate>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="Code" Width="Auto" Binding="{Binding Code}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+                <DataGridTextColumn Header="Cost" Width="Auto" Binding="{Binding Cost}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Profit" Width="Auto" Binding="{Binding Profit}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Price" Width="Auto" Binding="{Binding Price}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding Discount}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Category" Width="Auto" Binding="{Binding CategoryName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Currency" Width="Auto" Binding="{Binding CurrencyCode}" IsReadOnly="True"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="50" Height="20" FontSize="8" FontWeight="Bold" Content="EDIT"
+                                    Command="{Binding DataContext.ShowFormCmd,
+                                    RelativeSource={RelativeSource FindAncestor,
+                                    AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Id}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
+
 </UserControl>

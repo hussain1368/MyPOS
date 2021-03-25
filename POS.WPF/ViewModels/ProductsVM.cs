@@ -67,7 +67,7 @@ namespace POS.WPF.ViewModels
             {
                 int _id = (int)id;
                 theProduct = await productQuery.GetById(_id);
-                LoadCurrentProduct();
+                MapCurrentProduct();
                 eventArgs.Session.Close(false);
             }, null);
         }
@@ -115,9 +115,11 @@ namespace POS.WPF.ViewModels
         {
             LoadListCmd = new RelayCommandAsync(async () =>
             {
-                IsListLoading = true;
-                await LoadProductsList();
-                IsListLoading = false;
+                await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, eventArgs) =>
+                {
+                    await LoadProductsList();
+                    eventArgs.Session.Close(false);
+                }, null);
             });
 
             LoadOptionsCmd = new RelayCommandAsync(async () =>
@@ -182,7 +184,7 @@ namespace POS.WPF.ViewModels
             CancelCmd = new RelayCommandSyncVoid(() =>
             {
                 if (theProduct == null) CurrentProduct = new ProductModel();
-                else LoadCurrentProduct();
+                else MapCurrentProduct();
             });
 
             CheckAllCmd = new RelayCommandSyncParam(isChecked =>
@@ -211,7 +213,7 @@ namespace POS.WPF.ViewModels
             });
         }
 
-        private void LoadCurrentProduct()
+        private void MapCurrentProduct()
         {
             if (theProduct == null) return;
 

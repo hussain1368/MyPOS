@@ -12,6 +12,9 @@
         <Behaviors:EventTrigger EventName="Loaded" SourceName="PageGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
         </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="AccountTypeCombo">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
+        </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
     <Grid x:Name="PageGrid">
         <Grid.RowDefinitions>
@@ -23,17 +26,19 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 0">
             <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
-            <Button Margin="0 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
+            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
+            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Margin="10 0" x:Name="AccountTypeCombo"
+                  materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:HintAssist.Hint="Account Type"
+                  SelectedValue="{Binding AccountTypeId}" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
 
-        <!--<GroupBox Grid.Row="1" Margin="20" Header="Account Details" Style="{DynamicResource MaterialDesignCardGroupBox}">
-            <local:AccountForm />
-        </GroupBox>-->
-
-        <materialDesign:DialogHost Grid.Row="2" Margin="20 10" DialogTheme="Light" Identifier="MainDialogHost" IsOpen="{Binding IsFormOpen}">
-            <materialDesign:DialogHost.DialogContent>
-                <local:LoadingDialog />
-            </materialDesign:DialogHost.DialogContent>
+        <materialDesign:DialogHost Grid.Row="2" Margin="20 10" DialogTheme="Light" Identifier="MainDialogHost">
             <local:AccountList/>
         </materialDesign:DialogHost>
     </Grid>
