@@ -10,7 +10,7 @@
       mc:Ignorable="d">
     <Behaviors:Interaction.Triggers>
     </Behaviors:Interaction.Triggers>
-    <Grid Background="White" x:Name="PageLoad">
+    <Grid Background="White">
         <materialDesign:Snackbar 
             MessageQueue="{Binding MessageQueue}"
             HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1000" Margin="10">
@@ -24,8 +24,8 @@
 
         <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
             
-            <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog" x:Name="HostLoad">
-                <local:ProductsList x:Name="ListLoad"/>
+            <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog">
+                <local:ProductsList/>
             </materialDesign:DialogHost>
             
             <materialDesign:TransitionerSlide>

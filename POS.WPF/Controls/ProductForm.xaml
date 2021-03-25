@@ -39,9 +39,7 @@
                       Style="{DynamicResource MaterialDesignCardGroupBox}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
@@ -55,18 +53,10 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Code" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Code Status" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Product Name" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Initial Quantity" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Purchase Price" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Sale Price" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Pure Income" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center"/>
-
-                        <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="10"
+                        <ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
                                   materialDesign:HintAssist.Hint="Category"  
                                   materialDesign:TextFieldAssist.HasClearButton="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.CategoryId}"
                                   SelectedValuePath="Id"
                                   ItemsSource="{Binding CategoryList}">
@@ -77,13 +67,13 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <TextBox Grid.Row="1" Grid.Column="1" materialDesign:HintAssist.Hint="Code" Grid.ColumnSpan="3" Margin="10">
+                        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Code" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Code" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="10">
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
                             <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
                                      IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
                                 <TextBlock Text="Has Code"/>
@@ -98,13 +88,13 @@
                             </RadioButton>
                         </StackPanel>
 
-                        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Product Name" Margin="10">
+                        <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Product Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Name" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
 
-                        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Initial Quantity" Margin="10">
+                        <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Initial Quantity" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.InitialQuantity" UpdateSourceTrigger="PropertyChanged" TargetNullValue="">
                                     <Binding.ValidationRules>
@@ -117,7 +107,7 @@
                             </TextBox.Text>
                         </TextBox>
 
-                        <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" materialDesign:HintAssist.Hint="Purchase Price" Margin="10">
+                        <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Purchase Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Cost" UpdateSourceTrigger="PropertyChanged" TargetNullValue="">
                                     <Binding.ValidationRules>
@@ -130,7 +120,7 @@
                             </TextBox.Text>
                         </TextBox>
 
-                        <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Sale Price" Margin="10">
+                        <TextBox Grid.Row="6" Grid.Column="0" materialDesign:HintAssist.Hint="Sale Price" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Price" UpdateSourceTrigger="PropertyChanged" TargetNullValue="">
                                     <Binding.ValidationRules>
@@ -143,7 +133,7 @@
                             </TextBox.Text>
                         </TextBox>
 
-                        <TextBox Grid.Row="6" Grid.Column="3" materialDesign:HintAssist.Hint="Pure Income" Margin="10" IsReadOnly="True">
+                        <TextBox Grid.Row="6" Grid.Column="2" materialDesign:HintAssist.Hint="Pure Income" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10" IsReadOnly="True">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Profit" UpdateSourceTrigger="PropertyChanged" Mode="OneWay">
                                     <Binding.Converter>
@@ -161,7 +151,6 @@
                           materialDesign:ColorZoneAssist.Foreground="Black">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -174,17 +163,10 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Currency" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Unit" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Brand" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Alert Quantity" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Discount" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Expiry Date" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
-                        <TextBlock Text="Note" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" />
-
-                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="10"
+                        <ComboBox Grid.Row="0" Grid.Column="0" Margin="10"
                                   materialDesign:HintAssist.Hint="Currency"  
                                   materialDesign:TextFieldAssist.HasClearButton="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.CurrencyId}"
                                   SelectedValuePath="Id"
                                   ItemsSource="{Binding CurrencyList}">
@@ -195,9 +177,10 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="10"
+                        <ComboBox Grid.Row="1" Grid.Column="0" Margin="10"
                                   materialDesign:HintAssist.Hint="Unit"
                                   materialDesign:TextFieldAssist.HasClearButton="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.UnitId}"
                                   SelectedValuePath="Id"
                                   ItemsSource="{Binding UnitList}">
@@ -208,9 +191,10 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="10"
+                        <ComboBox Grid.Row="2" Grid.Column="0" Margin="10"
                                   materialDesign:HintAssist.Hint="Brand"  
                                   materialDesign:TextFieldAssist.HasClearButton="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.BrandId}"
                                   SelectedValuePath="Id"
                                   ItemsSource="{Binding BrandList}">
@@ -221,7 +205,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <TextBox Grid.Row="3" Grid.Column="1" materialDesign:HintAssist.Hint="Alert Quantity" Margin="10">
+                        <TextBox Grid.Row="3" Grid.Column="0" materialDesign:HintAssist.Hint="Alert Quantity" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.AlertQuantity" UpdateSourceTrigger="PropertyChanged" TargetNullValue="">
                                     <Binding.ValidationRules>
@@ -234,7 +218,7 @@
                             </TextBox.Text>
                         </TextBox>
 
-                        <TextBox Grid.Row="4" Grid.Column="1" materialDesign:HintAssist.Hint="Discount" Margin="10">
+                        <TextBox Grid.Row="4" Grid.Column="0" materialDesign:HintAssist.Hint="Discount" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Discount" UpdateSourceTrigger="PropertyChanged" TargetNullValue="">
                                     <Binding.ValidationRules>
@@ -247,13 +231,13 @@
                             </TextBox.Text>
                         </TextBox>
 
-                        <DatePicker Grid.Row="5" Grid.Column="1" materialDesign:HintAssist.Hint="Expiry Date" Margin="10">
+                        <DatePicker Grid.Row="5" Grid.Column="0" materialDesign:HintAssist.Hint="Expiry Date" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="10">
                             <DatePicker.SelectedDate>
                                 <Binding Path="CurrentProduct.ExpiryDate" UpdateSourceTrigger="PropertyChanged"/>
                             </DatePicker.SelectedDate>
                         </DatePicker>
 
-                        <TextBox Grid.Row="6" Grid.Column="1" materialDesign:HintAssist.Hint="Note" Margin="10" AcceptsReturn="True">
+                        <TextBox Grid.Row="6" Grid.Column="0" materialDesign:HintAssist.Hint="Note" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10" AcceptsReturn="True">
                             <TextBox.Text>
                                 <Binding Path="CurrentProduct.Note" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>

@@ -90,13 +90,6 @@ namespace POS.WPF.ViewModels
             set { _accountsList = value; OnPropertyChanged(); }
         }
 
-        private bool _isFormOpen;
-        public bool IsFormOpen
-        {
-            get { return _isFormOpen; }
-            set { _isFormOpen = value; OnPropertyChanged(); }
-        }
-
         private int? _accountTypeId;
         public int? AccountTypeId
         {
@@ -181,7 +174,6 @@ namespace POS.WPF.ViewModels
                 data.UpdatedDate = DateTime.Now;
                 await accountQuery.Update(data);
             }
-
             await loadList();
             DialogHost.CloseDialogCommand.Execute(null, null);
         }

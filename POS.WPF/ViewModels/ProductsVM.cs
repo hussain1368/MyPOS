@@ -20,13 +20,36 @@ namespace POS.WPF.ViewModels
             this.productQuery = productQuery;
             this.optionQuery = optionQuery;
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
-            CreateCommands();
+
+            LoadListCmd = new RelayCommandAsync(async () =>
+            {
+                await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, eventArgs) =>
+                {
+                    await loadList();
+                    eventArgs.Session.Close(false);
+                }, null);
+            });
+            LoadOptionsCmd = new RelayCommandAsync(async () =>
+            {
+                ComboOptions = await optionQuery.OptionsAll();
+            });
+            ShowFormCmd = new RelayCommandAsyncParam(showForm);
+            SaveCmd = new RelayCommandAsync(saveForm);
+            CancelCmd = new RelayCommandSyncVoid(() =>
+            {
+                if (tempProduct == null) CurrentProduct = new ProductModel();
+                else mapProduct();
+            });
+            CheckAllCmd = new RelayCommandSyncParam(isChecked =>
+            {
+                foreach (var obj in ProductsList) obj.IsChecked = (bool)isChecked;
+            });
+            DeleteCmd = new RelayCommandAsync(deleteRows);
         }
 
         private readonly ProductQuery productQuery;
         private readonly OptionQuery optionQuery;
-        private ProductDTM theProduct;
-        private OptionValueDTM defaultCurrency;
+        private ProductDTM tempProduct;
 
         public ISnackbarMessageQueue MessageQueue { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
@@ -51,26 +74,8 @@ namespace POS.WPF.ViewModels
         {
             HeaderText = "List of Products",
             IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(ShowForm),
+            ButtonCommand = new RelayCommandAsyncParam(showForm),
         };
-
-        private async Task ShowForm(object id)
-        {
-            Transitioner.MoveNextCommand.Execute(null, null);
-            if (id == null)
-            {
-                CurrentProduct = new ProductModel();
-                theProduct = null;
-                return;
-            }
-            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
-            {
-                int _id = (int)id;
-                theProduct = await productQuery.GetById(_id);
-                MapCurrentProduct();
-                eventArgs.Session.Close(false);
-            }, null);
-        }
 
         private ProductModel _currentProduct = new ProductModel();
         public ProductModel CurrentProduct
@@ -103,142 +108,122 @@ namespace POS.WPF.ViewModels
         public IList<OptionValueDTM> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
         public IList<OptionValueDTM> UnitList => ComboOptions?.Where(op => op.TypeCode == "UNT").ToList();
         public IList<OptionValueDTM> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
+        private OptionValueDTM DefaultCurrency => ComboOptions?.SingleOrDefault(op => op.Code == "AFN");
 
-        private bool _isListLoading;
-        public bool IsListLoading
+        private async Task showForm(object id)
         {
-            get { return _isListLoading; }
-            set { _isListLoading = value; OnPropertyChanged(); }
+            Transitioner.MoveNextCommand.Execute(null, null);
+            if (id == null)
+            {
+                CurrentProduct = new ProductModel();
+                tempProduct = null;
+                return;
+            }
+            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+            {
+                tempProduct = await productQuery.GetById((int)id);
+                mapProduct();
+                eventArgs.Session.Close(false);
+            }, null);
         }
 
-        private void CreateCommands()
+        private async Task saveForm()
         {
-            LoadListCmd = new RelayCommandAsync(async () =>
+            CurrentProduct.ValidateModel();
+            if (CurrentProduct.HasErrors) return;
+
+            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
             {
-                await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, eventArgs) =>
+                var data = new ProductDTM
                 {
-                    await LoadProductsList();
-                    eventArgs.Session.Close(false);
-                }, null);
-            });
+                    Id = CurrentProduct.Id,
+                    Code = CurrentProduct.Code,
+                    CodeStatus = (byte)CurrentProduct.CodeStatus,
+                    CategoryId = CurrentProduct.CategoryId,
+                    Name = CurrentProduct.Name,
+                    Cost = CurrentProduct.Cost.Value,
+                    Profit = CurrentProduct.Profit.Value,
+                    Price = CurrentProduct.Price.Value,
+                    InitialQuantity = CurrentProduct.InitialQuantity.Value,
 
-            LoadOptionsCmd = new RelayCommandAsync(async () =>
-            {
-                ComboOptions = await optionQuery.OptionsAll();
-                defaultCurrency = await optionQuery.OptionByCode("AFN");
-            });
+                    CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
+                    UnitId = CurrentProduct.UnitId,
+                    BrandId = CurrentProduct.BrandId,
+                    AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
+                    Discount = CurrentProduct.Discount ?? 0,
+                    ExpiryDate = CurrentProduct.ExpiryDate,
+                    Note = CurrentProduct.Note,
 
-            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
+                    //refactor later
+                    InsertedBy = 1,
+                    InsertedDate = DateTime.Now,
+                    UpdatedBy = 1,
+                    UpdatedDate = DateTime.Now,
+                    IsDeleted = false,
+                };
 
-            SaveCmd = new RelayCommandAsync(async () =>
-            {
-                CurrentProduct.ValidateModel();
-                if (CurrentProduct.HasErrors) return;
-
-                await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+                if (CurrentProduct.Id == 0)
                 {
-                    var data = new ProductDTM
-                    {
-                        Id = CurrentProduct.Id,
-                        Code = CurrentProduct.Code,
-                        CodeStatus = (byte)CurrentProduct.CodeStatus,
-                        CategoryId = CurrentProduct.CategoryId,
-                        Name = CurrentProduct.Name,
-                        Cost = CurrentProduct.Cost.Value,
-                        Profit = CurrentProduct.Profit.Value,
-                        Price = CurrentProduct.Price.Value,
-                        InitialQuantity = CurrentProduct.InitialQuantity.Value,
-
-                        CurrencyId = CurrentProduct.CurrencyId ?? defaultCurrency.Id,
-                        UnitId = CurrentProduct.UnitId,
-                        BrandId = CurrentProduct.BrandId,
-                        AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
-                        Discount = CurrentProduct.Discount ?? 0,
-                        ExpiryDate = CurrentProduct.ExpiryDate,
-                        Note = CurrentProduct.Note,
-
-                        InsertedBy = 1,
-                        InsertedDate = DateTime.Now,
-                        UpdatedBy = 1,
-                        UpdatedDate = DateTime.Now,
-                        IsDeleted = false,
-                    };
-
-                    if (CurrentProduct.Id == 0)
-                    {
-                        await productQuery.Create(data);
-                        CurrentProduct = new ProductModel();
-                    }
-                    else
-                    {
-                        await productQuery.Update(data);
-                        theProduct = data;
-                    }
-                    eventArgs.Session.Close(false);
-                    var content = getMsg("Product Saved!");
-                    MessageQueue.Enqueue(content);
-                    LoadListCmd.Execute(null);
-                }, null);
-            });
-
-            CancelCmd = new RelayCommandSyncVoid(() =>
-            {
-                if (theProduct == null) CurrentProduct = new ProductModel();
-                else MapCurrentProduct();
-            });
-
-            CheckAllCmd = new RelayCommandSyncParam(isChecked =>
-            {
-                bool _isChecked = (bool)isChecked;
-                foreach (var obj in ProductsList) obj.IsChecked = _isChecked;
-            });
-
-            DeleteCmd = new RelayCommandAsync(async () =>
-            {
-                var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
-                if (ids.Length == 0) return;
-                string message = $"Are you sure to delete ({ids.Length}) records?";
-                var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-                var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, eventArgs) =>
+                    await productQuery.Create(data);
+                    CurrentProduct = new ProductModel();
+                }
+                else
                 {
-                    if (eventArgs.Parameter is bool param && param == false) return;
-                    eventArgs.Cancel();
-                    eventArgs.Session.UpdateContent(new LoadingDialog());
-                    await productQuery.Delete(ids);
-                    await LoadProductsList();
-                    eventArgs.Session.Close(false);
-                    var content = getMsg($"{ids.Length} Records Deleted!");
-                    MessageQueue.Enqueue(content);
-                });
+                    await productQuery.Update(data);
+                    tempProduct = data;
+                }
+                await loadList();
+                eventArgs.Session.Close(false);
+                var content = getMsg("Product Saved!");
+                MessageQueue.Enqueue(content);
+            }, null);
+        }
+
+        private async Task deleteRows()
+        {
+            var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
+            if (ids.Length == 0) return;
+            string message = $"Are you sure to delete ({ids.Length}) records?";
+            var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
+            var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, eventArgs) =>
+            {
+                if (eventArgs.Parameter is bool param && param == false) return;
+                eventArgs.Cancel();
+                eventArgs.Session.UpdateContent(new LoadingDialog());
+                await productQuery.Delete(ids);
+                await loadList();
+                eventArgs.Session.Close(false);
+                var content = getMsg($"{ids.Length} Records Deleted!");
+                MessageQueue.Enqueue(content);
             });
         }
 
-        private void MapCurrentProduct()
+        private void mapProduct()
         {
-            if (theProduct == null) return;
+            if (tempProduct == null) return;
 
             CurrentProduct = new ProductModel
             {
-                Id = theProduct.Id,
-                Code = theProduct.Code,
-                CodeStatus = (Enums.CodeStatus)theProduct.CodeStatus,
-                Name = theProduct.Name,
-                InitialQuantity = theProduct.InitialQuantity,
-                Cost = theProduct.Cost,
-                Price = theProduct.Price,
-                CategoryId = theProduct.CategoryId,
+                Id = tempProduct.Id,
+                Code = tempProduct.Code,
+                CodeStatus = (Enums.CodeStatus)tempProduct.CodeStatus,
+                Name = tempProduct.Name,
+                InitialQuantity = tempProduct.InitialQuantity,
+                Cost = tempProduct.Cost,
+                Price = tempProduct.Price,
+                CategoryId = tempProduct.CategoryId,
 
-                CurrencyId = theProduct.CurrencyId,
-                UnitId = theProduct.UnitId,
-                BrandId = theProduct.BrandId,
-                AlertQuantity = theProduct.AlertQuantity,
-                Discount = theProduct.Discount,
-                ExpiryDate = theProduct.ExpiryDate,
-                Note = theProduct.Note,
+                CurrencyId = tempProduct.CurrencyId,
+                UnitId = tempProduct.UnitId,
+                BrandId = tempProduct.BrandId,
+                AlertQuantity = tempProduct.AlertQuantity,
+                Discount = tempProduct.Discount,
+                ExpiryDate = tempProduct.ExpiryDate,
+                Note = tempProduct.Note,
             };
         }
 
-        private async Task LoadProductsList()
+        private async Task loadList()
         {
             var data = await productQuery.GetList();
             var _data = data.Select(p => new ProductModel
