@@ -2,9 +2,9 @@
 
 namespace POS.WPF.Views.Components
 {
-    public partial class ProductsList : UserControl
+    public partial class ProductList : UserControl
     {
-        public ProductsList()
+        public ProductList()
         {
             InitializeComponent();
         }

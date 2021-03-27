@@ -19,7 +19,7 @@
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
-    <Grid>
+    <Grid Margin="20 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -31,7 +31,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <GroupBox Header="Product Details" Grid.Column="0" Margin="0 0 5 0"
-                      Style="{DynamicResource MaterialDesignCardGroupBox}">
+                      Style="{DynamicResource MaterialDesignGroupBox}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -140,7 +140,7 @@
                 </Grid>
             </GroupBox>
             <GroupBox Header="More Details" Margin="5 0 0 0" Grid.Column="1"
-                          Style="{DynamicResource MaterialDesignCardGroupBox}"
+                          Style="{DynamicResource MaterialDesignGroupBox}"
                           materialDesign:ColorZoneAssist.Mode="Custom"
                           materialDesign:ColorZoneAssist.Background="Gray"
                           materialDesign:ColorZoneAssist.Foreground="Black">
@@ -243,11 +243,11 @@
         
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 15">
             <Button Margin="10 0"
-                    Command="{Binding CancelCmd}"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom">Cancel</Button>
-            <Button Margin="0"
                     Command="{Binding SaveCmd}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">Save</Button>
+            <Button Margin="0"
+                    Command="{Binding CancelCmd}"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom">Cancel</Button>
         </StackPanel>
     </Grid>
 </UserControl>

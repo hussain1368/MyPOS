@@ -32,7 +32,7 @@
                 </Grid.RowDefinitions>
                 <local:HeaderBar Grid.Row="0" DataContext="{Binding GridHeader}"/>
                 <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="GridDialog">
-                    <local:ProductsList/>
+                    <local:ProductList/>
                 </materialDesign:DialogHost>
             </Grid>
             
@@ -51,7 +51,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <local:HeaderBar Grid.Row="0" DataContext="{Binding FormHeader}" Panel.ZIndex="1000"/>
-                    <materialDesign:DialogHost Grid.Row="1" Margin="20 10" DialogTheme="Light" Identifier="FormDialog">
+                    <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="FormDialog">
                         <local:ProductForm/>
                     </materialDesign:DialogHost>
                 </Grid>
