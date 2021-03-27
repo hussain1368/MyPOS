@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
 
-namespace POS.WPF.Pages
+namespace POS.WPF.Views
 {
-    public partial class Products : UserControl
+    public partial class Home : UserControl
     {
-        public Products()
+        public Home()
         {
             InitializeComponent();
         }

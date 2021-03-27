@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace POS.WPF.Controls
+namespace POS.WPF.Views.Components
 {
     /// <summary>
-    /// Interaction logic for AccountForm.xaml
+    /// Interaction logic for LoadingDialog.xaml
     /// </summary>
-    public partial class AccountForm : UserControl
+    public partial class LoadingDialog : UserControl
     {
-        public AccountForm()
+        public LoadingDialog()
         {
             InitializeComponent();
         }

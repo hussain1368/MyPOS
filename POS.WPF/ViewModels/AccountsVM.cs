@@ -2,7 +2,7 @@
 using POS.DAL.Models;
 using POS.DAL.Query;
 using POS.WPF.Commands;
-using POS.WPF.Controls;
+using POS.WPF.Views.Components;
 using POS.WPF.Models;
 using System;
 using System.Collections.Generic;

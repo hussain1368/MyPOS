@@ -10,7 +10,7 @@ namespace POS.WPF
 {
     public partial class App : Application
     {
-        public IServiceProvider ServiceProvider { get; private set; }
+        public ServiceProvider ServiceProvider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -20,6 +20,7 @@ namespace POS.WPF
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
+            ServiceLocator.SetLocatorProvider(ServiceProvider);
 
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
@@ -31,6 +32,9 @@ namespace POS.WPF
             services.AddScoped<ProductQuery>();
             services.AddScoped<AccountQuery>();
             services.AddScoped<OptionQuery>();
+
+            services.AddLogging();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddScoped<MainVM>();
             services.AddScoped<HomeVM>();

@@ -30,6 +30,7 @@ namespace POS.DAL.Query
 
         private void MapSingle(ProductDTM data, Product model)
         {
+            model.Id = data.Id;
             model.Code = data.Code;
             model.CodeStatus = data.CodeStatus;
             model.Name = data.Name;
@@ -45,10 +46,16 @@ namespace POS.DAL.Query
             model.CurrencyId = data.CurrencyId;
             model.ExpiryDate = data.ExpiryDate;
             model.Note = data.Note;
-            model.InsertedBy = data.InsertedBy;
-            model.InsertedDate = data.InsertedDate;
-            model.UpdatedBy = data.UpdatedBy;
-            model.UpdatedDate = data.UpdatedDate;
+            if (data.Id == 0)
+            {
+                model.InsertedBy = data.InsertedBy;
+                model.InsertedDate = data.InsertedDate;
+            }
+            else
+            {
+                model.UpdatedBy = data.UpdatedBy;
+                model.UpdatedDate = data.UpdatedDate;
+            }
             model.IsDeleted = data.IsDeleted;
         }
 
@@ -82,30 +89,32 @@ namespace POS.DAL.Query
             };
         }
 
-        public async Task<IEnumerable<ProductDTM>> GetList()
+        public async Task<IEnumerable<ProductDTM>> GetList(int? categoryId)
         {
-            return await dbContext.Products.Where(x => x.IsDeleted == false).Select(x => new ProductDTM
+            var query = dbContext.Products.Where(p => p.IsDeleted == false);
+            if (categoryId != null) query = query.Where(p => p.CategoryId == categoryId);
+            return await query.Select(p => new ProductDTM
             {
-                Id = x.Id,
-                Code = x.Code,
-                CodeStatus = x.CodeStatus,
-                Name = x.Name,
-                Cost = x.Cost,
-                Profit = x.Profit,
-                Price = x.Price,
-                Discount = x.Discount,
-                AlertQuantity = x.AlertQuantity,
-                UnitId = x.UnitId,
-                BrandId = x.BrandId,
-                CategoryId = x.CategoryId,
-                CurrencyId = x.CurrencyId,
-                ExpiryDate = x.ExpiryDate,
-                Note = x.Note,
-                UnitName = x.UnitId != null ? x.Unit.Name : null,
-                BrandName = x.BrandId != null ? x.Brand.Name : null,
-                CategoryName = x.CategoryId != null ? x.Category.Name : null,
-                CurrencyName = x.Currency.Name,
-                CurrencyCode = x.Currency.Code,
+                Id = p.Id,
+                Code = p.Code,
+                CodeStatus = p.CodeStatus,
+                Name = p.Name,
+                Cost = p.Cost,
+                Profit = p.Profit,
+                Price = p.Price,
+                Discount = p.Discount,
+                AlertQuantity = p.AlertQuantity,
+                UnitId = p.UnitId,
+                BrandId = p.BrandId,
+                CategoryId = p.CategoryId,
+                CurrencyId = p.CurrencyId,
+                ExpiryDate = p.ExpiryDate,
+                Note = p.Note,
+                UnitName = p.UnitId != null ? p.Unit.Name : null,
+                BrandName = p.BrandId != null ? p.Brand.Name : null,
+                CategoryName = p.CategoryId != null ? p.Category.Name : null,
+                CurrencyName = p.Currency.Name,
+                CurrencyCode = p.Currency.Code,
             })
             .ToListAsync();
         }

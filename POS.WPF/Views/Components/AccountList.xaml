@@ -1,24 +1,44 @@
-﻿<UserControl x:Class="POS.WPF.Controls.AccountList"
+﻿<UserControl x:Class="POS.WPF.Views.Components.AccountList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:local="clr-namespace:POS.WPF.Controls"
+             xmlns:local="clr-namespace:POS.WPF.Views.Components"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="Loaded" SourceName="AccountsGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
         </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="AccountTypeCombo">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}"/>
+        </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
     <Grid>
-        <DataGrid x:Name="AccountsGrid"
-                            CanUserAddRows="False"
-                            SelectionUnit="FullRow"
-                            AutoGenerateColumns="False"
-                            SelectionMode="Single"
-                            ItemsSource="{Binding AccountsList}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20 0">
+            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
+            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
+            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Margin="10 0" x:Name="AccountTypeCombo"
+                  materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:HintAssist.Hint="Account Type"
+                  SelectedValue="{Binding AccountTypeId}" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" x:Name="AccountsGrid" CanUserAddRows="False" SelectionUnit="FullRow"
+                    AutoGenerateColumns="False" SelectionMode="Single"
+                    ItemsSource="{Binding AccountsList}" Margin="20 0 20 10" >
 
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">

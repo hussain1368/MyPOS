@@ -9,16 +9,18 @@ using POS.DAL.Query;
 using POS.DAL.Models;
 using POS.WPF.Commands;
 using POS.WPF.Models;
-using POS.WPF.Controls;
+using POS.WPF.Views.Components;
+using Microsoft.Extensions.Localization;
 
 namespace POS.WPF.ViewModels
 {
     public class ProductsVM : BaseVM
     {
-        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery)
+        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery, IStringLocalizer<Labels> stringLocalizer)
         {
             this.productQuery = productQuery;
             this.optionQuery = optionQuery;
+            this._t = stringLocalizer;
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
 
             LoadListCmd = new RelayCommandAsync(async () =>
@@ -49,6 +51,7 @@ namespace POS.WPF.ViewModels
 
         private readonly ProductQuery productQuery;
         private readonly OptionQuery optionQuery;
+        private readonly IStringLocalizer<Labels> _t;
         private ProductDTM tempProduct;
 
         public ISnackbarMessageQueue MessageQueue { get; set; }
@@ -62,7 +65,7 @@ namespace POS.WPF.ViewModels
 
         public HeaderBarVM FormHeader => new HeaderBarVM
         {
-            HeaderText = "Product Details",
+            HeaderText = _t["ProductDetails"],
             IconKind = "ArrowBack",
             ButtonCommand = new RelayCommandSyncVoid(() =>
             {
@@ -72,7 +75,7 @@ namespace POS.WPF.ViewModels
 
         public HeaderBarVM GridHeader => new HeaderBarVM
         {
-            HeaderText = "List of Products",
+            HeaderText = _t["ListOfProducts"],
             IconKind = "Add",
             ButtonCommand = new RelayCommandAsyncParam(showForm),
         };
@@ -82,6 +85,13 @@ namespace POS.WPF.ViewModels
         {
             get { return _currentProduct; }
             set { _currentProduct = value; OnPropertyChanged(); }
+        }
+
+        private int? _categoryId;
+        public int? CategoryId
+        {
+            get { return _categoryId; }
+            set { _categoryId = value; OnPropertyChanged(); }
         }
 
         private ObservableCollection<ProductModel> _productsList;
@@ -153,22 +163,20 @@ namespace POS.WPF.ViewModels
                     Discount = CurrentProduct.Discount ?? 0,
                     ExpiryDate = CurrentProduct.ExpiryDate,
                     Note = CurrentProduct.Note,
-
-                    //refactor later
-                    InsertedBy = 1,
-                    InsertedDate = DateTime.Now,
-                    UpdatedBy = 1,
-                    UpdatedDate = DateTime.Now,
                     IsDeleted = false,
                 };
 
                 if (CurrentProduct.Id == 0)
                 {
+                    data.InsertedBy = 1;
+                    data.InsertedDate = DateTime.Now;
                     await productQuery.Create(data);
                     CurrentProduct = new ProductModel();
                 }
                 else
                 {
+                    data.UpdatedBy = 1;
+                    data.UpdatedDate = DateTime.Now;
                     await productQuery.Update(data);
                     tempProduct = data;
                 }
@@ -225,7 +233,7 @@ namespace POS.WPF.ViewModels
 
         private async Task loadList()
         {
-            var data = await productQuery.GetList();
+            var data = await productQuery.GetList(CategoryId);
             var _data = data.Select(p => new ProductModel
             {
                 Id = p.Id,
