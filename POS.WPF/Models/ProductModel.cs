@@ -4,7 +4,7 @@ using System;
 
 namespace POS.WPF.Models
 {
-    public class ProductModel : BaseModelWithError<ProductModel>
+    public class ProductModel : BaseErrorBindable<ProductModel>
     {
         public ProductModel() : base(new ProductValidator()) { }
 

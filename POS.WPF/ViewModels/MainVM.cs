@@ -4,26 +4,29 @@ using System;
 
 namespace POS.WPF.ViewModels
 {
-    public class MainVM : BaseVM
+    public class MainVM : BaseBindable
     {
-        public MainVM(IServiceProvider services)
+        public MainVM(IServiceProvider services, AppState appState)
         {
-            Pages = new BaseVM[]
+            Pages = new BaseBindable[]
             {
                 services.GetRequiredService<HomeVM>(),
                 services.GetRequiredService<ProductsVM>(),
                 services.GetRequiredService<AccountsVM>(),
+                services.GetRequiredService<InvoicesVM>(),
             };
 
             BodyContent = Pages[0];
             ViewChangedCmd = new RelayCommandSyncVoid(() => BodyContent = Pages[SelectedIndex]);
+            this.appState = appState;
         }
 
-        private BaseVM[] Pages;
+        private readonly AppState appState;
+        private readonly BaseBindable[] Pages;
         public RelayCommandSyncVoid ViewChangedCmd { get; set; }
 
-        private BaseVM _bodyContent;
-        public BaseVM BodyContent
+        private BaseBindable _bodyContent;
+        public BaseBindable BodyContent
         {
             get { return _bodyContent; }
             set { _bodyContent = value; OnPropertyChanged(); }
@@ -35,5 +38,7 @@ namespace POS.WPF.ViewModels
             get { return _selectedIndex; }
             set { _selectedIndex = value; OnPropertyChanged(); }
         }
+
+        public string UserDisplayName => appState.CurrentUser?.DisplayName;
     }
 }

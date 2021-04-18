@@ -9,6 +9,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="LoginWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Components\AccountForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -36,11 +39,17 @@
     <Compile Update="Views\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Invoices.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Products.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Components\AccountForm.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -72,6 +81,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Home.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Invoices.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Products.xaml">

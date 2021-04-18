@@ -22,25 +22,33 @@ namespace POS.WPF
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(ServiceProvider);
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            loginWindow.Show();
+
+            //var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            //mainWindow.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<POSContext>(ServiceLifetime.Transient);
+            services.AddScoped<UserQuery>();
+            services.AddScoped<OptionQuery>();
             services.AddScoped<ProductQuery>();
             services.AddScoped<AccountQuery>();
-            services.AddScoped<OptionQuery>();
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+            services.AddSingleton<AppState>();
+            services.AddScoped<LoginVM>();
             services.AddScoped<MainVM>();
             services.AddScoped<HomeVM>();
             services.AddScoped<ProductsVM>();
             services.AddScoped<AccountsVM>();
+            services.AddScoped<InvoicesVM>();
 
+            services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();
         }
     }

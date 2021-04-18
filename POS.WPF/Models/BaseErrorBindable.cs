@@ -9,7 +9,7 @@ using POS.WPF.ViewModels;
 
 namespace POS.WPF.Models
 {
-    public class BaseModelWithError<T> : BaseVM, INotifyDataErrorInfo where T : BaseVM
+    public class BaseErrorBindable<T> : BaseBindable, INotifyDataErrorInfo where T : BaseBindable
     {
         private readonly T model;
         private readonly AbstractValidator<T> validator;
@@ -17,7 +17,7 @@ namespace POS.WPF.Models
         public bool HasErrors => !valResult.IsValid;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-        public BaseModelWithError(AbstractValidator<T> validator)
+        public BaseErrorBindable(AbstractValidator<T> validator)
         {
             model = this as T;
             this.validator = validator;

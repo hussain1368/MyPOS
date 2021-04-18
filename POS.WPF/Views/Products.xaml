@@ -17,7 +17,7 @@
             <materialDesign:SnackbarMessage>
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="CheckBold"/>
-                    <TextBlock Margin="10 0">Excellent!</TextBlock>
+                    <TextBlock Text="POS" Margin="10 0"/>
                 </StackPanel>
             </materialDesign:SnackbarMessage>
         </materialDesign:Snackbar>

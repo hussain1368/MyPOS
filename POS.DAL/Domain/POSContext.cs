@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+#nullable disable
+
 namespace POS.DAL.Domain
 {
     public partial class POSContext : DbContext
@@ -16,6 +18,7 @@ namespace POS.DAL.Domain
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
         public virtual DbSet<OptionType> OptionTypes { get; set; }
@@ -27,6 +30,7 @@ namespace POS.DAL.Domain
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=KBL-DTM-HUSSAIN\\SQL17;Database=POS;User ID=sa;Password=welcome;");
             }
         }
@@ -62,6 +66,29 @@ namespace POS.DAL.Domain
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Account_Currency");
+            });
+
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.ToTable("AppUser");
+
+                entity.Property(e => e.DisplayName)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UserRole)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Invoice>(entity =>

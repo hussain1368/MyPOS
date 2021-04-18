@@ -49,42 +49,42 @@
         <Grid x:Name="GridMenu" Width="250" HorizontalAlignment="Left" Background="White">
             <StackPanel>
                 <materialDesign:ColorZone Mode="PrimaryDark" MinHeight="50">
-                    <!--<TextBlock Text="POS" Margin="5" Foreground="White" FontSize="23"/>-->
+                    <TextBlock Text="{Binding UserDisplayName}" Margin="5" Foreground="White" FontSize="23"/>
                 </materialDesign:ColorZone>
                 <Image Height="110" Source="/Abuly.jpg" Stretch="UniformToFill"/>
-                    <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Calibri" FontSize="18" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled" Cursor="Hand"
-                              SelectedIndex="{Binding SelectedIndex}">
-                        <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Home" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Home" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Name="Products" Height="45" Padding="0" BorderThickness="0 0 0 0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
+                <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Calibri" FontSize="18" 
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" Cursor="Hand"
+                            SelectedIndex="{Binding SelectedIndex}">
+                    <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="Home" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Home" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Name="Products" Height="45" Padding="0" BorderThickness="0 0 0 0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
                             <materialDesign:PackIcon Kind="PackageVariant" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Products" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Name="Accounts" Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="BusinessCardOutline" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Accounts" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Cart" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Invoices" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Transactions" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
+                            <TextBlock Text="Products" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Name="Accounts" Height="45" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="BusinessCardOutline" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Accounts" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="Cart" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Invoices" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Transactions" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
                     <ListViewItem Height="45" Padding="0">
                         <StackPanel Orientation="Horizontal" Margin="10 0">
                             <materialDesign:PackIcon Kind="Poll" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
@@ -92,26 +92,25 @@
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Account" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Users" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="45" Padding="0">
-                            <StackPanel Orientation="Horizontal" Margin="10 0">
-                                <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                                <TextBlock Text="Settings" Margin="10"/>
-                            </StackPanel>
-                        </ListViewItem>
-                    </ListView>
-                </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="Account" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Users" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="45" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="10 0">
+                            <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock Text="Settings" Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
             <ToggleButton x:Name="ButtonToggleMenu" IsChecked="True"
-                          HorizontalAlignment="Right" VerticalAlignment="Top" 
-                          Foreground="White" Cursor="Hand"
+                          HorizontalAlignment="Right" VerticalAlignment="Top"
+                          Foreground="White" Cursor="Hand" Background="Red"
                           Width="40" Height="40" Margin="5"
                           Style="{DynamicResource MaterialDesignHamburgerToggleButton}">
             </ToggleButton>
         </Grid>
-        
     </Grid>
 </Window>

@@ -12,24 +12,24 @@ using System.Threading.Tasks;
 
 namespace POS.WPF.ViewModels
 {
-    public class AccountsVM : BaseVM
+    public class AccountsVM : BaseBindable
     {
         public AccountsVM(AccountQuery accountQuery, OptionQuery optionQuery)
         {
             this.accountQuery = accountQuery;
             this.optionQuery = optionQuery;
 
-            LoadOptionsCmd = new RelayCommandAsync(loadOptions);
+            LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
             LoadListCmd = new RelayCommandAsync(async () =>
             {
                 await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, eventArgs) =>
                 {
-                    await loadList();
+                    await LoadList();
                     eventArgs.Session.Close(false);
                 }, null);
             });
-            ShowFormCmd = new RelayCommandAsyncParam(showForm);
-            SaveCmd = new RelayCommandAsync(saveForm);
+            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
+            SaveCmd = new RelayCommandAsync(SaveForm);
             CancelCmd = new RelayCommandSyncVoid(() =>
             {
                 CurrentAccount = new AccountModel();
@@ -40,7 +40,7 @@ namespace POS.WPF.ViewModels
                 bool _isChecked = (bool)isChecked;
                 foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
             });
-            DeleteCmd = new RelayCommandAsync(deleteRows);
+            DeleteCmd = new RelayCommandAsync(DeleteRows);
         }
 
         private readonly AccountQuery accountQuery;
@@ -58,7 +58,7 @@ namespace POS.WPF.ViewModels
         {
             HeaderText = "List of Accounts",
             IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(showForm)
+            ButtonCommand = new RelayCommandAsyncParam(ShowForm)
         };
 
         private IList<OptionValueDTM> _comboOptions;
@@ -97,12 +97,12 @@ namespace POS.WPF.ViewModels
             set { _accountTypeId = value; OnPropertyChanged(); }
         }
 
-        private async Task loadOptions()
+        private async Task LoadOptions()
         {
             ComboOptions = await optionQuery.OptionsAll();
         }
 
-        private async Task loadList()
+        private async Task LoadList()
         {
             var data = await accountQuery.GetList(AccountTypeId);
             var _data = data.Select(m => new AccountModel
@@ -122,7 +122,7 @@ namespace POS.WPF.ViewModels
             AccountsList = new ObservableCollection<AccountModel>(_data);
         }
 
-        private async Task showForm(object id)
+        private async Task ShowForm(object id)
         {
             if (id == null) CurrentAccount = new AccountModel();
             else
@@ -143,7 +143,7 @@ namespace POS.WPF.ViewModels
             await DialogHost.Show(new AccountForm(), "MainDialogHost", null, null);
         }
 
-        private async Task saveForm()
+        private async Task SaveForm()
         {
             CurrentAccount.ValidateModel();
             if (CurrentAccount.HasErrors) return;
@@ -174,11 +174,11 @@ namespace POS.WPF.ViewModels
                 data.UpdatedDate = DateTime.Now;
                 await accountQuery.Update(data);
             }
-            await loadList();
+            await LoadList();
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
-        private async Task deleteRows()
+        private async Task DeleteRows()
         {
             var ids = AccountsList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
             if (ids.Length == 0) return;
@@ -190,7 +190,7 @@ namespace POS.WPF.ViewModels
                 eventArgs.Cancel();
                 eventArgs.Session.UpdateContent(new LoadingDialog());
                 await accountQuery.Delete(ids);
-                await loadList();
+                await LoadList();
                 eventArgs.Session.Close(false);
                 //var content = getMsg($"{ids.Length} Records Deleted!");
                 //MessageQueue.Enqueue(content);

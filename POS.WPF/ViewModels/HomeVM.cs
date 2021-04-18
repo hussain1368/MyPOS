@@ -1,6 +1,6 @@
 ﻿namespace POS.WPF.ViewModels
 {
-    public class HomeVM : BaseVM
+    public class HomeVM : BaseBindable
     {
     }
 }

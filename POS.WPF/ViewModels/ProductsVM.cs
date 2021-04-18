@@ -14,13 +14,12 @@ using Microsoft.Extensions.Localization;
 
 namespace POS.WPF.ViewModels
 {
-    public class ProductsVM : BaseVM
+    public class ProductsVM : BaseBindable
     {
-        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery, IStringLocalizer<Labels> stringLocalizer)
+        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery, IStringLocalizer<Labels> _t)
         {
             this.productQuery = productQuery;
-            this.optionQuery = optionQuery;
-            this._t = stringLocalizer;
+            this._t = _t;
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
 
             LoadListCmd = new RelayCommandAsync(async () =>
@@ -50,7 +49,6 @@ namespace POS.WPF.ViewModels
         }
 
         private readonly ProductQuery productQuery;
-        private readonly OptionQuery optionQuery;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTM tempProduct;
 
@@ -220,7 +218,6 @@ namespace POS.WPF.ViewModels
                 Cost = tempProduct.Cost,
                 Price = tempProduct.Price,
                 CategoryId = tempProduct.CategoryId,
-
                 CurrencyId = tempProduct.CurrencyId,
                 UnitId = tempProduct.UnitId,
                 BrandId = tempProduct.BrandId,

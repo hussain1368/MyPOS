@@ -2,7 +2,7 @@
 
 namespace POS.WPF.Models
 {
-    public class AccountModel : BaseModelWithError<AccountModel>
+    public class AccountModel : BaseErrorBindable<AccountModel>
     {
         public AccountModel() : base(new AccountValidator()) { }
 
