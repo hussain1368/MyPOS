@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using POS.DAL.Models;
+using POS.DAL.DTO;
 using System.Linq;
 
 namespace POS.DAL.Query
@@ -13,7 +13,7 @@ namespace POS.DAL.Query
         {
         }
 
-        public async Task Create(ProductDTM data)
+        public async Task Create(ProductDTO data)
         {
             var model = new Product();
             MapSingle(data, model);
@@ -21,14 +21,14 @@ namespace POS.DAL.Query
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(ProductDTM data)
+        public async Task Update(ProductDTO data)
         {
             var model = await dbContext.Products.FindAsync(data.Id);
             MapSingle(data, model);
             await dbContext.SaveChangesAsync();
         }
 
-        private void MapSingle(ProductDTM data, Product model)
+        private void MapSingle(ProductDTO data, Product model)
         {
             model.Id = data.Id;
             model.Code = data.Code;
@@ -59,11 +59,11 @@ namespace POS.DAL.Query
             model.IsDeleted = data.IsDeleted;
         }
 
-        public async Task<ProductDTM> GetById(int id)
+        public async Task<ProductDTO> GetById(int id)
         {
             var product = await dbContext.Products.FindAsync(id);
             if (product == null) return null;
-            return new ProductDTM
+            return new ProductDTO
             {
                 Id = product.Id,
                 Code = product.Code,
@@ -89,11 +89,11 @@ namespace POS.DAL.Query
             };
         }
 
-        public async Task<IEnumerable<ProductDTM>> GetList(int? categoryId)
+        public async Task<IEnumerable<ProductDTO>> GetList(int? categoryId)
         {
             var query = dbContext.Products.Where(p => p.IsDeleted == false);
             if (categoryId != null) query = query.Where(p => p.CategoryId == categoryId);
-            return await query.Select(p => new ProductDTM
+            return await query.Select(p => new ProductDTO
             {
                 Id = p.Id,
                 Code = p.Code,

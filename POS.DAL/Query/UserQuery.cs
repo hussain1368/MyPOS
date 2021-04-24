@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
-using POS.DAL.Models;
+using POS.DAL.DTO;
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +11,7 @@ namespace POS.DAL.Query
     {
         public UserQuery(POSContext dbContext) : base(dbContext) { }
 
-        public async Task Create(UserDTM data)
+        public async Task Create(UserDTO data)
         {
             var user = new AppUser
             {
@@ -38,14 +38,14 @@ namespace POS.DAL.Query
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<UserDTM> Login(string username, string password)
+        public async Task<UserDTO> Login(string username, string password)
         {
             var user = await dbContext.AppUsers.SingleOrDefaultAsync(u => u.Username == username);
             if (user == null) throw new ApplicationException("Incorrect Username!");
             var hasher = new PasswordHasher<AppUser>();
             var result = hasher.VerifyHashedPassword(user, user.Password, password);
             if (result != PasswordVerificationResult.Success) throw new ApplicationException("Incorrect Password!");
-            return new UserDTM
+            return new UserDTO
             {
                 Id = user.Id,
                 Username = user.Username,

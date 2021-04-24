@@ -2,8 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using POS.DAL.Query;
 using POS.DAL.Domain;
-using POS.WPF.ViewModels;
-using System;
+using POS.WPF.Models.ViewModels;
 using System.Windows;
 
 namespace POS.WPF

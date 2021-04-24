@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
-using POS.DAL.Models;
+using POS.DAL.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace POS.DAL.Query
     {
         public AccountQuery(POSContext dbContext) : base(dbContext) { }
 
-        public async Task Create(AccountDTM data)
+        public async Task Create(AccountDTO data)
         {
             var model = new Account();
             MapSingle(data, model);
@@ -19,14 +19,14 @@ namespace POS.DAL.Query
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(AccountDTM data)
+        public async Task Update(AccountDTO data)
         {
             var model = await dbContext.Accounts.FindAsync(data.Id);
             MapSingle(data, model);
             await dbContext.SaveChangesAsync();
         }
 
-        private void MapSingle(AccountDTM data, Account model)
+        private void MapSingle(AccountDTO data, Account model)
         {
             model.Id = data.Id;
             model.Name = data.Name;
@@ -49,11 +49,11 @@ namespace POS.DAL.Query
             model.IsDeleted = data.IsDeleted;
         }
 
-        public async Task<AccountDTM> GetById(int id)
+        public async Task<AccountDTO> GetById(int id)
         {
             var model = await dbContext.Accounts.FindAsync(id);
             if (model == null) return null;
-            return new AccountDTM
+            return new AccountDTO
             {
                 Id = model.Id,
                 Name = model.Name,
@@ -71,11 +71,11 @@ namespace POS.DAL.Query
             };
         }
 
-        public async Task<IEnumerable<AccountDTM>> GetList(int? accountTypeId)
+        public async Task<IEnumerable<AccountDTO>> GetList(int? accountTypeId)
         {
             var query = dbContext.Accounts.Where(m => !m.IsDeleted);
             if (accountTypeId != null) query = query.Where(m => m.AccountTypeId == accountTypeId);
-            return await query.Select(x => new AccountDTM
+            return await query.Select(x => new AccountDTO
             {
                 Id = x.Id,
                 Name = x.Name,

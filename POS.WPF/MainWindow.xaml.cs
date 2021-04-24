@@ -1,4 +1,4 @@
-﻿using POS.WPF.ViewModels;
+﻿using POS.WPF.Models.ViewModels;
 using System.Windows;
 
 namespace POS.WPF

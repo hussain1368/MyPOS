@@ -18,10 +18,10 @@
     <Compile Update="Views\Components\AccountList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Components\ConfirmDialog.xaml.cs">
+    <Compile Update="Views\Layout\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Components\LoadingDialog.xaml.cs">
+    <Compile Update="Views\Layout\LoadingDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Components\ProductForm.xaml.cs">
@@ -30,19 +30,19 @@
     <Compile Update="Views\Components\ProductList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Components\HeaderBar.xaml.cs">
+    <Compile Update="Views\Layout\HeaderBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Accounts.xaml.cs">
+    <Compile Update="Views\Pages\Accounts.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Home.xaml.cs">
+    <Compile Update="Views\Pages\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Invoices.xaml.cs">
+    <Compile Update="Views\Pages\Invoices.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Products.xaml.cs">
+    <Compile Update="Views\Pages\Products.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <Page Update="Views\Components\AccountList.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Components\ConfirmDialog.xaml">
+    <Page Update="Views\Layout\ConfirmDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Components\LoadingDialog.xaml">
+    <Page Update="Views\Layout\LoadingDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Components\ProductForm.xaml">
@@ -68,7 +68,7 @@
     <Page Update="Views\Components\ProductList.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Components\HeaderBar.xaml">
+    <Page Update="Views\Layout\HeaderBar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -77,16 +77,16 @@
     <Page Update="Dictionaries\MyBrushes.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Accounts.xaml">
+    <Page Update="Views\Pages\Accounts.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Home.xaml">
+    <Page Update="Views\Pages\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Invoices.xaml">
+    <Page Update="Views\Pages\Invoices.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Products.xaml">
+    <Page Update="Views\Pages\Products.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

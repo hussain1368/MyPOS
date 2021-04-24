@@ -4,7 +4,7 @@ namespace POS.WPF
 {
     public partial class LoginWindow : Window
     {
-        public LoginWindow(ViewModels.LoginVM context)
+        public LoginWindow(Models.ViewModels.LoginVM context)
         {
             InitializeComponent();
             DataContext = context;

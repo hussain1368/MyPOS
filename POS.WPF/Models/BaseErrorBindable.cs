@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.Results;
-using POS.WPF.ViewModels;
 
 namespace POS.WPF.Models
 {
@@ -14,6 +13,7 @@ namespace POS.WPF.Models
         private readonly T model;
         private readonly AbstractValidator<T> validator;
         private ValidationResult valResult = new ValidationResult();
+
         public bool HasErrors => !valResult.IsValid;
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 

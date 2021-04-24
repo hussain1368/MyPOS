@@ -6,7 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:conv="clr-namespace:POS.WPF.Converters"
-             xmlns:val="clr-namespace:POS.WPF.TypeValidators"
+             xmlns:val="clr-namespace:POS.WPF.Validators.TypeValidators"
              xmlns:local="clr-namespace:POS.WPF.Views.Components"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
