@@ -107,7 +107,7 @@
             </StackPanel>
             <ToggleButton x:Name="ButtonToggleMenu" IsChecked="True"
                           HorizontalAlignment="Right" VerticalAlignment="Top"
-                          Foreground="White" Cursor="Hand" Background="Red"
+                          Foreground="White" Cursor="Hand"
                           Width="40" Height="40" Margin="5"
                           Style="{DynamicResource MaterialDesignHamburgerToggleButton}">
             </ToggleButton>
