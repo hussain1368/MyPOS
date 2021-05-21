@@ -14,7 +14,7 @@ namespace POS.WPF
 
         private readonly UserQuery userQuery;
 
-        private UserDTO _currentUser;
+        private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini" };
         public UserDTO CurrentUser
         {
             get { return _currentUser; }

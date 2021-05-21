@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <None Remove="Abuly.jpg" />
+    <None Remove="barcodef.png" />
+    <None Remove="barcodeo.png" />
+    <None Remove="barcodew.png" />
+    <None Remove="barcodeb.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +30,10 @@
 
   <ItemGroup>
     <Resource Include="Abuly.jpg" />
+    <Resource Include="barcodef.png" />
+    <Resource Include="barcodeo.png" />
+    <Resource Include="barcodew.png" />
+    <Resource Include="barcodeb.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +47,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\Abuly.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\barcodeb.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\barcodew.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

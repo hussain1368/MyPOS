@@ -18,6 +18,9 @@
     <Compile Update="Views\Components\AccountList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Components\InvoiceForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Layout\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -54,6 +57,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Components\AccountList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Components\InvoiceForm.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Layout\ConfirmDialog.xaml">

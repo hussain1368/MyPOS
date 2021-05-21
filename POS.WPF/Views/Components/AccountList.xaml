@@ -37,8 +37,7 @@
 
         <DataGrid Grid.Row="1" x:Name="AccountsGrid" CanUserAddRows="False" SelectionUnit="FullRow"
                     AutoGenerateColumns="False" SelectionMode="Single"
-                    ItemsSource="{Binding AccountsList}" Margin="20 0 20 10" >
-
+                    ItemsSource="{Binding AccountsList}" Margin="20 0 20 10">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
                     <DataGridCheckBoxColumn.HeaderTemplate>

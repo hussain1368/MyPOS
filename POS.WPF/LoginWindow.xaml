@@ -25,21 +25,27 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="Welcome to POS" Margin="10" TextAlignment="Center" 
                            FontSize="18" FontWeight="Bold" Foreground="DarkBlue"/>
-                <TextBox Grid.Row="1" materialDesign:HintAssist.Hint="Username" Margin="10">
-                    <TextBox.Text>
-                        <Binding Path="User.Username" UpdateSourceTrigger="PropertyChanged"/>
-                    </TextBox.Text>
-                    <TextBox.InputBindings>
-                        <KeyBinding Command="{Binding LoginCmd}" Key="Enter"/>
-                    </TextBox.InputBindings>
-                </TextBox>
-                <PasswordBox Grid.Row="2" materialDesign:HintAssist.Hint="Password" Margin="10"
+                <Grid Grid.Row="1">
+                    <materialDesign:PackIcon Kind="User" Margin="10 15" Foreground="{Binding BorderBrush, ElementName=UsernameTextBox}"/>
+                    <TextBox x:Name="UsernameTextBox" materialDesign:HintAssist.Hint="Username" Padding="10 0 0 0" Margin="10">
+                        <TextBox.Text>
+                            <Binding Path="User.Username" UpdateSourceTrigger="PropertyChanged"/>
+                        </TextBox.Text>
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding LoginCmd}" Key="Enter"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <materialDesign:PackIcon Kind="Key" Margin="10 15" Foreground="{Binding BorderBrush, ElementName=PasswordTextBox}"/>
+                    <PasswordBox x:Name="PasswordTextBox" materialDesign:HintAssist.Hint="Password" Padding="10 0 0 0" Margin="10"
                              local:PasswordHelper.Attach="True" 
                              local:PasswordHelper.Password="{Binding User.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <PasswordBox.InputBindings>
-                        <KeyBinding Command="{Binding LoginCmd}" Key="Enter"/>
-                    </PasswordBox.InputBindings>
-                </PasswordBox>
+                        <PasswordBox.InputBindings>
+                            <KeyBinding Command="{Binding LoginCmd}" Key="Enter"/>
+                        </PasswordBox.InputBindings>
+                    </PasswordBox>
+                </Grid>
                 <Button Grid.Row="3" Margin="10" Content="Login" Command="{Binding LoginCmd}"/>
                 <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="Red" FontWeight="Bold" Margin="10 0"/>
             </Grid>

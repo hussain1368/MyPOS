@@ -119,6 +119,36 @@ namespace POS.DAL.Query
             .ToListAsync();
         }
 
+        public async Task<ProductItemDTO> GetByCode(string code)
+        {
+            var product = await dbContext.Products.SingleOrDefaultAsync(p => p.Code == code && !p.IsDeleted);
+            if (product == null) return null;
+            return new ProductItemDTO
+            {
+                Id = product.Id,
+                Code = product.Code,
+                Name = product.Name,
+                Price = product.Price,
+                Discount = product.Discount,
+            };
+        }
+
+        public async Task<IEnumerable<ProductItemDTO>> GetByName(string searchValue)
+        {
+            var query = dbContext.Products
+                .Where(p => p.IsDeleted == false)
+                .Where(p => p.Name.Contains(searchValue));
+            return await query.Select(p => new ProductItemDTO
+            {
+                Id = p.Id,
+                Code = p.Code,
+                Name = p.Name,
+                Price = p.Price,
+                Discount = p.Discount,
+            })
+            .Take(5).ToListAsync();
+        }
+
         public async Task Delete(int[] ids)
         {
             var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();

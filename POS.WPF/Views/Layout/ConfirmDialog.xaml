@@ -12,7 +12,10 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding Message}" FontWeight="Bold" FontSize="18" FontFamily="Calibri" />
+        <StackPanel Orientation="Horizontal">
+            <wpf:PackIcon Kind="WarningCircleOutline" Width="25" Height="25"/>
+            <TextBlock Grid.Row="0" Text="{Binding Message}" FontWeight="Bold" FontSize="18" FontFamily="Calibri" Margin="10 2"/>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0 16 0 0">
             <Button IsDefault="True" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
                     Command="{x:Static wpf:DialogHost.CloseDialogCommand}">

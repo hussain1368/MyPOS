@@ -10,14 +10,14 @@ namespace POS.WPF.Models.EntityModels
         public string Username
         {
             get { return _username; }
-            set { _username = value; OnPropertyChanged(); ValidateField(); }
+            set { SetAndValidate(ref _username, value); }
         }
 
         private string _password;
         public string Password
         {
             get { return _password; }
-            set { _password = value; OnPropertyChanged(); ValidateField(); }
+            set { SetAndValidate(ref _password, value); }
         }
     }
 }

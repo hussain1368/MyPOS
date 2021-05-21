@@ -35,6 +35,12 @@ namespace POS.WPF.Models
             OnPropertyChanged(nameof(HasErrors));
         }
 
+        protected void SetAndValidate<F>(ref F prop, F value, [CallerMemberName] string propName = "")
+        {
+            SetValue(ref prop, value, propName);
+            ValidateField(propName);
+        }
+
         public void ValidateModel()
         {
             valResult = validator.Validate(model);

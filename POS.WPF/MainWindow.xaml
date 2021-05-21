@@ -43,18 +43,108 @@
         </EventTrigger>
     </Window.Triggers>
     <Grid>
-        <Border BorderBrush="Gray" BorderThickness="1 0 0 0" Margin="250 0 0 0" x:Name="MainPanel">
-            <ContentControl x:Name="BodyContent" Content="{Binding BodyContent}"/>
+        <Border Margin="250 0 0 0" x:Name="MainPanel" BorderBrush="LightGray" BorderThickness="1 0 0 0">
+            <materialDesign:DrawerHost RightDrawerCloseOnClickAway="False">
+                <materialDesign:DrawerHost.RightDrawerContent>
+                    <Grid Width="260" Background="#ced6e0">
+                        <Button VerticalAlignment="Top" HorizontalAlignment="Left" 
+                                Foreground="Black" Width="25" Height="25" Padding="0" Margin="5"
+                                Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                                Style="{StaticResource MaterialDesignFlatButton}">
+                            <materialDesign:PackIcon Kind="Close" Width="25" Height="25"/>
+                        </Button>
+                        <!--<Button Foreground="White" Background="Black" Margin="5"
+                                Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Logout" Width="25" Height="25"/>
+                                <TextBlock Text="Logout"/>
+                            </StackPanel>
+                        </Button>-->
+                        <Border VerticalAlignment="Top" HorizontalAlignment="Right" CornerRadius="5" Padding="2" Margin="10" Cursor="Hand" BorderBrush="Black" BorderThickness="1">
+                            <!--<Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#1e3799"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#4a69bd"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>-->
+                            <!--<Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"/>
+                            </Border.InputBindings>-->
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Logout" Foreground="Black" Width="20" Height="15" Margin="0"/>
+                                <TextBlock Text="Logout" FontSize="12" FontWeight="Medium" Foreground="Black" Margin="0 0 5 2"/>
+                            </StackPanel>
+                        </Border>
+                        <Grid Background="White" Margin="10 50 10 10" VerticalAlignment="Top">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="0 0 0 1" Margin="10 5">
+                                <TextBlock Text="Change Your Password" FontSize="16" Padding="0 5" FontStyle="Italic" FontWeight="Bold"/>
+                            </Border>
+                            <PasswordBox Grid.Row="1" materialDesign:HintAssist.Hint="Old Password" materialDesign:HintAssist.IsFloating="True" Margin="10"/>
+                            <PasswordBox Grid.Row="2" materialDesign:HintAssist.Hint="New Password" materialDesign:HintAssist.IsFloating="True" Margin="10"/>
+                            <PasswordBox Grid.Row="3" materialDesign:HintAssist.Hint="Confirm Password" materialDesign:HintAssist.IsFloating="True" Margin="10"/>
+                            <Button Grid.Row="4" Content="Change Password" Margin="10"/>
+                        </Grid>
+                    </Grid>
+                </materialDesign:DrawerHost.RightDrawerContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" x:Name="TopBar" Background="LightGray" Height="30" VerticalAlignment="Top">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 5">
+                            <Border CornerRadius="10" Padding="5 2" Margin="5 0" Cursor="Hand">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#1e3799"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#4a69bd"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"/>
+                                </Border.InputBindings>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="UserOutline" Foreground="White" Width="20" Height="15" Margin="0 0"/>
+                                    <TextBlock Text="{Binding UserDisplayName}" FontSize="12" FontWeight="Medium" Foreground="White" Margin="0 0 5 2"/>
+                                </StackPanel>
+                            </Border>
+                            <materialDesign:PackIcon Kind="Settings" Width="20" Height="20" Margin="5 0"/>
+                            <materialDesign:PackIcon Kind="Power" Width="20" Height="20" Margin="5 0"/>
+                        </StackPanel>
+                    </Grid>
+                    <ContentControl Grid.Row="1" x:Name="BodyContent" Content="{Binding BodyContent}"/>
+                </Grid>
+            </materialDesign:DrawerHost>
         </Border>
         <Grid x:Name="GridMenu" Width="250" HorizontalAlignment="Left" Background="White">
             <StackPanel>
-                <materialDesign:ColorZone Mode="PrimaryDark" MinHeight="50">
-                    <TextBlock Text="{Binding UserDisplayName}" Margin="5" Foreground="White" FontSize="23"/>
-                </materialDesign:ColorZone>
+                <!--<materialDesign:ColorZone Mode="PrimaryMid" Height="50">
+                </materialDesign:ColorZone>-->
+                <StackPanel Orientation="Horizontal" Height="50" Background="{StaticResource PrimaryHueMidBrush}">
+                    <Border BorderBrush="White" BorderThickness="1.5" CornerRadius="20" Width="40" Height="40" Margin="5">
+                        <Image Source="/barcodeo.png" Width="25" Height="25" Stretch="Uniform"/>
+                    </Border>
+                    <TextBlock Text="POINT OF SALE" Foreground="White" FontFamily="Aharoni" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" Margin="5"/>
+                    </StackPanel>
                 <Image Height="110" Source="/Abuly.jpg" Stretch="UniformToFill"/>
                 <ListView x:Name="SideMenu" Foreground="#FF313131" FontFamily="Calibri" FontSize="18" 
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" Cursor="Hand"
-                            SelectedIndex="{Binding SelectedIndex}">
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled" Cursor="Hand"
+                                SelectedIndex="{Binding SelectedIndex}">
                     <ListViewItem Name="Home" Height="45" Padding="0" BorderThickness="0 0 0 0">
                         <StackPanel Orientation="Horizontal" Margin="10 0">
                             <materialDesign:PackIcon Kind="Home" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
@@ -76,7 +166,7 @@
                     <ListViewItem Height="45" Padding="0">
                         <StackPanel Orientation="Horizontal" Margin="10 0">
                             <materialDesign:PackIcon Kind="Cart" Width="20" Height="20" Foreground="Gray" Margin="5" VerticalAlignment="Center"/>
-                            <TextBlock Text="Invoices" Margin="10"/>
+                            <TextBlock Text="Sale and Purchase" Margin="10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="45" Padding="0">
@@ -105,12 +195,11 @@
                     </ListViewItem>
                 </ListView>
             </StackPanel>
-            <ToggleButton x:Name="ButtonToggleMenu" IsChecked="True"
-                          HorizontalAlignment="Right" VerticalAlignment="Top"
-                          Foreground="White" Cursor="Hand"
-                          Width="40" Height="40" Margin="5"
-                          Style="{DynamicResource MaterialDesignHamburgerToggleButton}">
-            </ToggleButton>
+            <Border Width="50" Height="50" Background="{StaticResource PrimaryHueMidBrush}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <ToggleButton x:Name="ButtonToggleMenu" IsChecked="True"
+                                  Foreground="White" Cursor="Hand" Width="40" Height="40" Margin="5"
+                                  Style="{DynamicResource MaterialDesignHamburgerToggleButton}"/>
+            </Border>
         </Grid>
     </Grid>
 </Window>
