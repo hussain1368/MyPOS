@@ -160,19 +160,17 @@ namespace POS.WPF.Models.ViewModels
                 AccountTypeId = CurrentAccount.AccountTypeId.Value,
                 CurrentBalance = CurrentAccount.CurrentBalance,
                 IsDeleted = false,
+                UpdatedBy = 1,
+                UpdatedDate = DateTime.Now,
             };
 
             if (CurrentAccount.Id == 0)
             {
-                data.InsertedBy = 1;
-                data.InsertedDate = DateTime.Now;
                 await accountQuery.Create(data);
                 CurrentAccount = new AccountEM();
             }
             else
             {
-                data.UpdatedBy = 1;
-                data.UpdatedDate = DateTime.Now;
                 await accountQuery.Update(data);
             }
             await LoadList();

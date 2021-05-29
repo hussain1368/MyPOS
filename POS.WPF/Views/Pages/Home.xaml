@@ -8,14 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       mc:Ignorable="d">
 
-    <Grid>
-        <!--<TextBlock Text="Home Page" FontSize="18"/>-->
-        <my:MyComboBox IsEditable="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" Margin="20"
-                       Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-            <ComboBoxItem Content="iPhone"/>
-            <ComboBoxItem Content="Samsung"/>
-            <ComboBoxItem Content="Xiaomi"/>
-            <ComboBoxItem Content="Huawei"/>
-        </my:MyComboBox>
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="Home Page" FontSize="18"/>
+    </StackPanel>
 </UserControl>

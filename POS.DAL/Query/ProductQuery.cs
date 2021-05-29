@@ -46,16 +46,8 @@ namespace POS.DAL.Query
             model.CurrencyId = data.CurrencyId;
             model.ExpiryDate = data.ExpiryDate;
             model.Note = data.Note;
-            if (data.Id == 0)
-            {
-                model.InsertedBy = data.InsertedBy;
-                model.InsertedDate = data.InsertedDate;
-            }
-            else
-            {
-                model.UpdatedBy = data.UpdatedBy;
-                model.UpdatedDate = data.UpdatedDate;
-            }
+            model.UpdatedBy = data.UpdatedBy;
+            model.UpdatedDate = data.UpdatedDate;
             model.IsDeleted = data.IsDeleted;
         }
 
@@ -81,8 +73,6 @@ namespace POS.DAL.Query
                 CurrencyId = product.CurrencyId,
                 ExpiryDate = product.ExpiryDate,
                 Note = product.Note,
-                InsertedBy = product.InsertedBy,
-                InsertedDate = product.InsertedDate,
                 UpdatedBy = product.UpdatedBy,
                 UpdatedDate = product.UpdatedDate,
                 IsDeleted = product.IsDeleted,
@@ -152,7 +142,7 @@ namespace POS.DAL.Query
         public async Task Delete(int[] ids)
         {
             var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();
-            dbContext.Products.RemoveRange(products);
+            foreach (var product in products) product.IsDeleted = true;
             await dbContext.SaveChangesAsync();
         }
     }

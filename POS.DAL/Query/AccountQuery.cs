@@ -36,16 +36,8 @@ namespace POS.DAL.Query
             model.CurrencyId = data.CurrencyId;
             model.CurrentBalance = data.CurrentBalance;
             model.AccountTypeId = data.AccountTypeId;
-            if (data.Id == 0)
-            {
-                model.InsertedBy = data.InsertedBy;
-                model.InsertedDate = data.InsertedDate;
-            }
-            else
-            {
-                model.UpdatedBy = data.UpdatedBy;
-                model.UpdatedDate = data.UpdatedDate;
-            }
+            model.UpdatedBy = data.UpdatedBy;
+            model.UpdatedDate = data.UpdatedDate;
             model.IsDeleted = data.IsDeleted;
         }
 
@@ -63,15 +55,13 @@ namespace POS.DAL.Query
                 CurrencyId = model.CurrencyId,
                 CurrentBalance = model.CurrentBalance,
                 AccountTypeId = model.AccountTypeId,
-                InsertedBy = model.InsertedBy,
-                InsertedDate = model.InsertedDate,
                 UpdatedBy = model.UpdatedBy,
                 UpdatedDate = model.UpdatedDate,
                 IsDeleted = model.IsDeleted,
             };
         }
 
-        public async Task<IEnumerable<AccountDTO>> GetList(int? accountTypeId)
+        public async Task<IEnumerable<AccountDTO>> GetList(int? accountTypeId = null)
         {
             var query = dbContext.Accounts.Where(m => !m.IsDeleted);
             if (accountTypeId != null) query = query.Where(m => m.AccountTypeId == accountTypeId);
@@ -85,8 +75,6 @@ namespace POS.DAL.Query
                 CurrencyId = x.CurrencyId,
                 CurrentBalance = x.CurrentBalance,
                 AccountTypeId = x.AccountTypeId,
-                InsertedBy = x.InsertedBy,
-                InsertedDate = x.InsertedDate,
                 UpdatedBy = x.UpdatedBy,
                 UpdatedDate = x.UpdatedDate,
                 IsDeleted = x.IsDeleted,

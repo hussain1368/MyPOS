@@ -35,6 +35,7 @@ namespace POS.WPF
             services.AddScoped<OptionQuery>();
             services.AddScoped<ProductQuery>();
             services.AddScoped<AccountQuery>();
+            services.AddScoped<InvoiceQuery>();
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");

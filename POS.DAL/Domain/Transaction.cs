@@ -15,12 +15,10 @@ namespace POS.DAL.Domain
         public int? InvoiceId { get; set; }
         public byte TransactionType { get; set; }
         public int CurrencyId { get; set; }
-        public int CurrencyRate { get; set; }
+        public double CurrencyRate { get; set; }
         public string Note { get; set; }
-        public int InsertedBy { get; set; }
-        public DateTime InserteDate { get; set; }
-        public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public int UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
         public virtual Account Account { get; set; }

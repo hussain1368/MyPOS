@@ -28,10 +28,8 @@ namespace POS.DAL.Domain
         public int CurrencyId { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public string Note { get; set; }
-        public int InsertedBy { get; set; }
-        public DateTime InsertedDate { get; set; }
-        public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public int UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
         public virtual OptionValue Brand { get; set; }

@@ -25,6 +25,8 @@ namespace POS.DAL.Domain
         public virtual DbSet<OptionValue> OptionValues { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<Treasury> Treasuries { get; set; }
+        public virtual DbSet<Warehouse> Warehouses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -44,8 +46,6 @@ namespace POS.DAL.Domain
                 entity.ToTable("Account");
 
                 entity.Property(e => e.Address).HasMaxLength(255);
-
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -72,6 +72,9 @@ namespace POS.DAL.Domain
             {
                 entity.ToTable("AppUser");
 
+                entity.HasIndex(e => e.Username, "IX_AppUser_Username")
+                    .IsUnique();
+
                 entity.Property(e => e.DisplayName)
                     .IsRequired()
                     .HasMaxLength(255);
@@ -97,8 +100,6 @@ namespace POS.DAL.Domain
 
                 entity.Property(e => e.AccountName).HasMaxLength(255);
 
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.IssueDate).HasColumnType("date");
 
                 entity.Property(e => e.SerialNum)
@@ -117,6 +118,24 @@ namespace POS.DAL.Domain
                     .HasForeignKey(d => d.CurrencyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_Currency");
+
+                entity.HasOne(d => d.Treasury)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.TreasuryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Treasury");
+
+                entity.HasOne(d => d.UpdatedByNavigation)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.UpdatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_AppUser");
+
+                entity.HasOne(d => d.Warehouse)
+                    .WithMany(p => p.Invoices)
+                    .HasForeignKey(d => d.WarehouseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_Warehouse");
             });
 
             modelBuilder.Entity<InvoiceItem>(entity =>
@@ -174,8 +193,6 @@ namespace POS.DAL.Domain
 
                 entity.Property(e => e.ExpiryDate).HasColumnType("date");
 
-                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(255);
@@ -212,8 +229,6 @@ namespace POS.DAL.Domain
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
-                entity.Property(e => e.InserteDate).HasColumnType("datetime");
-
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Account)
@@ -231,6 +246,30 @@ namespace POS.DAL.Domain
                     .WithMany(p => p.Transactions)
                     .HasForeignKey(d => d.InvoiceId)
                     .HasConstraintName("FK_Transaction_Invoice");
+            });
+
+            modelBuilder.Entity<Treasury>(entity =>
+            {
+                entity.ToTable("Treasury");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.Treasuries)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Treasury_Currency");
+            });
+
+            modelBuilder.Entity<Warehouse>(entity =>
+            {
+                entity.ToTable("Warehouse");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -17,6 +17,7 @@ namespace POS.DAL.Domain
             ProductCurrencies = new HashSet<Product>();
             ProductUnits = new HashSet<Product>();
             Transactions = new HashSet<Transaction>();
+            Treasuries = new HashSet<Treasury>();
         }
 
         public int Id { get; set; }
@@ -24,6 +25,7 @@ namespace POS.DAL.Domain
         public string Name { get; set; }
         public string Code { get; set; }
         public string Flag { get; set; }
+        public bool IsDefault { get; set; }
         public bool IsDeleted { get; set; }
 
         public virtual OptionType Type { get; set; }
@@ -35,5 +37,6 @@ namespace POS.DAL.Domain
         public virtual ICollection<Product> ProductCurrencies { get; set; }
         public virtual ICollection<Product> ProductUnits { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Treasury> Treasuries { get; set; }
     }
 }

@@ -54,5 +54,33 @@ namespace POS.DAL.Query
             })
             .SingleOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<TreasuryDTO>> GetTreasuriesList()
+        {
+            return await dbContext.Treasuries.Where(t => !t.IsDeleted).Select(t => new TreasuryDTO
+            {
+                Id = t.Id,
+                Name = t.Name,
+                CurrencyId = t.CurrencyId,
+                CurrentBalance = t.CurrentBalance,
+                Note = t.Note,
+                CurrencyName = t.Currency.Name,
+                CurrencyCode = t.Currency.Code,
+                IsDefault = t.IsDefault,
+            })
+            .ToListAsync();
+        }
+
+        public async Task<IEnumerable<WarehouseDTO>> GetWarehousesList()
+        {
+            return await dbContext.Warehouses.Where(w => !w.IsDeleted).Select(w => new WarehouseDTO
+            {
+                Id = w.Id,
+                Name = w.Name,
+                Note = w.Note,
+                IsDefault = w.IsDefault,
+            })
+            .ToListAsync();
+        }
     }
 }

@@ -5,9 +5,13 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:comp="clr-namespace:POS.WPF.Views.Components"
+             xmlns:conv="clr-namespace:POS.WPF.Converters"
              xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:RadioConverter x:Key="RadioConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,8 +22,16 @@
                 <materialDesign:ColorZone Mode="Dark" Height="60">
                     <StackPanel Orientation="Horizontal" Margin="20 10" VerticalAlignment="Bottom">
                     <!--<TextBlock Text="Sale and Purchase" Margin="20 10" VerticalAlignment="Bottom" Foreground="White" FontSize="24" FontWeight="Normal" FontFamily="Aharoni"/>-->
-                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" IsChecked="True" Content="Sale" />
-                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" IsChecked="False" Content="Purchase" />
+                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" Content="Sale">
+                            <RadioButton.IsChecked>
+                                <Binding Path="InvoiceType" Converter="{StaticResource RadioConverter}" ConverterParameter="Sale" Mode="TwoWay"/>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" Content="Purchase">
+                            <RadioButton.IsChecked>
+                                <Binding Path="InvoiceType" Converter="{StaticResource RadioConverter}" ConverterParameter="Purchase" Mode="TwoWay"/>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
                     </StackPanel>
                 </materialDesign:ColorZone>
 
@@ -29,10 +41,12 @@
                 </Button>
             </Grid>
         </Border>
-        <GroupBox Grid.Row="1" Header="New Invoice" Margin="20 10" 
-                  materialDesign:ColorZoneAssist.Mode="Standard" 
-                  Style="{DynamicResource MaterialDesignCardGroupBox}">
-            <comp:InvoiceForm/>
-        </GroupBox>
+        <materialDesign:DialogHost Identifier="FormDialogHost" Grid.Row="1" Margin="20 10">
+            <GroupBox Header="New Invoice"
+                      materialDesign:ColorZoneAssist.Mode="Standard" 
+                      Style="{DynamicResource MaterialDesignCardGroupBox}">
+                <comp:InvoiceForm/>
+            </GroupBox>
+        </materialDesign:DialogHost>
     </Grid>
 </UserControl>

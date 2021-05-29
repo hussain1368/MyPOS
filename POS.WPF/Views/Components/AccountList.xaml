@@ -58,11 +58,13 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Width="50" Height="20" FontSize="8" FontWeight="Bold" Content="EDIT"
+                            <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}"
                                             Command="{Binding DataContext.ShowFormCmd,
                                             RelativeSource={RelativeSource FindAncestor,
                                             AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding Id}"/>
+                                            CommandParameter="{Binding Id}">
+                                <materialDesign:PackIcon Kind="NoteEditOutline" Width="15" Height="15"/>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

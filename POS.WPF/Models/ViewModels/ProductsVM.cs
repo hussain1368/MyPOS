@@ -163,19 +163,17 @@ namespace POS.WPF.Models.ViewModels
                     ExpiryDate = CurrentProduct.ExpiryDate,
                     Note = CurrentProduct.Note,
                     IsDeleted = false,
+                    UpdatedBy = 1,
+                    UpdatedDate = DateTime.Now,
                 };
 
                 if (CurrentProduct.Id == 0)
                 {
-                    data.InsertedBy = 1;
-                    data.InsertedDate = DateTime.Now;
                     await productQuery.Create(data);
                     CurrentProduct = new ProductEM();
                 }
                 else
                 {
-                    data.UpdatedBy = 1;
-                    data.UpdatedDate = DateTime.Now;
                     await productQuery.Update(data);
                     tempProduct = data;
                 }

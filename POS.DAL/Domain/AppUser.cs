@@ -7,6 +7,11 @@ namespace POS.DAL.Domain
 {
     public partial class AppUser
     {
+        public AppUser()
+        {
+            Invoices = new HashSet<Invoice>();
+        }
+
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -15,5 +20,7 @@ namespace POS.DAL.Domain
         public bool IsDeleted { get; set; }
         public int UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
+
+        public virtual ICollection<Invoice> Invoices { get; set; }
     }
 }

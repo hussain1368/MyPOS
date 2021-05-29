@@ -12,10 +12,8 @@ namespace POS.DAL.DTO
         public int CurrencyId { get; set; }
         public int CurrentBalance { get; set; }
         public int AccountTypeId { get; set; }
-        public int InsertedBy { get; set; }
-        public DateTime InsertedDate { get; set; }
-        public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+        public int UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
         public string AccountTypeName { get; set; }
