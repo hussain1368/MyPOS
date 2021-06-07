@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MaterialDesignThemes.Wpf;
-using MaterialDesignThemes.Wpf.Transitions;
 using POS.DAL.Query;
 using POS.DAL.DTO;
 using POS.WPF.Commands;
-using POS.WPF.Views.Sections;
 using Microsoft.Extensions.Localization;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Layout;
@@ -47,6 +45,22 @@ namespace POS.WPF.Models.ViewModels
                 foreach (var obj in ProductsList) obj.IsChecked = (bool)isChecked;
             });
             DeleteCmd = new RelayCommandAsync(DeleteRows);
+
+            HeaderContext = new HeaderBarVM
+            {
+                HeaderText = _t["ListOfProducts"],
+                IconKind = "Add",
+                ButtonCmd = new RelayCommandAsync(async () =>
+                {
+                    if (TransitionerIndex == 0) await ShowForm(null);
+                    else
+                    {
+                        HeaderContext.HeaderText = _t["ListOfProducts"];
+                        HeaderContext.IconKind = "Add";
+                        TransitionerIndex--;
+                    }
+                })
+            };
         }
 
         private readonly ProductQuery productQuery;
@@ -62,22 +76,19 @@ namespace POS.WPF.Models.ViewModels
         public RelayCommandSyncVoid CancelCmd { get; set; }
         public RelayCommandSyncParam CheckAllCmd { get; set; }
 
-        public HeaderBarVM FormHeader => new HeaderBarVM
+        private HeaderBarVM _headerContext;
+        public HeaderBarVM HeaderContext
         {
-            HeaderText = _t["ProductDetails"],
-            IconKind = "ArrowBack",
-            ButtonCommand = new RelayCommandSyncVoid(() =>
-            {
-                Transitioner.MovePreviousCommand.Execute(null, null);
-            })
-        };
+            get => _headerContext;
+            set => SetValue(ref _headerContext, value);
+        }
 
-        public HeaderBarVM GridHeader => new HeaderBarVM
+        private int _transitionerIndex = 0;
+        public int TransitionerIndex
         {
-            HeaderText = _t["ListOfProducts"],
-            IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(ShowForm),
-        };
+            get => _transitionerIndex;
+            set => SetValue(ref _transitionerIndex, value);
+        }
 
         private ProductEM _currentProduct = new ProductEM();
         public ProductEM CurrentProduct
@@ -121,7 +132,10 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task ShowForm(object id)
         {
-            Transitioner.MoveNextCommand.Execute(null, null);
+            TransitionerIndex++;
+            HeaderContext.HeaderText = _t["ProductDetails"];
+            HeaderContext.IconKind = "ArrowBack";
+
             if (id == null)
             {
                 CurrentProduct = new ProductEM();

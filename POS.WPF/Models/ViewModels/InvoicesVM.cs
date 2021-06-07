@@ -1,5 +1,4 @@
 ﻿using MaterialDesignThemes.Wpf;
-using MaterialDesignThemes.Wpf.Transitions;
 using POS.DAL.DTO;
 using POS.DAL.Query;
 using POS.WPF.Commands;
@@ -16,11 +15,24 @@ namespace POS.WPF.Models.ViewModels
     {
         public InvoicesVM(InvoiceFormVM invoiceFormContext, InvoiceQuery invoiceQuery)
         {
+            this.invoiceQuery = invoiceQuery;
             LoadListCmd = new RelayCommandAsync(LoadList);
             ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
             InvoiceFormContext = invoiceFormContext;
             invoiceFormContext.ParentPage = this;
-            this.invoiceQuery = invoiceQuery;
+
+            HeaderContext = new HeaderBarVM
+            {
+                HeaderText = "Sale and Purchase",
+                IconKind = "ArrowBack",
+                IsButtonVisible = false,
+                ButtonCmd = new RelayCommandSyncVoid(() =>
+                {
+                    HeaderContext.IsButtonVisible = false;
+                    HeaderContext.HeaderText = "Sale and Purchase";
+                    TransitionerIndex--;
+                })
+            };
         }
 
         private readonly InvoiceQuery invoiceQuery;
@@ -28,6 +40,20 @@ namespace POS.WPF.Models.ViewModels
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsyncParam ShowFormCmd { get; set; }
         public InvoiceFormVM InvoiceFormContext { get; }
+
+        private HeaderBarVM _headerContext;
+        public HeaderBarVM HeaderContext
+        {
+            get => _headerContext;
+            set => SetValue(ref _headerContext, value);
+        }
+
+        private int _transitionerIndex = 0;
+        public int TransitionerIndex
+        {
+            get => _transitionerIndex;
+            set => SetValue(ref _transitionerIndex, value);
+        }
 
         private IEnumerable<InvoiceRowDTO> _invoicesList = Enumerable.Empty<InvoiceRowDTO>();
         public IEnumerable<InvoiceRowDTO> InvoicesList
@@ -62,7 +88,8 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task ShowForm(object param)
         {
-            Transitioner.MoveNextCommand.Execute(null, null);
+            TransitionerIndex++;
+            HeaderContext.IsButtonVisible = true;
             if (param is string)
             {
                 var invoiceType = Enum.Parse<InvoiceType>(param.ToString());
@@ -71,6 +98,12 @@ namespace POS.WPF.Models.ViewModels
             if (param is int _param)
             {
                 await InvoiceFormContext.SetInvoiceData(_param);
+            }
+            switch (InvoiceFormContext.InvoiceType)
+            {
+                case Enums.InvoiceType.Sale: HeaderContext.HeaderText = "Sale Invoice Details"; break;
+                case Enums.InvoiceType.Purchase: HeaderContext.HeaderText = "Purchase Invoice Details"; break;
+                case Enums.InvoiceType.Return: HeaderContext.HeaderText = "Return Invoice Details"; break;
             }
         }
     }

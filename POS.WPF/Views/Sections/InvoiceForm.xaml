@@ -148,14 +148,14 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0"
-                                        Command="{Binding DataContext.DecrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding Index}">
+                                        <Button Width="20" Height="20" Margin="5 0" Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.DecrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding Index}">
                                             <materialDesign:PackIcon Kind="Minus" Width="15" Height="15"/>
                                         </Button>
-                                        <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0"
-                                        Command="{Binding DataContext.IncrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding Index}">
+                                        <Button Width="20" Height="20" Margin="5 0" Style="{StaticResource MaterialDesignIconButton}"
+                                                Command="{Binding DataContext.IncrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding Index}">
                                             <materialDesign:PackIcon Kind="Add" Width="15" Height="15"/>
                                         </Button>
                                         <Button Width="20" Height="20" Foreground="Red" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0">
@@ -175,9 +175,8 @@
                 </DataGrid>
 
                 <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                    <Button Margin="0" Content="Save" HorizontalAlignment="Right" Command="{Binding SaveCmd}"/>
-                    <Button Margin="10 0" Content="Cancel" HorizontalAlignment="Right" Command="{Binding CancelCmd}"/>
-                    <Button Margin="0" Content="Back" HorizontalAlignment="Right" Command="{Binding ShowListCmd}"/>
+                    <Button Margin="10 0" Content="Save" HorizontalAlignment="Right" Command="{Binding SaveCmd}"/>
+                    <Button Margin="0" Content="Cancel" HorizontalAlignment="Right" Command="{Binding CancelCmd}"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

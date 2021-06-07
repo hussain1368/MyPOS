@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
-            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" x:Name="AccountTypeCombo"
+            <ComboBox Grid.Row="1" Grid.Column="0" Width="150" x:Name="AccountTypeCombo"
                   materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:HintAssist.Hint="Account Type"
                   SelectedValue="{Binding AccountTypeId}" DisplayMemberPath="Name" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}"/>
             <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>

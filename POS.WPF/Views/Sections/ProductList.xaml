@@ -18,21 +18,21 @@
     </Behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20 0">
-            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="{loc:Labels Delete}"/>
-            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="{loc:Labels Search}"/>
-            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Margin="10 0" x:Name="CategoryCombo"
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0 0 0 10">
+            <ComboBox Grid.Row="1" Grid.Column="0" Width="150" Margin="0 0 10 0" x:Name="CategoryCombo"
                       materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:HintAssist.Hint="Category"
                       ItemsSource="{Binding CategoryList}" SelectedValue="{Binding CategoryId}" 
                       SelectedValuePath="Id" DisplayMemberPath="Name">
             </ComboBox>
+            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="{loc:Labels Delete}" Margin="0 0 10 0"/>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="{loc:Labels Search}"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="1" x:Name="ListGrid" Margin="20 0 20 10" CanUserAddRows="False" SelectionUnit="FullRow" AutoGenerateColumns="False" SelectionMode="Single" ItemsSource="{Binding ProductsList}">
+        <DataGrid Grid.Row="1" x:Name="ListGrid" CanUserAddRows="False" SelectionUnit="FullRow" AutoGenerateColumns="False" SelectionMode="Single" ItemsSource="{Binding ProductsList}">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
                     <DataGridCheckBoxColumn.HeaderTemplate>

@@ -1,5 +1,4 @@
 ﻿using MaterialDesignThemes.Wpf;
-using MaterialDesignThemes.Wpf.Transitions;
 using POS.DAL.DTO;
 using POS.DAL.Query;
 using POS.WPF.Commands;
@@ -27,7 +26,6 @@ namespace POS.WPF.Models.ViewModels
             this.optionQuery = optionQuery;
             this.accountQuery = accountQuery;
             this.invoiceQuery = invoiceQuery;
-            ShowListCmd = new RelayCommandSyncVoid(() => { Transitioner.MovePreviousCommand.Execute(null, null); });
             LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
             FindByNameInputCmd = new RelayCommandAsync(FindByName);
             FindByNameKeyUpCmd = new RelayCommandAsyncParam(FindByNameKeyUp);
@@ -51,7 +49,6 @@ namespace POS.WPF.Models.ViewModels
         public RelayCommandSyncParam DeleteInvoiceItemCmd { get; set; }
         public RelayCommandSyncParam IncrementInvoiceItemCmd { get; set; }
         public RelayCommandSyncParam DecrementInvoiceItemCmd { get; set; }
-        public RelayCommandSyncVoid ShowListCmd { get; set; }
         public RelayCommandSyncVoid CancelCmd { get; set; }
         public RelayCommandAsync SaveCmd { get; set; }
 

@@ -7,7 +7,6 @@
              xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:conv="clr-namespace:POS.WPF.Converters"
              xmlns:val="clr-namespace:POS.WPF.Validators.TypeValidators"
-             xmlns:local="clr-namespace:POS.WPF.Views.Sections"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -19,7 +18,7 @@
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
-    <Grid Margin="20 10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -30,8 +29,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="Product Details" Grid.Column="0" Margin="0 0 5 0"
-                      Style="{StaticResource MaterialDesignGroupBox}">
+            <GroupBox Header="Product Details" Margin="0 0 5 0" Grid.Column="0" Style="{StaticResource MaterialDesignGroupBox}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -53,13 +51,8 @@
                                   materialDesign:TextFieldAssist.HasClearButton="True"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.CategoryId}"
-                                  SelectedValuePath="Id"
+                                  SelectedValuePath="Id" DisplayMemberPath="Name"
                                   ItemsSource="{Binding CategoryList}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
                     <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="Code" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
@@ -139,8 +132,7 @@
                     </TextBox>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="More Details" Margin="5 0 0 0" Grid.Column="1"
-                          Style="{StaticResource MaterialDesignGroupBox}">
+            <GroupBox Header="More Details" Margin="5 0 0 0" Grid.Column="1" Style="{StaticResource MaterialDesignGroupBox}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -160,13 +152,8 @@
                                   materialDesign:TextFieldAssist.HasClearButton="True"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.CurrencyId}"
-                                  SelectedValuePath="Id"
+                                  SelectedValuePath="Id" DisplayMemberPath="Name"
                                   ItemsSource="{Binding CurrencyList}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
                     <ComboBox Grid.Row="1" Grid.Column="0" Margin="10"
@@ -174,13 +161,8 @@
                                   materialDesign:TextFieldAssist.HasClearButton="True"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.UnitId}"
-                                  SelectedValuePath="Id"
+                                  SelectedValuePath="Id" DisplayMemberPath="Name"
                                   ItemsSource="{Binding UnitList}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
                     <ComboBox Grid.Row="2" Grid.Column="0" Margin="10"
@@ -188,13 +170,8 @@
                                   materialDesign:TextFieldAssist.HasClearButton="True"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   SelectedValue="{Binding CurrentProduct.BrandId}"
-                                  SelectedValuePath="Id"
+                                  SelectedValuePath="Id" DisplayMemberPath="Name"
                                   ItemsSource="{Binding BrandList}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
                     <TextBox Grid.Row="3" Grid.Column="0" materialDesign:HintAssist.Hint="Alert Quantity" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">

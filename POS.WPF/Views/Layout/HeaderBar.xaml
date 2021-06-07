@@ -11,8 +11,9 @@
             <TextBlock Text="{Binding HeaderText}" Margin="20 10" VerticalAlignment="Bottom" Foreground="White" FontSize="24" FontWeight="Normal" FontFamily="Aharoni"/>
         </materialDesign:ColorZone>
 
-        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20 -20" Panel.ZIndex="1000"
-                Style="{DynamicResource MaterialDesignFloatingActionButton}" Command="{Binding ButtonCommand}">
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                Margin="20 -20" Panel.ZIndex="1000" Visibility="{Binding ButtonVisibility}"
+                Style="{DynamicResource MaterialDesignFloatingActionButton}" Command="{Binding ButtonCmd}">
             <materialDesign:PackIcon Kind="{Binding IconKind}" Width="30" Height="30"/>
         </Button>
     </Grid>

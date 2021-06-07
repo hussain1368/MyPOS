@@ -18,12 +18,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Panel.ZIndex="1000">
-            <materialDesign:ColorZone Mode="Dark" Height="60" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
-                <TextBlock Text="Sale and Purchase" Margin="20 10" VerticalAlignment="Bottom" Foreground="White" FontSize="24" FontWeight="Normal" FontFamily="Aharoni"/>
-            </materialDesign:ColorZone>
+            <layout:HeaderBar DataContext="{Binding HeaderContext}"/>
         </Border>
             <Border Margin="20 10" Grid.Row="1">
-                <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
+                <materialDesign:Transitioner SelectedIndex="{Binding TransitionerIndex}" AutoApplyTransitionOrigins="True">
                     <!--Slide #1-->
                     <materialDesign:DialogHost Identifier="MainDialogHost" DialogTheme="Light">
                         <section:InvoiceList/>

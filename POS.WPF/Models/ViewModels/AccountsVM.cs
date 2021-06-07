@@ -59,7 +59,7 @@ namespace POS.WPF.Models.ViewModels
         {
             HeaderText = "List of Accounts",
             IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(ShowForm)
+            ButtonCmd = new RelayCommandAsyncParam(ShowForm)
         };
 
         private IList<OptionValueDTO> _comboOptions;

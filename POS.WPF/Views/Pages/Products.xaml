@@ -12,6 +12,12 @@
     <Behaviors:Interaction.Triggers>
     </Behaviors:Interaction.Triggers>
     <Grid Background="White">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <materialDesign:Snackbar 
             MessageQueue="{Binding MessageQueue}"
             HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="1000" Margin="10">
@@ -23,42 +29,33 @@
             </materialDesign:SnackbarMessage>
         </materialDesign:Snackbar>
 
-        <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
-            
-            <!--Slide #1-->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <layout:HeaderBar Grid.Row="0" DataContext="{Binding GridHeader}"/>
-                <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="GridDialog">
-                    <comp:ProductList />
+        <Border Grid.Row="0" Panel.ZIndex="100">
+            <layout:HeaderBar DataContext="{Binding HeaderContext}"/>
+        </Border>
+
+        <Border Grid.Row="1" Margin="20 10">
+            <materialDesign:Transitioner SelectedIndex="{Binding TransitionerIndex}" AutoApplyTransitionOrigins="True">
+
+                <!--Slide #1-->
+                <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog">
+                    <comp:ProductList/>
                 </materialDesign:DialogHost>
-            </Grid>
-            
-            <materialDesign:TransitionerSlide>
-                <materialDesign:TransitionerSlide.BackwardWipe>
-                    <materialDesign:CircleWipe/>
-                </materialDesign:TransitionerSlide.BackwardWipe>
-                <materialDesign:TransitionerSlide.ForwardWipe>
-                    <materialDesign:SlideWipe Direction="Right"/>
-                </materialDesign:TransitionerSlide.ForwardWipe>
-                
-                <!--Slide #2-->
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <layout:HeaderBar Grid.Row="0" DataContext="{Binding FormHeader}" Panel.ZIndex="1000"/>
-                    <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="FormDialog">
+
+                <materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide.BackwardWipe>
+                        <materialDesign:CircleWipe/>
+                    </materialDesign:TransitionerSlide.BackwardWipe>
+                    <materialDesign:TransitionerSlide.ForwardWipe>
+                        <materialDesign:SlideWipe Direction="Right"/>
+                    </materialDesign:TransitionerSlide.ForwardWipe>
+
+                    <!--Slide #2-->
+                    <materialDesign:DialogHost DialogTheme="Light" Identifier="FormDialog">
                         <comp:ProductForm/>
                     </materialDesign:DialogHost>
-                </Grid>
 
-            </materialDesign:TransitionerSlide>
-        </materialDesign:Transitioner>
-
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+        </Border>
     </Grid>
 </UserControl>
