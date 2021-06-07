@@ -3,7 +3,7 @@ using POS.DAL.Query;
 using POS.WPF.Models;
 using System.Threading.Tasks;
 
-namespace POS.WPF
+namespace POS.WPF.Common
 {
     public class AppState : BaseBindable
     {

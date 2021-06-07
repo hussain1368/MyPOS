@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using System.Windows.Markup;
 using System;
+using POS.WPF.Common;
 
 namespace POS.WPF
 {

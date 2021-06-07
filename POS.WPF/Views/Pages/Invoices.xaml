@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:comp="clr-namespace:POS.WPF.Views.Components"
+             xmlns:section="clr-namespace:POS.WPF.Views.Sections"
              xmlns:conv="clr-namespace:POS.WPF.Converters"
              xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
              mc:Ignorable="d" 
@@ -18,35 +18,31 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Panel.ZIndex="1000">
-            <Grid>
-                <materialDesign:ColorZone Mode="Dark" Height="60">
-                    <StackPanel Orientation="Horizontal" Margin="20 10" VerticalAlignment="Bottom">
-                    <!--<TextBlock Text="Sale and Purchase" Margin="20 10" VerticalAlignment="Bottom" Foreground="White" FontSize="24" FontWeight="Normal" FontFamily="Aharoni"/>-->
-                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" Content="Sale">
-                            <RadioButton.IsChecked>
-                                <Binding Path="InvoiceType" Converter="{StaticResource RadioConverter}" ConverterParameter="Sale" Mode="TwoWay"/>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
-                        <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" Content="Purchase">
-                            <RadioButton.IsChecked>
-                                <Binding Path="InvoiceType" Converter="{StaticResource RadioConverter}" ConverterParameter="Purchase" Mode="TwoWay"/>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
-                    </StackPanel>
-                </materialDesign:ColorZone>
-
-                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="0" Margin="20 -20" Panel.ZIndex="1000"
-                Style="{DynamicResource MaterialDesignFloatingActionButton}" Command="{Binding ButtonCommand}">
-                    <materialDesign:PackIcon Kind="TableArrowLeft" Width="30" Height="30"/>
-                </Button>
-            </Grid>
+            <materialDesign:ColorZone Mode="Dark" Height="60" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
+                <TextBlock Text="Sale and Purchase" Margin="20 10" VerticalAlignment="Bottom" Foreground="White" FontSize="24" FontWeight="Normal" FontFamily="Aharoni"/>
+            </materialDesign:ColorZone>
         </Border>
-        <materialDesign:DialogHost Identifier="FormDialogHost" Grid.Row="1" Margin="20 10">
-            <GroupBox Header="New Invoice"
-                      materialDesign:ColorZoneAssist.Mode="Standard" 
-                      Style="{DynamicResource MaterialDesignCardGroupBox}">
-                <comp:InvoiceForm/>
-            </GroupBox>
-        </materialDesign:DialogHost>
+            <Border Margin="20 10" Grid.Row="1">
+                <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True">
+                    <!--Slide #1-->
+                    <materialDesign:DialogHost Identifier="MainDialogHost" DialogTheme="Light">
+                        <section:InvoiceList/>
+                    </materialDesign:DialogHost>
+
+                    <materialDesign:TransitionerSlide>
+                        <materialDesign:TransitionerSlide.BackwardWipe>
+                            <materialDesign:CircleWipe/>
+                        </materialDesign:TransitionerSlide.BackwardWipe>
+                        <materialDesign:TransitionerSlide.ForwardWipe>
+                            <materialDesign:SlideWipe Direction="Right"/>
+                        </materialDesign:TransitionerSlide.ForwardWipe>
+                        <!--Slide #2-->
+                        <materialDesign:DialogHost Identifier="FormDialogHost" DialogTheme="Light">
+                            <section:InvoiceForm DataContext="{Binding InvoiceFormContext}"/>
+                        </materialDesign:DialogHost>
+                    </materialDesign:TransitionerSlide>
+
+                </materialDesign:Transitioner>
+            </Border>
     </Grid>
 </UserControl>

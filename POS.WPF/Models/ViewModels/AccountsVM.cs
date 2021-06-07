@@ -7,7 +7,7 @@ using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
 using POS.DAL.Query;
 using POS.WPF.Commands;
-using POS.WPF.Views.Components;
+using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Layout;
 

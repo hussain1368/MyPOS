@@ -98,8 +98,6 @@ namespace POS.DAL.Domain
             {
                 entity.ToTable("Invoice");
 
-                entity.Property(e => e.AccountName).HasMaxLength(255);
-
                 entity.Property(e => e.IssueDate).HasColumnType("date");
 
                 entity.Property(e => e.SerialNum)
@@ -145,7 +143,6 @@ namespace POS.DAL.Domain
                 entity.HasOne(d => d.Invoice)
                     .WithMany(p => p.InvoiceItems)
                     .HasForeignKey(d => d.InvoiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_InvoiceItem_Invoice");
 
                 entity.HasOne(d => d.Product)

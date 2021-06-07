@@ -9,6 +9,13 @@ namespace POS.WPF.Models.EntityModels
     {
         public InvoiceEM() : base(new InvoiceValidator()) { }
 
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetValue(ref _id, value);
+        }
+
         private TreasuryDTO _treasury;
         public TreasuryDTO Treasury
         {

@@ -1,0 +1,185 @@
+﻿<UserControl x:Class="POS.WPF.Views.Sections.InvoiceForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:my="clr-namespace:POS.WPF.Controls"
+             xmlns:conv="clr-namespace:POS.WPF.Converters"
+             xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
+             xmlns:model="clr-namespace:POS.WPF.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:RadioConverter x:Key="RadioConverter"/>
+    </UserControl.Resources>
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded" SourceName="FormGrid">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="PreviewTextInput" SourceName="ProductDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding FindByNameInputCmd}"/>
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="PreviewKeyUp" SourceName="ProductDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding FindByNameKeyUpCmd}" PassEventArgsToCommand="True"/>
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="ProductDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding AddInvoiceItemCmd}"/>
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
+
+    <GroupBox Header="{Binding FormTitle}"
+                      materialDesign:ColorZoneAssist.Mode="PrimaryMid"
+                      Style="{DynamicResource MaterialDesignCardGroupBox}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid x:Name="FormGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Row="0" Grid.Column="0" Margin="10" materialDesign:HintAssist.Hint="Treasury" 
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                  materialDesign:TextFieldAssist.HasClearButton="True"
+                  SelectedValue="{Binding CurrentInvoice.Treasury}" ItemsSource="{Binding TreasuriesList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Warehouse" 
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                  materialDesign:TextFieldAssist.HasClearButton="True"
+                  SelectedValue="{Binding CurrentInvoice.WarehouseId}" SelectedValuePath="Id" ItemsSource="{Binding WarehousesList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <ComboBox Grid.Row="0" Grid.Column="2" Margin="10" materialDesign:HintAssist.Hint="Customer/Supplier"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                  materialDesign:TextFieldAssist.HasClearButton="True"
+                  SelectedValue="{Binding CurrentInvoice.AccountId}" SelectedValuePath="Id" ItemsSource="{Binding AccountsList}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <DatePicker Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Bottom"
+                    materialDesign:HintAssist.Hint="Date"
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    <DatePicker.SelectedDate>
+                        <Binding Path="CurrentInvoice.IssueDate" UpdateSourceTrigger="PropertyChanged" TargetNullValue=""/>
+                    </DatePicker.SelectedDate>
+                </DatePicker>
+
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Bottom"
+                 materialDesign:HintAssist.Hint="Currency Rate"
+                 materialDesign:HintAssist.IsFloating="True"
+                 materialDesign:TextFieldAssist.HasClearButton="True">
+                    <TextBox.Text>
+                        <Binding Path="CurrentInvoice.CurrencyRate" UpdateSourceTrigger="PropertyChanged" TargetNullValue=""/>
+                    </TextBox.Text>
+                </TextBox>
+
+                <layout:RadioBox Grid.Row="1" Grid.Column="2" Margin="10" Label="Payment Type" model:RadioBoxModel.Model="{Binding CurrentInvoice.PaymentType}">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="Cash" Margin="0" Validation.ErrorTemplate="{x:Null}">
+                            <RadioButton.IsChecked>
+                                <Binding Path="CurrentInvoice.PaymentType" Converter="{StaticResource RadioConverter}" ConverterParameter="Cash" Mode="TwoWay"/>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+                        <RadioButton Content="Loan" Margin="20 0" Validation.ErrorTemplate="{x:Null}">
+                            <RadioButton.IsChecked>
+                                <Binding Path="CurrentInvoice.PaymentType" Converter="{StaticResource RadioConverter}" ConverterParameter="Loan" Mode="TwoWay"/>
+                            </RadioButton.IsChecked>
+                        </RadioButton>
+                    </StackPanel>
+                </layout:RadioBox>
+
+                <my:MyComboBox x:Name="ProductDrp" Grid.Row="2" Grid.Column="0" Margin="10" 
+                  materialDesign:HintAssist.Hint="Product"
+                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                  materialDesign:TextFieldAssist.HasClearButton="True" StaysOpenOnEdit="True"
+                  IsEditable="True" IsTextSearchEnabled="False"
+                  SelectedItem="{Binding SelectedProduct, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding ProductsList, UpdateSourceTrigger=PropertyChanged}"
+                  Text="{Binding SearchValue, UpdateSourceTrigger=PropertyChanged}">
+                </my:MyComboBox>
+
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Notes" Grid.ColumnSpan="2"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" AcceptsReturn="True" Text="{Binding CurrentInvoice.Note}"/>
+
+                <Border Grid.Row="3" Grid.Column="0" Margin="10" Background="DarkGray" CornerRadius="5" Height="150" VerticalAlignment="Top">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding InvoiceTotalPrice, StringFormat={}{0:N0}}" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding CurrentInvoice.Treasury.CurrencyCode}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <DataGrid x:Name="ItemsDataGrid" Grid.Row="3" Grid.Column="1" Margin="10" Grid.ColumnSpan="2" MinHeight="150"
+                  ItemsSource="{Binding InvoiceItems}" AutoGenerateColumns="False" SelectionMode="Single" 
+                  SelectionUnit="FullRow" CanUserReorderColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Width="Auto" Binding="{Binding Index}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Code" Width="Auto" Binding="{Binding ProductCode}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding ProductName}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Unit Price" Width="Auto" Binding="{Binding UnitPrice, StringFormat={}{0:N0}}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Discount" Width="Auto" Binding="{Binding UnitDiscount, StringFormat={}{0:N0}}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Quantity" Width="Auto" Binding="{Binding Quantity, StringFormat={}{0:N0}}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTextColumn Header="Total" Width="Auto" Binding="{Binding TotalPrice, StringFormat={}{0:N0}}" IsReadOnly="True" CanUserSort="False"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0"
+                                        Command="{Binding DataContext.DecrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Index}">
+                                            <materialDesign:PackIcon Kind="Minus" Width="15" Height="15"/>
+                                        </Button>
+                                        <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0"
+                                        Command="{Binding DataContext.IncrementInvoiceItemCmd,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Index}">
+                                            <materialDesign:PackIcon Kind="Add" Width="15" Height="15"/>
+                                        </Button>
+                                        <Button Width="20" Height="20" Foreground="Red" Style="{StaticResource MaterialDesignIconButton}" Margin="5 0">
+                                            <materialDesign:PackIcon Kind="TrashOutline" Width="15" Height="15"/>
+                                            <Button.Command>
+                                                <Binding Path="DataContext.DeleteInvoiceItemCmd" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}"/>
+                                            </Button.Command>
+                                            <Button.CommandParameter>
+                                                <Binding Path="Index"/>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Margin="0" Content="Save" HorizontalAlignment="Right" Command="{Binding SaveCmd}"/>
+                    <Button Margin="10 0" Content="Cancel" HorizontalAlignment="Right" Command="{Binding CancelCmd}"/>
+                    <Button Margin="0" Content="Back" HorizontalAlignment="Right" Command="{Binding ShowListCmd}"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </GroupBox>
+</UserControl>

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="POS.WPF.Views.Components.AccountForm"
+﻿<UserControl x:Class="POS.WPF.Views.Sections.AccountForm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -27,22 +27,16 @@
         <ComboBox Grid.Row="1" Grid.Column="0" Margin="10" materialDesign:HintAssist.Hint="Account Type" 
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                   materialDesign:TextFieldAssist.HasClearButton="True"
-                  SelectedValue="{Binding CurrentAccount.AccountTypeId}" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+                  SelectedValue="{Binding CurrentAccount.AccountTypeId}" 
+                  SelectedValuePath="Id" DisplayMemberPath="Name"
+                  ItemsSource="{Binding AccountTypeList}">
         </ComboBox>
         <ComboBox Grid.Row="1" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Currency" 
                   Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                   materialDesign:TextFieldAssist.HasClearButton="True"
-                  SelectedValue="{Binding CurrentAccount.CurrencyId}" SelectedValuePath="Id" ItemsSource="{Binding CurrencyList}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
+                  SelectedValue="{Binding CurrentAccount.CurrencyId}" 
+                  SelectedValuePath="Id" DisplayMemberPath="Name"
+                  ItemsSource="{Binding CurrencyList}">
         </ComboBox>
         <TextBox Grid.Row="2" Grid.Column="0" materialDesign:HintAssist.Hint="Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="10">
             <TextBox.Text>

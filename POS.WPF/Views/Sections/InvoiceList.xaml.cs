@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace POS.WPF.Views.Components
+namespace POS.WPF.Views.Sections
 {
     /// <summary>
-    /// Interaction logic for AccountList.xaml
+    /// Interaction logic for InvoiceList.xaml
     /// </summary>
-    public partial class AccountList : UserControl
+    public partial class InvoiceList : UserControl
     {
-        public AccountList()
+        public InvoiceList()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace POS.WPF
+namespace POS.WPF.Common
 {
     public class WindowCloser
     {

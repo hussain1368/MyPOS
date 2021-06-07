@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="POS.WPF.Views.Components.AccountList"
+﻿<UserControl x:Class="POS.WPF.Views.Sections.AccountList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -17,27 +17,21 @@
     </Behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20 0">
-            <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
-            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
-            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" Margin="10 0" x:Name="AccountTypeCombo"
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
+            <ComboBox Grid.Row="1" Grid.Column="0" Width="200" x:Name="AccountTypeCombo"
                   materialDesign:TextFieldAssist.HasClearButton="True" materialDesign:HintAssist.Hint="Account Type"
-                  SelectedValue="{Binding AccountTypeId}" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                  SelectedValue="{Binding AccountTypeId}" DisplayMemberPath="Name" SelectedValuePath="Id" ItemsSource="{Binding AccountTypeList}"/>
+            <Button Margin="10 0" Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding DeleteCmd}" Content="Delete"/>
+            <Button Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadListCmd}" Content="Search"/>
         </StackPanel>
 
         <DataGrid Grid.Row="1" x:Name="AccountsGrid" CanUserAddRows="False" SelectionUnit="FullRow"
                     AutoGenerateColumns="False" SelectionMode="Single"
-                    ItemsSource="{Binding AccountsList}" Margin="20 0 20 10">
+                    ItemsSource="{Binding AccountsList}">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn Header="Code" Width="Auto" Binding="{Binding IsChecked}" EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
@@ -58,11 +52,12 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Width="20" Height="20" Style="{StaticResource MaterialDesignIconButton}"
-                                            Command="{Binding DataContext.ShowFormCmd,
-                                            RelativeSource={RelativeSource FindAncestor,
-                                            AncestorType={x:Type UserControl}}}"
-                                            CommandParameter="{Binding Id}">
+                            <Button Width="20" Height="20" ToolTip="Open"
+                                    Style="{StaticResource MaterialDesignIconButton}"
+                                    Command="{Binding DataContext.ShowFormCmd,
+                                    RelativeSource={RelativeSource FindAncestor,
+                                    AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding Id}">
                                 <materialDesign:PackIcon Kind="NoteEditOutline" Width="15" Height="15"/>
                             </Button>
                         </DataTemplate>

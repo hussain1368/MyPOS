@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using POS.WPF.Commands;
+using POS.WPF.Common;
 using System;
 
 namespace POS.WPF.Models.ViewModels

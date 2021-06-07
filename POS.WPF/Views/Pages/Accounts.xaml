@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:POS.WPF.Views.Components"
+    xmlns:local="clr-namespace:POS.WPF.Views.Sections"
     xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
     d:DesignHeight="450" d:DesignWidth="800"
     mc:Ignorable="d">
@@ -23,7 +23,7 @@
         <layout:HeaderBar Grid.Row="0" DataContext="{Binding Header}"/>
 
         <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="MainDialogHost">
-            <local:AccountList/>
+            <local:AccountList Margin="20 10"/>
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:POS.WPF"
+        xmlns:common="clr-namespace:POS.WPF.Common"
         mc:Ignorable="d"
         Title="LoginWindow" Height="400" Width="700"
         WindowStartupLocation="CenterScreen"
-        local:WindowCloser.EnableWindowClosing="True">
+        common:WindowCloser.EnableWindowClosing="True">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -25,9 +25,9 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="Welcome to POS" Margin="10" TextAlignment="Center" 
                            FontSize="18" FontWeight="Bold" Foreground="DarkBlue"/>
-                <Grid Grid.Row="1">
-                    <materialDesign:PackIcon Kind="User" Margin="10 15" Foreground="{Binding BorderBrush, ElementName=UsernameTextBox}"/>
-                    <TextBox x:Name="UsernameTextBox" materialDesign:HintAssist.Hint="Username" Padding="10 0 0 0" Margin="10">
+                <Grid Grid.Row="1" Margin="10">
+                    <materialDesign:PackIcon Kind="User" Margin="0 0 0 5" Foreground="{Binding BorderBrush, ElementName=UsernameTextBox}"/>
+                    <TextBox x:Name="UsernameTextBox" materialDesign:HintAssist.Hint="Username" Padding="20 0 0 0">
                         <TextBox.Text>
                             <Binding Path="User.Username" UpdateSourceTrigger="PropertyChanged"/>
                         </TextBox.Text>
@@ -36,11 +36,11 @@
                         </TextBox.InputBindings>
                     </TextBox>
                 </Grid>
-                <Grid Grid.Row="2">
-                    <materialDesign:PackIcon Kind="Key" Margin="10 15" Foreground="{Binding BorderBrush, ElementName=PasswordTextBox}"/>
-                    <PasswordBox x:Name="PasswordTextBox" materialDesign:HintAssist.Hint="Password" Padding="10 0 0 0" Margin="10"
-                             local:PasswordHelper.Attach="True" 
-                             local:PasswordHelper.Password="{Binding User.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <Grid Grid.Row="2" Margin="10">
+                    <materialDesign:PackIcon Kind="Key" Margin="0 0 0 5" Foreground="{Binding BorderBrush, ElementName=PasswordTextBox}"/>
+                    <PasswordBox x:Name="PasswordTextBox" materialDesign:HintAssist.Hint="Password" Padding="20 0 0 0"
+                             common:PasswordHelper.Attach="True" 
+                             common:PasswordHelper.Password="{Binding User.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <PasswordBox.InputBindings>
                             <KeyBinding Command="{Binding LoginCmd}" Key="Enter"/>
                         </PasswordBox.InputBindings>

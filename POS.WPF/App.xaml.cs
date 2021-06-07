@@ -4,6 +4,7 @@ using POS.DAL.Query;
 using POS.DAL.Domain;
 using POS.WPF.Models.ViewModels;
 using System.Windows;
+using POS.WPF.Common;
 
 namespace POS.WPF
 {
@@ -47,6 +48,7 @@ namespace POS.WPF
             services.AddScoped<ProductsVM>();
             services.AddScoped<AccountsVM>();
             services.AddScoped<InvoicesVM>();
+            services.AddScoped<InvoiceFormVM>();
 
             services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();

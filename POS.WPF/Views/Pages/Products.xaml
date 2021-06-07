@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
-      xmlns:comp="clr-namespace:POS.WPF.Views.Components"
+      xmlns:comp="clr-namespace:POS.WPF.Views.Sections"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       d:DesignHeight="450" d:DesignWidth="800"
       mc:Ignorable="d">
@@ -33,7 +33,7 @@
                 </Grid.RowDefinitions>
                 <layout:HeaderBar Grid.Row="0" DataContext="{Binding GridHeader}"/>
                 <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="GridDialog">
-                    <comp:ProductList/>
+                    <comp:ProductList />
                 </materialDesign:DialogHost>
             </Grid>
             

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using POS.WPF.Commands;
+using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
 
 namespace POS.WPF.Models.ViewModels

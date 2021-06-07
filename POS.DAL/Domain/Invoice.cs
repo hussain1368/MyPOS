@@ -19,11 +19,12 @@ namespace POS.DAL.Domain
         public int WarehouseId { get; set; }
         public int TreasuryId { get; set; }
         public int? AccountId { get; set; }
-        public string AccountName { get; set; }
         public int CurrencyId { get; set; }
         public double CurrencyRate { get; set; }
         public DateTime IssueDate { get; set; }
-        public byte? PaymentType { get; set; }
+        public byte PaymentType { get; set; }
+        public int TotalPrice { get; set; }
+        public int ItemsCount { get; set; }
         public string Note { get; set; }
         public int UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }

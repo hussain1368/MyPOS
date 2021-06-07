@@ -8,7 +8,7 @@ using MaterialDesignThemes.Wpf.Transitions;
 using POS.DAL.Query;
 using POS.DAL.DTO;
 using POS.WPF.Commands;
-using POS.WPF.Views.Components;
+using POS.WPF.Views.Sections;
 using Microsoft.Extensions.Localization;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Layout;
@@ -27,7 +27,7 @@ namespace POS.WPF.Models.ViewModels
             {
                 await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, eventArgs) =>
                 {
-                    await loadList();
+                    await LoadList();
                     eventArgs.Session.Close(false);
                 }, null);
             });
@@ -35,23 +35,23 @@ namespace POS.WPF.Models.ViewModels
             {
                 ComboOptions = await optionQuery.OptionsAll();
             });
-            ShowFormCmd = new RelayCommandAsyncParam(showForm);
-            SaveCmd = new RelayCommandAsync(saveForm);
+            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
+            SaveCmd = new RelayCommandAsync(SaveForm);
             CancelCmd = new RelayCommandSyncVoid(() =>
             {
-                if (tempProduct == null) CurrentProduct = new ProductEM();
-                else mapProduct();
+                if (tempProductData == null) CurrentProduct = new ProductEM();
+                else MapProduct();
             });
             CheckAllCmd = new RelayCommandSyncParam(isChecked =>
             {
                 foreach (var obj in ProductsList) obj.IsChecked = (bool)isChecked;
             });
-            DeleteCmd = new RelayCommandAsync(deleteRows);
+            DeleteCmd = new RelayCommandAsync(DeleteRows);
         }
 
         private readonly ProductQuery productQuery;
         private readonly IStringLocalizer<Labels> _t;
-        private ProductDTO tempProduct;
+        private ProductDTO tempProductData;
 
         public ISnackbarMessageQueue MessageQueue { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
@@ -76,7 +76,7 @@ namespace POS.WPF.Models.ViewModels
         {
             HeaderText = _t["ListOfProducts"],
             IconKind = "Add",
-            ButtonCommand = new RelayCommandAsyncParam(showForm),
+            ButtonCommand = new RelayCommandAsyncParam(ShowForm),
         };
 
         private ProductEM _currentProduct = new ProductEM();
@@ -119,24 +119,24 @@ namespace POS.WPF.Models.ViewModels
         public IList<OptionValueDTO> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
         private OptionValueDTO DefaultCurrency => ComboOptions?.SingleOrDefault(op => op.Code == "AFN");
 
-        private async Task showForm(object id)
+        private async Task ShowForm(object id)
         {
             Transitioner.MoveNextCommand.Execute(null, null);
             if (id == null)
             {
                 CurrentProduct = new ProductEM();
-                tempProduct = null;
+                tempProductData = null;
                 return;
             }
             await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
             {
-                tempProduct = await productQuery.GetById((int)id);
-                mapProduct();
+                tempProductData = await productQuery.GetById((int)id);
+                MapProduct();
                 eventArgs.Session.Close(false);
             }, null);
         }
 
-        private async Task saveForm()
+        private async Task SaveForm()
         {
             CurrentProduct.ValidateModel();
             if (CurrentProduct.HasErrors) return;
@@ -175,16 +175,16 @@ namespace POS.WPF.Models.ViewModels
                 else
                 {
                     await productQuery.Update(data);
-                    tempProduct = data;
+                    tempProductData = data;
                 }
-                await loadList();
+                await LoadList();
                 eventArgs.Session.Close(false);
                 var content = getMsg("Product Saved!");
                 MessageQueue.Enqueue(content);
             }, null);
         }
 
-        private async Task deleteRows()
+        private async Task DeleteRows()
         {
             var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
             if (ids.Length == 0) return;
@@ -196,38 +196,38 @@ namespace POS.WPF.Models.ViewModels
                 eventArgs.Cancel();
                 eventArgs.Session.UpdateContent(new LoadingDialog());
                 await productQuery.Delete(ids);
-                await loadList();
+                await LoadList();
                 eventArgs.Session.Close(false);
                 var content = getMsg($"{ids.Length} Records Deleted!");
                 MessageQueue.Enqueue(content);
             });
         }
 
-        private void mapProduct()
+        private void MapProduct()
         {
-            if (tempProduct == null) return;
+            if (tempProductData == null) return;
 
             CurrentProduct = new ProductEM
             {
-                Id = tempProduct.Id,
-                Code = tempProduct.Code,
-                CodeStatus = (Enums.CodeStatus)tempProduct.CodeStatus,
-                Name = tempProduct.Name,
-                InitialQuantity = tempProduct.InitialQuantity,
-                Cost = tempProduct.Cost,
-                Price = tempProduct.Price,
-                CategoryId = tempProduct.CategoryId,
-                CurrencyId = tempProduct.CurrencyId,
-                UnitId = tempProduct.UnitId,
-                BrandId = tempProduct.BrandId,
-                AlertQuantity = tempProduct.AlertQuantity,
-                Discount = tempProduct.Discount,
-                ExpiryDate = tempProduct.ExpiryDate,
-                Note = tempProduct.Note,
+                Id = tempProductData.Id,
+                Code = tempProductData.Code,
+                CodeStatus = (Enums.CodeStatus)tempProductData.CodeStatus,
+                Name = tempProductData.Name,
+                InitialQuantity = tempProductData.InitialQuantity,
+                Cost = tempProductData.Cost,
+                Price = tempProductData.Price,
+                CategoryId = tempProductData.CategoryId,
+                CurrencyId = tempProductData.CurrencyId,
+                UnitId = tempProductData.UnitId,
+                BrandId = tempProductData.BrandId,
+                AlertQuantity = tempProductData.AlertQuantity,
+                Discount = tempProductData.Discount,
+                ExpiryDate = tempProductData.ExpiryDate,
+                Note = tempProductData.Note,
             };
         }
 
-        private async Task loadList()
+        private async Task LoadList()
         {
             var data = await productQuery.GetList(CategoryId);
             var _data = data.Select(p => new ProductEM

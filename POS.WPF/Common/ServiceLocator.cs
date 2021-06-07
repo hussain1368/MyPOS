@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace POS.WPF
+namespace POS.WPF.Common
 {
     public class ServiceLocator
     {
