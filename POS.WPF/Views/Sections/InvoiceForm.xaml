@@ -8,7 +8,6 @@
     xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:POS.WPF.Common"
     xmlns:my="clr-namespace:POS.WPF.Controls"
     Padding="20,10"
     d:DesignHeight="450"
@@ -122,8 +121,8 @@
                     Grid.Row="1"
                     Grid.Column="2"
                     Margin="10"
-                    model:RadioBoxModel.Model="{Binding CurrentInvoice.PaymentType}"
-                    Label="Payment Type">
+                    Label="Payment Type"
+                    Tag="{Binding CurrentInvoice.PaymentType}">
                     <StackPanel Orientation="Horizontal">
                         <RadioButton
                             Margin="0"
