@@ -83,6 +83,8 @@ namespace POS.WPF.Models.ViewModels
             set => SetValue(ref _headerContext, value);
         }
 
+        public bool IsEditMode => CurrentProduct.Id != 0;
+
         private int _transitionerIndex = 0;
         public int TransitionerIndex
         {
@@ -94,7 +96,12 @@ namespace POS.WPF.Models.ViewModels
         public ProductEM CurrentProduct
         {
             get { return _currentProduct; }
-            set { _currentProduct = value; OnPropertyChanged(); }
+            set
+            {
+                _currentProduct = value; 
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEditMode));
+            }
         }
 
         private int? _categoryId;

@@ -22,11 +22,8 @@ namespace POS.WPF
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(ServiceProvider);
 
-            //var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
-            //loginWindow.Show();
-
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            var window = ServiceProvider.GetRequiredService<MainWindow>();
+            window.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)
