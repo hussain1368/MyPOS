@@ -1,12 +1,5 @@
 ﻿namespace POS.WPF.Enums
 {
-    public enum CodeStatus
-    {
-        HasCode = 1,
-        NewCode = 2,
-        NoCode = 3,
-    }
-
     public enum InvoiceType
     {
         Sale = 1,

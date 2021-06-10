@@ -12,54 +12,28 @@ namespace POS.WPF.Models.EntityModels
         public int Id
         {
             get { return _id; }
-            set { _id = value; OnPropertyChanged(); }
+            set { SetValue(ref _id, value); }
         }
 
         private string _code;
         public string Code
         {
             get { return _code; }
-            set
-            {
-                _code = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
-        }
-
-        private CodeStatus _codeStatus;
-        public CodeStatus CodeStatus
-        {
-            get { return _codeStatus; }
-            set
-            {
-                _codeStatus = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
+            set { SetAndValidate(ref _code, value); }
         }
 
         private string _name;
         public string Name
         {
             get { return _name; }
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
+            set { SetAndValidate(ref _name, value); }
         }
 
         private int? _initialQuantity;
         public int? InitialQuantity
         {
             get { return _initialQuantity; }
-            set {
-                _initialQuantity = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
+            set { SetAndValidate(ref _initialQuantity, value); }
         }
 
         private int? _cost;
@@ -68,10 +42,8 @@ namespace POS.WPF.Models.EntityModels
             get { return _cost; }
             set
             {
-                _cost = value;
-                OnPropertyChanged();
+                SetAndValidate(ref _cost, value);
                 OnPropertyChanged(nameof(Profit));
-                ValidateField();
             }
         }
 
@@ -81,88 +53,82 @@ namespace POS.WPF.Models.EntityModels
             get { return _price; }
             set
             {
-                _price = value;
-                OnPropertyChanged();
+                SetAndValidate(ref _price, value);
                 OnPropertyChanged(nameof(Profit));
-                ValidateField();
             }
         }
 
         public int? Profit
         {
-            get { return (Price ?? 0) - (Cost ?? 0); }
+            get
+            {
+                var _value = (Price ?? 0) - (Cost ?? 0);
+                if (_value == 0) return null;
+                return _value;
+            }
         }
 
         private int? _categoryId;
         public int? CategoryId
         {
             get { return _categoryId; }
-            set
-            {
-                _categoryId = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
+            set { SetAndValidate(ref _categoryId, value); }
         }
 
         private int? _currencyId;
         public int? CurrencyId
         {
             get { return _currencyId; }
-            set { _currencyId = value; OnPropertyChanged(); }
+            set { SetValue(ref _currencyId, value); }
         }
 
         private int? _unitId;
         public int? UnitId
         {
             get { return _unitId; }
-            set { _unitId = value; OnPropertyChanged(); }
+            set { SetValue(ref _unitId, value); }
         }
 
         private int? _brandId;
         public int? BrandId
         {
             get { return _brandId; }
-            set { _brandId = value; OnPropertyChanged(); }
+            set { SetValue(ref _brandId, value); }
         }
 
         private int? _alertQuantity;
         public int? AlertQuantity
         {
-            get { return _alertQuantity; }
-            set { _alertQuantity = value; OnPropertyChanged(); }
+            get { if (_alertQuantity == 0) return null; return _alertQuantity; }
+            set { SetValue(ref _alertQuantity, value); }
         }
 
         private int? _discount;
         public int? Discount
         {
-            get { return _discount; }
-            set {
-                _discount = value;
-                OnPropertyChanged();
-                ValidateField();
-            }
+            get { if (_discount == 0) return null; return _discount; }
+            set { SetAndValidate(ref _discount, value); }
         }
 
         private DateTime? _expiryDate;
         public DateTime? ExpiryDate
         {
             get { return _expiryDate; }
-            set { _expiryDate = value; OnPropertyChanged(); }
+            set { SetValue(ref _expiryDate, value); }
         }
 
         private string _note;
         public string Note
         {
             get { return _note; }
-            set { _note = value; OnPropertyChanged(); }
+            set { SetValue(ref _note, value); }
         }
 
         private bool _isChecked;
         public bool IsChecked
         {
             get { return _isChecked; }
-            set { _isChecked = value; OnPropertyChanged(); }
+            set { SetValue(ref _isChecked, value); }
         }
 
         public string UnitName { get; set; }

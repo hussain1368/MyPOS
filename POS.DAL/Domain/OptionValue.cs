@@ -26,6 +26,7 @@ namespace POS.DAL.Domain
         public string Code { get; set; }
         public string Flag { get; set; }
         public bool IsDefault { get; set; }
+        public bool IsReadOnly { get; set; }
         public bool IsDeleted { get; set; }
 
         public virtual OptionType Type { get; set; }

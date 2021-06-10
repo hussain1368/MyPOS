@@ -156,6 +156,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Margin="10"
+                    VerticalAlignment="Top"
                     materialDesign:HintAssist.Hint="Product"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     IsEditable="True"

@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:val="clr-namespace:POS.WPF.Validators.TypeValidators"
+    Padding="20,10"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -20,54 +21,57 @@
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
-    <Border Padding="20,10">
 
-        <StackPanel x:Name="FormGrid">
-            <materialDesign:Card Margin="0">
-                <Expander
-                    Padding="0,0,0,20"
-                    materialDesign:ExpanderAssist.HeaderBackground="{StaticResource PrimaryHueMidBrush}"
-                    materialDesign:ExpanderAssist.HeaderFontSize="14"
-                    materialDesign:ExpanderAssist.HorizontalHeaderPadding="5"
-                    Background="White"
-                    Header="Product Details"
-                    IsExpanded="True">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+    <StackPanel x:Name="FormGrid">
+        <materialDesign:Card Margin="0">
+            <Expander
+                Padding="0,0,0,20"
+                materialDesign:ExpanderAssist.HeaderBackground="{StaticResource PrimaryHueMidBrush}"
+                materialDesign:ExpanderAssist.HeaderFontSize="14"
+                materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 5"
+                Background="White"
+                IsExpanded="True">
+                <Expander.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="White" Text="Product Details" />
+                    </DataTemplate>
+                </Expander.HeaderTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Code"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding Path="CurrentProduct.Code" UpdateSourceTrigger="PropertyChanged" />
-                            </TextBox.Text>
-                        </TextBox>
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Category"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding CategoryList}"
-                            SelectedValue="{Binding CurrentProduct.CategoryId}"
-                            SelectedValuePath="Id"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Code"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Code" UpdateSourceTrigger="PropertyChanged" />
+                        </TextBox.Text>
+                    </TextBox>
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Category"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding CategoryList}"
+                        SelectedValue="{Binding CurrentProduct.CategoryId}"
+                        SelectedValuePath="Id"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
 
-                        <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="10">
+                    <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="10">
                             <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
                                             IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
                                 <TextBlock Text="Has Code"/>
@@ -82,246 +86,253 @@
                             </RadioButton>
                         </StackPanel>-->
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Product Name"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding Path="CurrentProduct.Name" UpdateSourceTrigger="PropertyChanged" />
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Product Name"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Name" UpdateSourceTrigger="PropertyChanged" />
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Initial Quantity"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentProduct.InitialQuantity"
-                                    TargetNullValue=""
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <val:IntegerValidator />
-                                    </Binding.ValidationRules>
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Initial Quantity"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding
+                                Path="CurrentProduct.InitialQuantity"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator />
+                                </Binding.ValidationRules>
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Purchase Price"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentProduct.Cost"
-                                    TargetNullValue=""
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <val:IntegerValidator />
-                                    </Binding.ValidationRules>
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Purchase Price"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding
+                                Path="CurrentProduct.Cost"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator />
+                                </Binding.ValidationRules>
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Sale Price"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentProduct.Price"
-                                    TargetNullValue=""
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <val:IntegerValidator />
-                                    </Binding.ValidationRules>
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Sale Price"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding
+                                Path="CurrentProduct.Price"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator />
+                                </Binding.ValidationRules>
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Pure Income"
-                            IsReadOnly="True"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Mode="OneWay"
-                                    Path="CurrentProduct.Profit"
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
-                    </Grid>
-                </Expander>
-            </materialDesign:Card>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Pure Income"
+                        materialDesign:HintAssist.IsFloating="True"
+                        IsReadOnly="True">
+                        <TextBox.Text>
+                            <Binding
+                                Mode="OneWay"
+                                Path="CurrentProduct.Profit"
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+            </Expander>
+        </materialDesign:Card>
 
-            <materialDesign:Card Margin="0,15">
-                <Expander
-                    Padding="0,0,0,20"
-                    materialDesign:ExpanderAssist.HeaderBackground="{StaticResource PrimaryHueMidBrush}"
-                    materialDesign:ExpanderAssist.HeaderFontSize="14"
-                    materialDesign:ExpanderAssist.HorizontalHeaderPadding="5"
-                    Background="White"
-                    Header="Optional Details"
-                    IsExpanded="{Binding IsEditMode, Mode=OneWay}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+        <materialDesign:Card Margin="0,15">
+            <Expander
+                Padding="0,0,0,20"
+                materialDesign:ExpanderAssist.HeaderBackground="{StaticResource PrimaryHueMidBrush}"
+                materialDesign:ExpanderAssist.HeaderFontSize="14"
+                materialDesign:ExpanderAssist.HorizontalHeaderPadding="10 5"
+                Background="White"
+                IsExpanded="{Binding IsEditMode, Mode=OneWay}">
+                <Expander.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="White" Text="Optional Details" />
+                    </DataTemplate>
+                </Expander.HeaderTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Currency"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding CurrencyList}"
-                            SelectedValue="{Binding CurrentProduct.CurrencyId}"
-                            SelectedValuePath="Id"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Currency"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding CurrencyList}"
+                        SelectedValue="{Binding CurrentProduct.CurrencyId}"
+                        SelectedValuePath="Id"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Unit"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding UnitList}"
-                            SelectedValue="{Binding CurrentProduct.UnitId}"
-                            SelectedValuePath="Id"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Unit"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding UnitList}"
+                        SelectedValue="{Binding CurrentProduct.UnitId}"
+                        SelectedValuePath="Id"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-                        <ComboBox
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Brand"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
-                            DisplayMemberPath="Name"
-                            ItemsSource="{Binding BrandList}"
-                            SelectedValue="{Binding CurrentProduct.BrandId}"
-                            SelectedValuePath="Id"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <ComboBox
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Brand"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding BrandList}"
+                        SelectedValue="{Binding CurrentProduct.BrandId}"
+                        SelectedValuePath="Id"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
-                        <TextBox
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Alert Quantity"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentProduct.AlertQuantity"
-                                    TargetNullValue=""
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <val:IntegerValidator />
-                                    </Binding.ValidationRules>
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Margin="10"
+                        materialDesign:HintAssist.Hint="Alert Quantity"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding
+                                Path="CurrentProduct.AlertQuantity"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator />
+                                </Binding.ValidationRules>
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Discount"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding
-                                    Path="CurrentProduct.Discount"
-                                    TargetNullValue=""
-                                    UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <val:IntegerValidator />
-                                    </Binding.ValidationRules>
-                                    <Binding.Converter>
-                                        <conv:IntegerConverter />
-                                    </Binding.Converter>
-                                </Binding>
-                            </TextBox.Text>
-                        </TextBox>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        materialDesign:HintAssist.Hint="Discount"
+                        materialDesign:HintAssist.IsFloating="True">
+                        <TextBox.Text>
+                            <Binding
+                                Path="CurrentProduct.Discount"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <val:IntegerValidator />
+                                </Binding.ValidationRules>
+                                <Binding.Converter>
+                                    <conv:IntegerConverter />
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
 
-                        <DatePicker
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Expiry Date"
-                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}">
-                            <DatePicker.SelectedDate>
-                                <Binding Path="CurrentProduct.ExpiryDate" UpdateSourceTrigger="PropertyChanged" />
-                            </DatePicker.SelectedDate>
-                        </DatePicker>
+                    <DatePicker
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        materialDesign:HintAssist.Hint="Expiry Date"
+                        Style="{StaticResource MaterialDesignFloatingHintDatePicker}">
+                        <DatePicker.SelectedDate>
+                            <Binding Path="CurrentProduct.ExpiryDate" UpdateSourceTrigger="PropertyChanged" />
+                        </DatePicker.SelectedDate>
+                    </DatePicker>
 
-                        <TextBox
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="2"
-                            Margin="10"
-                            materialDesign:HintAssist.Hint="Note"
-                            AcceptsReturn="True"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                            <TextBox.Text>
-                                <Binding Path="CurrentProduct.Note" UpdateSourceTrigger="PropertyChanged" />
-                            </TextBox.Text>
-                        </TextBox>
-                    </Grid>
-                </Expander>
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        materialDesign:HintAssist.Hint="Note"
+                        materialDesign:HintAssist.IsFloating="True"
+                        AcceptsReturn="True">
+                        <TextBox.Text>
+                            <Binding Path="CurrentProduct.Note" UpdateSourceTrigger="PropertyChanged" />
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+            </Expander>
 
-            </materialDesign:Card>
+        </materialDesign:Card>
 
-            <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
-                <Button
-                    Margin="10,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding SaveCmd}">
-                    Save
-                </Button>
-                <Button
-                    Margin="0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding CancelCmd}">
-                    Cancel
-                </Button>
-            </WrapPanel>
-        </StackPanel>
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
+            <Button
+                Margin="10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding SaveCmd}">
+                Save
+            </Button>
+            <Button
+                Margin="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding CancelCmd}">
+                Cancel
+            </Button>
+        </WrapPanel>
+    </StackPanel>
 
-    </Border>
+
 </UserControl>

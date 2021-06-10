@@ -13,44 +13,45 @@ namespace POS.DAL.Query
 
         public async Task<IList<OptionValueDTO>> OptionsByTypeId(int typeId)
         {
-            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false).Where(x => x.TypeId == typeId);
+            var query = dbContext.OptionValues.Where(v => v.IsDeleted == false).Where(x => x.TypeId == typeId);
             return await SelectOptions(query);
         }
 
         public async Task<IList<OptionValueDTO>> OptionsByTypeCode(string typeCode)
         {
-            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false).Where(x => x.Type.Code == typeCode);
+            var query = dbContext.OptionValues.Where(v => v.IsDeleted == false).Where(x => x.Type.Code == typeCode);
             return await SelectOptions(query);
         }
 
         public async Task<IList<OptionValueDTO>> OptionsAll()
         {
-            var query = dbContext.OptionValues.Where(x => x.IsDeleted == false);
+            var query = dbContext.OptionValues.Where(v => v.IsDeleted == false);
             return await SelectOptions(query);
         }
 
         private async Task<IList<OptionValueDTO>> SelectOptions(IQueryable<OptionValue> query)
         {
-            return await query.Select(x => new OptionValueDTO
+            return await query.Select(v => new OptionValueDTO
             {
-                Id = x.Id,
-                TypeId = x.TypeId,
-                TypeCode = x.Type.Code,
-                Name = x.Name,
-                Code = x.Code
+                Id = v.Id,
+                TypeId = v.TypeId,
+                TypeCode = v.Type.Code,
+                Name = v.Name,
+                Code = v.Code,
+                IsDefault = v.IsDefault,
             })
             .ToListAsync();
         }
 
         public async Task<OptionValueDTO> OptionByCode(string code)
         {
-            return await dbContext.OptionValues.Where(x => x.Code == code).Select(x => new OptionValueDTO
+            return await dbContext.OptionValues.Where(x => x.Code == code).Select(v => new OptionValueDTO
             {
-                Id = x.Id,
-                TypeId = x.TypeId,
-                TypeCode = x.Type.Code,
-                Name = x.Name,
-                Code = x.Code
+                Id = v.Id,
+                TypeId = v.TypeId,
+                TypeCode = v.Type.Code,
+                Name = v.Name,
+                Code = v.Code
             })
             .SingleOrDefaultAsync();
         }

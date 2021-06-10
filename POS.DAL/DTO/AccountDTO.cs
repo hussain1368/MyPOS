@@ -5,7 +5,6 @@ namespace POS.DAL.DTO
     public class AccountDTO
     {
         public int Id { get; set; }
-        public string SerialNum { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }

@@ -32,7 +32,6 @@ namespace POS.DAL.Query
         {
             model.Id = data.Id;
             model.Code = data.Code;
-            model.CodeStatus = data.CodeStatus;
             model.Name = data.Name;
             model.Cost = data.Cost;
             model.Profit = data.Profit;
@@ -59,7 +58,6 @@ namespace POS.DAL.Query
             {
                 Id = product.Id,
                 Code = product.Code,
-                CodeStatus = product.CodeStatus,
                 Name = product.Name,
                 Cost = product.Cost,
                 Profit = product.Profit,
@@ -87,7 +85,6 @@ namespace POS.DAL.Query
             {
                 Id = p.Id,
                 Code = p.Code,
-                CodeStatus = p.CodeStatus,
                 Name = p.Name,
                 Cost = p.Cost,
                 Profit = p.Profit,

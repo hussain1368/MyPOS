@@ -17,9 +17,9 @@ namespace POS.DAL.Domain
         public string Password { get; set; }
         public string DisplayName { get; set; }
         public string UserRole { get; set; }
-        public bool IsDeleted { get; set; }
         public int UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual ICollection<Invoice> Invoices { get; set; }
     }

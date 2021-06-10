@@ -42,9 +42,7 @@
 
                 <!--  Slide #1  -->
                 <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog">
-                    <Border Padding="20,10">
-                        <comp:ProductList />
-                    </Border>
+                    <comp:ProductList />
                 </materialDesign:DialogHost>
 
                 <materialDesign:TransitionerSlide>

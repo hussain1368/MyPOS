@@ -18,27 +18,25 @@ namespace POS.WPF.Models.ViewModels
         public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery, IStringLocalizer<Labels> _t)
         {
             this.productQuery = productQuery;
+            this.optionQuery = optionQuery;
             this._t = _t;
             MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
 
             LoadListCmd = new RelayCommandAsync(async () =>
             {
-                await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, eventArgs) =>
+                await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, args) =>
                 {
                     await LoadList();
-                    eventArgs.Session.Close(false);
+                    args.Session.Close(false);
                 }, null);
             });
-            LoadOptionsCmd = new RelayCommandAsync(async () =>
-            {
-                ComboOptions = await optionQuery.OptionsAll();
-            });
+            LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
             ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
             SaveCmd = new RelayCommandAsync(SaveForm);
             CancelCmd = new RelayCommandSyncVoid(() =>
             {
                 if (tempProductData == null) CurrentProduct = new ProductEM();
-                else MapProduct();
+                else ResetProductData();
             });
             CheckAllCmd = new RelayCommandSyncParam(isChecked =>
             {
@@ -64,6 +62,7 @@ namespace POS.WPF.Models.ViewModels
         }
 
         private readonly ProductQuery productQuery;
+        private readonly OptionQuery optionQuery;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 
@@ -98,8 +97,7 @@ namespace POS.WPF.Models.ViewModels
             get { return _currentProduct; }
             set
             {
-                _currentProduct = value; 
-                OnPropertyChanged();
+                SetValue(ref _currentProduct, value);
                 OnPropertyChanged(nameof(IsEditMode));
             }
         }
@@ -118,8 +116,8 @@ namespace POS.WPF.Models.ViewModels
             set { _productsList = value; OnPropertyChanged(); }
         }
 
-        private IList<OptionValueDTO> _comboOptions;
-        public IList<OptionValueDTO> ComboOptions
+        private IEnumerable<OptionValueDTO> _comboOptions = Enumerable.Empty<OptionValueDTO>();
+        public IEnumerable<OptionValueDTO> ComboOptions
         {
             get { return _comboOptions; }
             set {
@@ -135,8 +133,23 @@ namespace POS.WPF.Models.ViewModels
         public IList<OptionValueDTO> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
         public IList<OptionValueDTO> UnitList => ComboOptions?.Where(op => op.TypeCode == "UNT").ToList();
         public IList<OptionValueDTO> BrandList => ComboOptions?.Where(op => op.TypeCode == "BRN").ToList();
-        private OptionValueDTO DefaultCurrency => ComboOptions?.SingleOrDefault(op => op.Code == "AFN");
+        private OptionValueDTO DefaultCurrency => ComboOptions?.SingleOrDefault(op => op.TypeCode == "CRC" && op.IsDefault == true);
 
+        private async Task LoadOptions()
+        {
+            var categoryId = CurrentProduct.CategoryId;
+            var currencyId = CurrentProduct.CurrencyId;
+            var unitId = CurrentProduct.UnitId;
+            var brandId = CurrentProduct.BrandId;
+
+            ComboOptions = await optionQuery.OptionsAll();
+
+            CurrentProduct.CategoryId = categoryId;
+            CurrentProduct.CurrencyId = currencyId;
+            CurrentProduct.UnitId = unitId;
+            CurrentProduct.BrandId = brandId;
+        }
+        
         private async Task ShowForm(object id)
         {
             TransitionerIndex++;
@@ -149,11 +162,11 @@ namespace POS.WPF.Models.ViewModels
                 tempProductData = null;
                 return;
             }
-            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
             {
                 tempProductData = await productQuery.GetById((int)id);
-                MapProduct();
-                eventArgs.Session.Close(false);
+                ResetProductData();
+                args.Session.Close(false);
             }, null);
         }
 
@@ -168,14 +181,12 @@ namespace POS.WPF.Models.ViewModels
                 {
                     Id = CurrentProduct.Id,
                     Code = CurrentProduct.Code,
-                    CodeStatus = (byte)CurrentProduct.CodeStatus,
                     CategoryId = CurrentProduct.CategoryId,
                     Name = CurrentProduct.Name,
                     Cost = CurrentProduct.Cost.Value,
                     Profit = CurrentProduct.Profit.Value,
                     Price = CurrentProduct.Price.Value,
                     InitialQuantity = CurrentProduct.InitialQuantity.Value,
-
                     CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
                     UnitId = CurrentProduct.UnitId,
                     BrandId = CurrentProduct.BrandId,
@@ -224,15 +235,13 @@ namespace POS.WPF.Models.ViewModels
             });
         }
 
-        private void MapProduct()
+        private void ResetProductData()
         {
             if (tempProductData == null) return;
-
             CurrentProduct = new ProductEM
             {
                 Id = tempProductData.Id,
                 Code = tempProductData.Code,
-                CodeStatus = (Enums.CodeStatus)tempProductData.CodeStatus,
                 Name = tempProductData.Name,
                 InitialQuantity = tempProductData.InitialQuantity,
                 Cost = tempProductData.Cost,
@@ -270,13 +279,19 @@ namespace POS.WPF.Models.ViewModels
 
         private object getMsg(string msg)
         {
-            var panel = new System.Windows.Controls.StackPanel();
-            panel.Orientation = System.Windows.Controls.Orientation.Horizontal;
-            var icon = new PackIcon();
-            icon.Kind = PackIconKind.CheckBold;
-            var text = new System.Windows.Controls.TextBlock();
-            text.Margin = new System.Windows.Thickness(10, 0, 0, 0);
-            text.Text = msg;
+            var panel = new System.Windows.Controls.StackPanel
+            {
+                Orientation = System.Windows.Controls.Orientation.Horizontal
+            };
+            var icon = new PackIcon
+            {
+                Kind = PackIconKind.CheckBold
+            };
+            var text = new System.Windows.Controls.TextBlock
+            {
+                Margin = new System.Windows.Thickness(10, 0, 0, 0),
+                Text = msg
+            };
             panel.Children.Add(icon);
             panel.Children.Add(text);
             return panel;

@@ -186,6 +186,9 @@ namespace POS.DAL.Domain
             {
                 entity.ToTable("Product");
 
+                entity.HasIndex(e => e.Code, "IX_Product_Code")
+                    .IsUnique();
+
                 entity.Property(e => e.Code).HasMaxLength(50);
 
                 entity.Property(e => e.ExpiryDate).HasColumnType("date");

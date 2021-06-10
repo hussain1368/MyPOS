@@ -6,7 +6,6 @@ namespace POS.DAL.DTO
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public byte CodeStatus { get; set; }
         public string Name { get; set; }
         public int Cost { get; set; }
         public int Profit { get; set; }
