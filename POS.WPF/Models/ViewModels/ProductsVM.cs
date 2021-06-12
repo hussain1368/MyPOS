@@ -181,44 +181,66 @@ namespace POS.WPF.Models.ViewModels
             CurrentProduct.ValidateModel();
             if (CurrentProduct.HasErrors) return;
 
-            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
+            if (string.IsNullOrWhiteSpace(CurrentProduct.Code))
             {
-                var data = new ProductDTO
+                var message = "Product code is blank. Do you want to generate a new code?";
+                await DialogHost.Show(new ConfirmDialog(new ConfirmDialogVM { Message = message }), "FormDialog", null, async (sender, args) =>
                 {
-                    Id = CurrentProduct.Id,
-                    Code = CurrentProduct.Code,
-                    CategoryId = CurrentProduct.CategoryId,
-                    Name = CurrentProduct.Name,
-                    Cost = CurrentProduct.Cost.Value,
-                    Profit = CurrentProduct.Profit.Value,
-                    Price = CurrentProduct.Price.Value,
-                    InitialQuantity = CurrentProduct.InitialQuantity.Value,
-                    CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
-                    UnitId = CurrentProduct.UnitId,
-                    BrandId = CurrentProduct.BrandId,
-                    AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
-                    Discount = CurrentProduct.Discount ?? 0,
-                    ExpiryDate = CurrentProduct.ExpiryDate,
-                    Note = CurrentProduct.Note,
-                    IsDeleted = false,
-                    UpdatedBy = 1,
-                    UpdatedDate = DateTime.Now,
-                };
+                    if (args.Parameter is bool param && param == false) return;
+                    args.Cancel();
+                    args.Session.UpdateContent(new LoadingDialog());
+                    await SaveToDatabase();
+                    await LoadList();
+                    args.Session.Close(false);
+                    await MsgContext.ShowSuccess("Product saved successfully!");
+                });
+            }
+            else
+            {
+                await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
+                {
+                    await SaveToDatabase();
+                    args.Session.Close(false);
+                    await MsgContext.ShowSuccess("Product saved successfully!");
+                }, null);
+            }
+        }
 
-                if (CurrentProduct.Id == 0)
-                {
-                    await productQuery.Create(data);
-                    CurrentProduct = new ProductEM();
-                }
-                else
-                {
-                    await productQuery.Update(data);
-                    tempProductData = data;
-                }
-                await LoadList();
-                args.Session.Close(false);
-                await MsgContext.ShowSuccess("Product saved successfully!");
-            }, null);
+        private async Task SaveToDatabase()
+        {
+            var data = new ProductDTO
+            {
+                Id = CurrentProduct.Id,
+                Code = CurrentProduct.Code,
+                CategoryId = CurrentProduct.CategoryId,
+                Name = CurrentProduct.Name,
+                Cost = CurrentProduct.Cost.Value,
+                Profit = CurrentProduct.Profit.Value,
+                Price = CurrentProduct.Price.Value,
+                InitialQuantity = CurrentProduct.InitialQuantity.Value,
+                CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
+                UnitId = CurrentProduct.UnitId,
+                BrandId = CurrentProduct.BrandId,
+                AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
+                Discount = CurrentProduct.Discount ?? 0,
+                ExpiryDate = CurrentProduct.ExpiryDate,
+                Note = CurrentProduct.Note,
+                IsDeleted = false,
+                UpdatedBy = 1,
+                UpdatedDate = DateTime.Now,
+            };
+
+            if (CurrentProduct.Id == 0)
+            {
+                await productQuery.Create(data);
+                CurrentProduct = new ProductEM();
+            }
+            else
+            {
+                await productQuery.Update(data);
+                tempProductData = data;
+            }
+            await LoadList();
         }
 
         private async Task DeleteRows()

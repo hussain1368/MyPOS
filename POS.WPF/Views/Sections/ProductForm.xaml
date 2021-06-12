@@ -55,7 +55,10 @@
                         materialDesign:HintAssist.Hint="Code"
                         materialDesign:HintAssist.IsFloating="True">
                         <TextBox.Text>
-                            <Binding Path="CurrentProduct.Code" UpdateSourceTrigger="PropertyChanged" />
+                            <Binding
+                                Path="CurrentProduct.Code"
+                                TargetNullValue=""
+                                UpdateSourceTrigger="PropertyChanged" />
                         </TextBox.Text>
                     </TextBox>
                     <ComboBox
@@ -69,22 +72,6 @@
                         SelectedValue="{Binding CurrentProduct.CategoryId}"
                         SelectedValuePath="Id"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
-
-
-                    <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="10">
-                            <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
-                                            IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=HasCode }">
-                                <TextBlock Text="Has Code"/>
-                            </RadioButton>
-                            <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True" Margin="15 0"
-                                            IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NewCode }">
-                                <TextBlock Text="New Code"/>
-                            </RadioButton>
-                            <RadioButton Style="{StaticResource MaterialDesignRadioButton}" Tag="True"
-                                            IsChecked="{Binding Path=CurrentProduct.CodeStatus, Converter={StaticResource RadioConverter}, ConverterParameter=NoCode }">
-                                <TextBlock Text="No Code"/>
-                            </RadioButton>
-                        </StackPanel>-->
 
                     <TextBox
                         Grid.Row="0"
@@ -333,6 +320,5 @@
             </Button>
         </WrapPanel>
     </StackPanel>
-
 
 </UserControl>

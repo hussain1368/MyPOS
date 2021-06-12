@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using POS.DAL.DTO;
 using System.Linq;
+using System;
 
 namespace POS.DAL.Query
 {
@@ -31,7 +32,6 @@ namespace POS.DAL.Query
         private void MapSingle(ProductDTO data, Product model)
         {
             model.Id = data.Id;
-            model.Code = data.Code;
             model.Name = data.Name;
             model.Cost = data.Cost;
             model.Profit = data.Profit;
@@ -48,6 +48,11 @@ namespace POS.DAL.Query
             model.UpdatedBy = data.UpdatedBy;
             model.UpdatedDate = data.UpdatedDate;
             model.IsDeleted = data.IsDeleted;
+
+            if (string.IsNullOrWhiteSpace(data.Code))
+                model.Code = $"{DateTime.Now.DayOfYear}{new Random().Next(100_000_000, 900_000_000)}";
+            else
+                model.Code = data.Code;
         }
 
         public async Task<ProductDTO> GetById(int id)
@@ -141,6 +146,11 @@ namespace POS.DAL.Query
             var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();
             foreach (var product in products) product.IsDeleted = true;
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckDuplicate(int id, string code)
+        {
+            return await dbContext.Products.AnyAsync(p => p.Id != id && p.Code == code);
         }
     }
 }

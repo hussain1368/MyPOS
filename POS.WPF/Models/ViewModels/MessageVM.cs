@@ -20,7 +20,7 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _isActive, value); }
         }
 
-        private string _backgroundColor;
+        private string _backgroundColor = "Green";
         public string BackgroundColor
         {
             get { return _backgroundColor; }

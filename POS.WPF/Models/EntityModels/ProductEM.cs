@@ -1,6 +1,5 @@
-﻿using POS.WPF.Enums;
+﻿using System;
 using POS.WPF.Validators.ModelValidators;
-using System;
 
 namespace POS.WPF.Models.EntityModels
 {
