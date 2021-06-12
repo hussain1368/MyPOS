@@ -5,7 +5,7 @@
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:conv="clr-namespace:POS.WPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
+    xmlns:layout="clr-namespace:POS.WPF.Views.Shared"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:my="clr-namespace:POS.WPF.Controls"

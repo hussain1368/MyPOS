@@ -3,7 +3,7 @@ using POS.DAL.DTO;
 using POS.DAL.Query;
 using POS.WPF.Commands;
 using POS.WPF.Enums;
-using POS.WPF.Views.Layout;
+using POS.WPF.Views.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

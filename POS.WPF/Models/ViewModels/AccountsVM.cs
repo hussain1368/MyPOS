@@ -9,7 +9,7 @@ using POS.DAL.Query;
 using POS.WPF.Commands;
 using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
-using POS.WPF.Views.Layout;
+using POS.WPF.Views.Shared;
 
 namespace POS.WPF.Models.ViewModels
 {

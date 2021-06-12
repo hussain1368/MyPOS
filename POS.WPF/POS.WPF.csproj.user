@@ -22,10 +22,10 @@
     <Compile Update="Views\Sections\InvoiceForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Layout\ConfirmDialog.xaml.cs">
+    <Compile Update="Views\Shared\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Layout\LoadingDialog.xaml.cs">
+    <Compile Update="Views\Shared\LoadingDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Sections\InvoiceList.xaml.cs">
@@ -37,10 +37,10 @@
     <Compile Update="Views\Sections\ProductList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Layout\HeaderBar.xaml.cs">
+    <Compile Update="Views\Shared\HeaderBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Layout\RadioBox.xaml.cs">
+    <Compile Update="Views\Shared\RadioBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Accounts.xaml.cs">
@@ -69,10 +69,10 @@
     <Page Update="Views\Sections\InvoiceForm.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Layout\ConfirmDialog.xaml">
+    <Page Update="Views\Shared\ConfirmDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Layout\LoadingDialog.xaml">
+    <Page Update="Views\Shared\LoadingDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Sections\InvoiceList.xaml">
@@ -84,7 +84,7 @@
     <Page Update="Views\Sections\ProductList.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Layout\HeaderBar.xaml">
+    <Page Update="Views\Shared\HeaderBar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -93,7 +93,7 @@
     <Page Update="Styles\MyBrushes.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Layout\RadioBox.xaml">
+    <Page Update="Views\Shared\RadioBox.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Pages\Accounts.xaml">

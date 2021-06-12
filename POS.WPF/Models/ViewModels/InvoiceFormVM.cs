@@ -4,7 +4,7 @@ using POS.DAL.Query;
 using POS.WPF.Commands;
 using POS.WPF.Enums;
 using POS.WPF.Models.EntityModels;
-using POS.WPF.Views.Layout;
+using POS.WPF.Views.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

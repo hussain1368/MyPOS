@@ -9,7 +9,7 @@ using POS.DAL.DTO;
 using POS.WPF.Commands;
 using Microsoft.Extensions.Localization;
 using POS.WPF.Models.EntityModels;
-using POS.WPF.Views.Layout;
+using POS.WPF.Views.Shared;
 
 namespace POS.WPF.Models.ViewModels
 {
@@ -20,7 +20,7 @@ namespace POS.WPF.Models.ViewModels
             this.productQuery = productQuery;
             this.optionQuery = optionQuery;
             this._t = _t;
-            MessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(2));
+            MsgContext = new MessageVM();
 
             LoadListCmd = new RelayCommandAsync(async () =>
             {
@@ -66,7 +66,6 @@ namespace POS.WPF.Models.ViewModels
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 
-        public ISnackbarMessageQueue MessageQueue { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
         public RelayCommandAsync LoadOptionsCmd { get; set; }
         public RelayCommandAsyncParam ShowFormCmd { get; set; }
@@ -80,6 +79,13 @@ namespace POS.WPF.Models.ViewModels
         {
             get => _headerContext;
             set => SetValue(ref _headerContext, value);
+        }
+
+        private MessageVM _msgContext;
+        public MessageVM MsgContext
+        {
+            get { return _msgContext; }
+            set { SetValue(ref _msgContext, value); }
         }
 
         public bool IsEditMode => CurrentProduct.Id != 0;
@@ -175,7 +181,7 @@ namespace POS.WPF.Models.ViewModels
             CurrentProduct.ValidateModel();
             if (CurrentProduct.HasErrors) return;
 
-            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, eventArgs) =>
+            await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
             {
                 var data = new ProductDTO
                 {
@@ -210,28 +216,30 @@ namespace POS.WPF.Models.ViewModels
                     tempProductData = data;
                 }
                 await LoadList();
-                eventArgs.Session.Close(false);
-                var content = getMsg("Product Saved!");
-                MessageQueue.Enqueue(content);
+                args.Session.Close(false);
+                await MsgContext.ShowSuccess("Product saved successfully!");
             }, null);
         }
 
         private async Task DeleteRows()
         {
             var ids = ProductsList.Where(p => p.IsChecked).Select(p => p.Id).ToArray();
-            if (ids.Length == 0) return;
+            if (ids.Length == 0)
+            {
+                await MsgContext.ShowError("Please select at least one record!");
+                return;
+            }
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, eventArgs) =>
+            var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, args) =>
             {
-                if (eventArgs.Parameter is bool param && param == false) return;
-                eventArgs.Cancel();
-                eventArgs.Session.UpdateContent(new LoadingDialog());
+                if (args.Parameter is bool param && param == false) return;
+                args.Cancel();
+                args.Session.UpdateContent(new LoadingDialog());
                 await productQuery.Delete(ids);
                 await LoadList();
-                eventArgs.Session.Close(false);
-                var content = getMsg($"{ids.Length} Records Deleted!");
-                MessageQueue.Enqueue(content);
+                args.Session.Close(false);
+                await MsgContext.ShowSuccess($"{ids.Length} records deleted successfully!");
             });
         }
 
@@ -275,26 +283,6 @@ namespace POS.WPF.Models.ViewModels
                 CurrencyCode = p.CurrencyCode,
             });
             ProductsList = new ObservableCollection<ProductEM>(_data);
-        }
-
-        private object getMsg(string msg)
-        {
-            var panel = new System.Windows.Controls.StackPanel
-            {
-                Orientation = System.Windows.Controls.Orientation.Horizontal
-            };
-            var icon = new PackIcon
-            {
-                Kind = PackIconKind.CheckBold
-            };
-            var text = new System.Windows.Controls.TextBlock
-            {
-                Margin = new System.Windows.Thickness(10, 0, 0, 0),
-                Text = msg
-            };
-            panel.Children.Add(icon);
-            panel.Children.Add(text);
-            return panel;
         }
     }
 }

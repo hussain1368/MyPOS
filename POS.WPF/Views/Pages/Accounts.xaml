@@ -1,29 +1,34 @@
-﻿<UserControl x:Class="POS.WPF.Views.Pages.Accounts"
+﻿<UserControl
+    x:Class="POS.WPF.Views.Pages.Accounts"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:layout="clr-namespace:POS.WPF.Views.Shared"
     xmlns:local="clr-namespace:POS.WPF.Views.Sections"
-    xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
-    d:DesignHeight="450" d:DesignWidth="800"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
     mc:Ignorable="d">
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="Loaded" SourceName="PageGrid">
-            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}"/>
+            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
     <Grid x:Name="PageGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <layout:HeaderBar Grid.Row="0" DataContext="{Binding Header}"/>
 
-        <materialDesign:DialogHost Grid.Row="1" DialogTheme="Light" Identifier="MainDialogHost">
-            <local:AccountList Margin="20 10"/>
+        <layout:HeaderBar Grid.Row="0" DataContext="{Binding Header}" />
+
+        <materialDesign:DialogHost
+            Grid.Row="1"
+            DialogTheme="Light"
+            Identifier="MainDialogHost">
+            <local:AccountList Margin="20,10" />
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>

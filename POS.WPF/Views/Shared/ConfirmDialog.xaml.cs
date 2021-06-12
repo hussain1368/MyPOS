@@ -1,7 +1,7 @@
 ﻿using POS.WPF.Models.ViewModels;
 using System.Windows.Controls;
 
-namespace POS.WPF.Views.Layout
+namespace POS.WPF.Views.Shared
 {
     public partial class ConfirmDialog : UserControl
     {

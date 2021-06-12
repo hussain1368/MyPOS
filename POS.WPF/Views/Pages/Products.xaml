@@ -2,64 +2,69 @@
     x:Class="POS.WPF.Views.Pages.Products"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:comp="clr-namespace:POS.WPF.Views.Sections"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:layout="clr-namespace:POS.WPF.Views.Layout"
+    xmlns:layout="clr-namespace:POS.WPF.Views.Shared"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Behaviors:Interaction.Triggers />
-    <Grid Background="White">
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
+    <Grid>
         <materialDesign:Snackbar
-            Margin="10"
+            Margin="15,5"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Panel.ZIndex="1000"
-            MessageQueue="{Binding MessageQueue}">
+            Panel.ZIndex="1100"
+            Background="{Binding BackgroundColor}"
+            DataContext="{Binding MsgContext}"
+            IsActive="{Binding IsActive}">
             <materialDesign:SnackbarMessage>
                 <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="CheckBold" />
-                    <TextBlock Margin="10,0" Text="POS" />
+                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="{Binding IconKind}" />
+                    <TextBlock
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Medium"
+                        Text="{Binding Message}" />
                 </StackPanel>
             </materialDesign:SnackbarMessage>
         </materialDesign:Snackbar>
 
-        <Border Grid.Row="0" Panel.ZIndex="100">
-            <layout:HeaderBar DataContext="{Binding HeaderContext}" />
-        </Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="1">
-            <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="{Binding TransitionerIndex}">
+            <Border Grid.Row="0" Panel.ZIndex="100">
+                <layout:HeaderBar DataContext="{Binding HeaderContext}" />
+            </Border>
 
-                <!--  Slide #1  -->
-                <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog">
-                    <comp:ProductList />
-                </materialDesign:DialogHost>
+            <Border Grid.Row="1">
+                <materialDesign:Transitioner AutoApplyTransitionOrigins="True" SelectedIndex="{Binding TransitionerIndex}">
 
-                <materialDesign:TransitionerSlide>
-                    <materialDesign:TransitionerSlide.BackwardWipe>
-                        <materialDesign:CircleWipe />
-                    </materialDesign:TransitionerSlide.BackwardWipe>
-                    <materialDesign:TransitionerSlide.ForwardWipe>
-                        <materialDesign:SlideWipe Direction="Right" />
-                    </materialDesign:TransitionerSlide.ForwardWipe>
-
-                    <!--  Slide #2  -->
-                    <materialDesign:DialogHost DialogTheme="Light" Identifier="FormDialog">
-                        <comp:ProductForm />
+                    <!--  Slide #1  -->
+                    <materialDesign:DialogHost DialogTheme="Light" Identifier="GridDialog">
+                        <comp:ProductList />
                     </materialDesign:DialogHost>
 
-                </materialDesign:TransitionerSlide>
-            </materialDesign:Transitioner>
-        </Border>
+                    <materialDesign:TransitionerSlide>
+                        <materialDesign:TransitionerSlide.BackwardWipe>
+                            <materialDesign:CircleWipe />
+                        </materialDesign:TransitionerSlide.BackwardWipe>
+                        <materialDesign:TransitionerSlide.ForwardWipe>
+                            <materialDesign:SlideWipe Direction="Right" />
+                        </materialDesign:TransitionerSlide.ForwardWipe>
+
+                        <!--  Slide #2  -->
+                        <materialDesign:DialogHost DialogTheme="Light" Identifier="FormDialog">
+                            <comp:ProductForm />
+                        </materialDesign:DialogHost>
+
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
