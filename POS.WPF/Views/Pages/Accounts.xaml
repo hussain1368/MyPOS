@@ -22,7 +22,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <layout:HeaderBar Grid.Row="0" DataContext="{Binding Header}" />
+        <layout:HeaderBar
+            Grid.Row="0"
+            Panel.ZIndex="10"
+            DataContext="{Binding Header}" />
 
         <materialDesign:DialogHost
             Grid.Row="1"

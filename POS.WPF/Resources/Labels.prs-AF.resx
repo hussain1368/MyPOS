@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Accounts" xml:space="preserve">
-    <value>Accounts</value>
+    <value>حسابها</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Remove</value>
+    <value>حذف</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Home</value>
+    <value>صفحه اصلی</value>
   </data>
   <data name="ListOfProducts" xml:space="preserve">
-    <value>List of Products</value>
+    <value>لیست اجناس</value>
   </data>
   <data name="PointOfSale" xml:space="preserve">
-    <value>Point of Sale</value>
+    <value>فروشــــــگاه</value>
   </data>
   <data name="ProductDetails" xml:space="preserve">
-    <value>Product Details</value>
+    <value>مشخصات جنس</value>
   </data>
   <data name="Products" xml:space="preserve">
-    <value>Products</value>
+    <value>اجناس</value>
   </data>
   <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
+    <value>گزارشات</value>
   </data>
   <data name="SaleAndPurchase" xml:space="preserve">
-    <value>Sale and Purchase</value>
+    <value>خرید و فروش</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Refresh</value>
+    <value>جستجو</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>تنظیمات</value>
   </data>
   <data name="Transactions" xml:space="preserve">
-    <value>Transactions</value>
+    <value>نقل و انتقالات مالی</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>کاربران</value>
   </data>
 </root>

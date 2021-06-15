@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:loc="clr-namespace:POS.WPF"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="1180"
@@ -47,7 +48,7 @@
             <BeginStoryboard Storyboard="{StaticResource OpenMenu}" />
         </EventTrigger>
     </Window.Triggers>
-    <Grid>
+    <Grid FlowDirection="RightToLeft">
         <Border
             x:Name="MainPanel"
             Margin="250,0,0,0"
@@ -213,8 +214,6 @@
             HorizontalAlignment="Left"
             Background="White">
             <StackPanel>
-                <!--<materialDesign:ColorZone Mode="PrimaryMid" Height="50">
-                </materialDesign:ColorZone>-->
                 <StackPanel
                     Height="50"
                     Background="{StaticResource PrimaryHueMidBrush}"
@@ -235,11 +234,11 @@
                     <TextBlock
                         Margin="5"
                         VerticalAlignment="Center"
-                        FontFamily="Aharoni"
+                        FontFamily="Calibri"
                         FontSize="20"
                         FontWeight="DemiBold"
                         Foreground="White"
-                        Text="POINT OF SALE" />
+                        Text="{loc:Labels PointOfSale}" />
                 </StackPanel>
                 <Image
                     Height="110"
@@ -251,115 +250,30 @@
                     FontFamily="Calibri"
                     FontSize="18"
                     Foreground="#FF313131"
+                    ItemsSource="{Binding MenuItems}"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     SelectedIndex="{Binding SelectedIndex}">
-                    <ListViewItem
-                        Name="Home"
-                        Height="45"
-                        Padding="0"
-                        BorderThickness="0,0,0,0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="Home" />
-                            <TextBlock Margin="10" Text="Home" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem
-                        Name="Products"
-                        Height="45"
-                        Padding="0"
-                        BorderThickness="0,0,0,0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="PackageVariant" />
-                            <TextBlock Margin="10" Text="Products" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem
-                        Name="Accounts"
-                        Height="45"
-                        Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="BusinessCardOutline" />
-                            <TextBlock Margin="10" Text="Accounts" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="Cart" />
-                            <TextBlock Margin="10" Text="Sale and Purchase" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="CashMultiple" />
-                            <TextBlock Margin="10" Text="Transactions" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="Poll" />
-                            <TextBlock Margin="10" Text="Reports" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="Account" />
-                            <TextBlock Margin="10" Text="Users" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Margin="10,0" Orientation="Horizontal">
-                            <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
-                                Margin="5"
-                                VerticalAlignment="Center"
-                                Foreground="Gray"
-                                Kind="Settings" />
-                            <TextBlock Margin="10" Text="Settings" />
-                        </StackPanel>
-                    </ListViewItem>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="45" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="10,0" Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                    Width="20"
+                                    Height="20"
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    Foreground="Gray"
+                                    Kind="{Binding IconKind}" />
+                                <TextBlock Margin="10" Text="{Binding Text}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
             <Border

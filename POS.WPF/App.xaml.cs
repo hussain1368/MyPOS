@@ -5,6 +5,8 @@ using POS.DAL.Domain;
 using POS.WPF.Models.ViewModels;
 using System.Windows;
 using POS.WPF.Common;
+using System.Globalization;
+using System.Threading;
 
 namespace POS.WPF
 {
@@ -16,6 +18,8 @@ namespace POS.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            CultureInfo.CurrentUICulture = new CultureInfo("prs-AF", false);
+            //Thread.CurrentThread.CurrentCulture = new CultureInfo("prs-AF");
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
