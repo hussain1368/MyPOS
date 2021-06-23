@@ -6,11 +6,11 @@ using POS.DAL.DTO;
 using System.Linq;
 using System;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public class ProductQuery : DbQuery
+    public class ProductRepository : BaseRepository
     {
-        public ProductQuery(POSContext dbContext) : base(dbContext)
+        public ProductRepository(POSContext dbContext) : base(dbContext)
         {
         }
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using POS.DAL.Query;
+using POS.DAL.Repository;
 using POS.DAL.Domain;
 using POS.WPF.Models.ViewModels;
 using System.Windows;
@@ -33,11 +33,11 @@ namespace POS.WPF
         private void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<POSContext>(ServiceLifetime.Transient);
-            services.AddScoped<UserQuery>();
-            services.AddScoped<OptionQuery>();
-            services.AddScoped<ProductQuery>();
-            services.AddScoped<AccountQuery>();
-            services.AddScoped<InvoiceQuery>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<OptionRepository>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<AccountRepository>();
+            services.AddScoped<InvoiceRepository>();
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");

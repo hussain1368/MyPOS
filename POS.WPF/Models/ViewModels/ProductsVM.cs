@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MaterialDesignThemes.Wpf;
-using POS.DAL.Query;
+using POS.DAL.Repository;
 using POS.DAL.DTO;
 using POS.WPF.Commands;
 using Microsoft.Extensions.Localization;
@@ -15,7 +15,7 @@ namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(ProductQuery productQuery, OptionQuery optionQuery, IStringLocalizer<Labels> _t)
+        public ProductsVM(ProductRepository productQuery, OptionRepository optionQuery, IStringLocalizer<Labels> _t)
         {
             this.productQuery = productQuery;
             this.optionQuery = optionQuery;
@@ -61,8 +61,8 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly ProductQuery productQuery;
-        private readonly OptionQuery optionQuery;
+        private readonly ProductRepository productQuery;
+        private readonly OptionRepository optionQuery;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 

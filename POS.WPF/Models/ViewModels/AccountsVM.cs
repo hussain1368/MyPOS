@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
-using POS.DAL.Query;
+using POS.DAL.Repository;
 using POS.WPF.Commands;
 using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
@@ -15,10 +15,10 @@ namespace POS.WPF.Models.ViewModels
 {
     public class AccountsVM : BaseBindable
     {
-        public AccountsVM(AccountQuery accountQuery, OptionQuery optionQuery)
+        public AccountsVM(AccountRepository accountRepo, OptionRepository optionRepo)
         {
-            this.accountQuery = accountQuery;
-            this.optionQuery = optionQuery;
+            this.accountRepo = accountRepo;
+            this.optionRepo = optionRepo;
 
             LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
             LoadListCmd = new RelayCommandAsync(async () =>
@@ -44,8 +44,8 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new RelayCommandAsync(DeleteRows);
         }
 
-        private readonly AccountQuery accountQuery;
-        private readonly OptionQuery optionQuery;
+        private readonly AccountRepository accountRepo;
+        private readonly OptionRepository optionRepo;
 
         public RelayCommandAsync LoadOptionsCmd { get; set; }
         public RelayCommandAsync LoadListCmd { get; set; }
@@ -100,12 +100,12 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadOptions()
         {
-            ComboOptions = await optionQuery.OptionsAll();
+            ComboOptions = await optionRepo.OptionsAll();
         }
 
         private async Task LoadList()
         {
-            var data = await accountQuery.GetList(AccountTypeId);
+            var data = await accountRepo.GetList(AccountTypeId);
             var _data = data.Select(m => new AccountEM
             {
                 Id = m.Id,
@@ -128,7 +128,7 @@ namespace POS.WPF.Models.ViewModels
             if (id == null) CurrentAccount = new AccountEM();
             else
             {
-                var obj = await accountQuery.GetById((int)id);
+                var obj = await accountRepo.GetById((int)id);
                 CurrentAccount = new AccountEM
                 {
                     Id = obj.Id,
@@ -166,12 +166,12 @@ namespace POS.WPF.Models.ViewModels
 
             if (CurrentAccount.Id == 0)
             {
-                await accountQuery.Create(data);
+                await accountRepo.Create(data);
                 CurrentAccount = new AccountEM();
             }
             else
             {
-                await accountQuery.Update(data);
+                await accountRepo.Update(data);
             }
             await LoadList();
             DialogHost.CloseDialogCommand.Execute(null, null);
@@ -183,14 +183,14 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "MainDialogHost", null, async (sender, eventArgs) =>
+            var obj = await DialogHost.Show(view, "MainDialogHost", null, async (sender, args) =>
             {
-                if (eventArgs.Parameter is bool param && param == false) return;
-                eventArgs.Cancel();
-                eventArgs.Session.UpdateContent(new LoadingDialog());
-                await accountQuery.Delete(ids);
+                if (args.Parameter is bool param && param == false) return;
+                args.Cancel();
+                args.Session.UpdateContent(new LoadingDialog());
+                await accountRepo.Delete(ids);
                 await LoadList();
-                eventArgs.Session.Close(false);
+                args.Session.Close(false);
                 //var content = getMsg($"{ids.Length} Records Deleted!");
                 //MessageQueue.Enqueue(content);
             });

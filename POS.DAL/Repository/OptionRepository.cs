@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public class OptionQuery : DbQuery
+    public class OptionRepository : BaseRepository
     {
-        public OptionQuery(POSContext dbContext): base(dbContext) { }
+        public OptionRepository(POSContext dbContext): base(dbContext) { }
 
         public async Task<IList<OptionValueDTO>> OptionsByTypeId(int typeId)
         {

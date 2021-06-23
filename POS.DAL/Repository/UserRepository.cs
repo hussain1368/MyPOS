@@ -5,11 +5,11 @@ using POS.DAL.DTO;
 using System;
 using System.Threading.Tasks;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public class UserQuery : DbQuery
+    public class UserRepository : BaseRepository
     {
-        public UserQuery(POSContext dbContext) : base(dbContext) { }
+        public UserRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(UserDTO data)
         {

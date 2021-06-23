@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public class AccountQuery : DbQuery
+    public class AccountRepository : BaseRepository
     {
-        public AccountQuery(POSContext dbContext) : base(dbContext) { }
+        public AccountRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(AccountDTO data)
         {

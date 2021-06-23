@@ -1,12 +1,12 @@
 ﻿using POS.DAL.Domain;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public abstract class DbQuery
+    public abstract class BaseRepository
     {
         protected readonly POSContext dbContext;
 
-        public DbQuery(POSContext dbContext)
+        public BaseRepository(POSContext dbContext)
         {
             this.dbContext = dbContext;
         }

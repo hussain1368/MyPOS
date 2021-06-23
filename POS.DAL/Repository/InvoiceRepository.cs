@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace POS.DAL.Query
+namespace POS.DAL.Repository
 {
-    public class InvoiceQuery : DbQuery
+    public class InvoiceRepository : BaseRepository
     {
-        public InvoiceQuery(POSContext dbContext) : base(dbContext) { }
+        public InvoiceRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(InvoiceDTO data)
         {

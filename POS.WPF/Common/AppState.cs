@@ -1,5 +1,5 @@
 ﻿using POS.DAL.DTO;
-using POS.DAL.Query;
+using POS.DAL.Repository;
 using POS.WPF.Models;
 using System.Threading.Tasks;
 
@@ -7,12 +7,12 @@ namespace POS.WPF.Common
 {
     public class AppState : BaseBindable
     {
-        public AppState(UserQuery userQuery)
+        public AppState(UserRepository userQuery)
         {
             this.userQuery = userQuery;
         }
 
-        private readonly UserQuery userQuery;
+        private readonly UserRepository userQuery;
 
         private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini" };
         public UserDTO CurrentUser

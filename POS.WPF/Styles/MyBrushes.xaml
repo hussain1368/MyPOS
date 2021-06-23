@@ -4,4 +4,8 @@
     xmlns:local="clr-namespace:POS.WPF">
     <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="Red" />
     <SolidColorBrush x:Key="SecondaryHueMidForegroundBrush" Color="#FFFFFF" />
+    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="{x:Type Button}">
+        <Setter Property="FontFamily" Value="Calibri" />
+        <Setter Property="FontWeight" Value="Medium" />
+    </Style>
 </ResourceDictionary>

@@ -46,10 +46,7 @@
                 Command="{Binding DeleteCmd}"
                 Content="{loc:Labels Delete}"
                 Style="{StaticResource MaterialDesignRaisedAccentButton}" />
-            <Button
-                Command="{Binding LoadListCmd}"
-                Content="{loc:Labels Search}"
-                Style="{StaticResource MaterialDesignRaisedButton}" />
+            <Button Command="{Binding LoadListCmd}" Content="{loc:Labels Search}" />
         </StackPanel>
 
         <DataGrid

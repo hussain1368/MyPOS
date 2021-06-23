@@ -27,7 +27,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
                 <!--  Custom Dictionaries  -->
                 <ResourceDictionary Source="Styles/MyBrushes.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
