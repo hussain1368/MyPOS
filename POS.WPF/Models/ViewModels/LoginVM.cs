@@ -12,26 +12,26 @@ namespace POS.WPF.Models.ViewModels
         {
             this.appState = appState;
             this.mainVM = mainVM;
-            LoginCmd = new RelayCommandAsync(Login);
+            LoginCmd = new CommandAsync(Login);
         }
 
         private readonly AppState appState;
         private readonly MainVM mainVM;
 
-        public RelayCommandAsync LoginCmd { get; set; }
+        public CommandAsync LoginCmd { get; set; }
 
         private LoginEM _user = new LoginEM();
         public LoginEM User
         {
             get { return _user; }
-            set { _user = value; OnPropertyChanged(); }
+            set { SetValue(ref _user, value); }
         }
 
         private string _errorMessage;
         public string ErrorMessage
         {
             get { return _errorMessage; }
-            set { _errorMessage = value; OnPropertyChanged(); }
+            set { SetValue(ref _errorMessage, value); }
         }
 
         private async Task Login()

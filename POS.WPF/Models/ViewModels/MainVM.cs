@@ -13,7 +13,7 @@ namespace POS.WPF.Models.ViewModels
     {
         public MainVM(IServiceProvider services, AppState appState, IStringLocalizer<Labels> t)
         {
-            ViewChangedCmd = new RelayCommandSyncVoid(() => BodyContent = MenuItems[SelectedIndex].ViewModel);
+            ViewChangedCmd = new CommandSync(() => BodyContent = MenuItems[SelectedIndex].ViewModel);
             this.appState = appState;
             _t = t;
             MenuItems = new ObservableCollection<MenuItemEM>()
@@ -74,7 +74,7 @@ namespace POS.WPF.Models.ViewModels
         private readonly AppState appState;
         private readonly IStringLocalizer<Labels> _t;
 
-        public RelayCommandSyncVoid ViewChangedCmd { get; set; }
+        public CommandSync ViewChangedCmd { get; set; }
 
         private BaseBindable _bodyContent;
         public BaseBindable BodyContent

@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace POS.WPF.Commands
 {
-    public abstract class RelayCommandBase : ICommand
+    public abstract class CommandBase : ICommand
     {
         public event EventHandler CanExecuteChanged;
 

@@ -20,8 +20,8 @@ namespace POS.WPF.Models.ViewModels
             this.accountRepo = accountRepo;
             this.optionRepo = optionRepo;
 
-            LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
-            LoadListCmd = new RelayCommandAsync(async () =>
+            LoadOptionsCmd = new CommandAsync(LoadOptions);
+            LoadListCmd = new CommandAsync(async () =>
             {
                 await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, eventArgs) =>
                 {
@@ -29,37 +29,37 @@ namespace POS.WPF.Models.ViewModels
                     eventArgs.Session.Close(false);
                 }, null);
             });
-            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
-            SaveCmd = new RelayCommandAsync(SaveForm);
-            CancelCmd = new RelayCommandSyncVoid(() =>
+            ShowFormCmd = new CommandAsyncParam(ShowForm);
+            SaveCmd = new CommandAsync(SaveForm);
+            CancelCmd = new CommandSync(() =>
             {
                 CurrentAccount = new AccountEM();
                 DialogHost.CloseDialogCommand.Execute(null, null);
             });
-            CheckAllCmd = new RelayCommandSyncParam(isChecked =>
+            CheckAllCmd = new CommandParam(isChecked =>
             {
                 bool _isChecked = (bool)isChecked;
                 foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
             });
-            DeleteCmd = new RelayCommandAsync(DeleteRows);
+            DeleteCmd = new CommandAsync(DeleteRows);
         }
 
         private readonly AccountRepository accountRepo;
         private readonly OptionRepository optionRepo;
 
-        public RelayCommandAsync LoadOptionsCmd { get; set; }
-        public RelayCommandAsync LoadListCmd { get; set; }
-        public RelayCommandAsyncParam ShowFormCmd { get; set; }
-        public RelayCommandAsync SaveCmd { get; set; }
-        public RelayCommandSyncVoid CancelCmd { get; set; }
-        public RelayCommandSyncParam CheckAllCmd { get; set; }
-        public RelayCommandAsync DeleteCmd { get; set; }
+        public CommandAsync LoadOptionsCmd { get; set; }
+        public CommandAsync LoadListCmd { get; set; }
+        public CommandAsyncParam ShowFormCmd { get; set; }
+        public CommandAsync SaveCmd { get; set; }
+        public CommandSync CancelCmd { get; set; }
+        public CommandParam CheckAllCmd { get; set; }
+        public CommandAsync DeleteCmd { get; set; }
 
         public HeaderBarVM Header => new HeaderBarVM
         {
             HeaderText = "List of Accounts",
             IconKind = "Add",
-            ButtonCmd = new RelayCommandAsyncParam(ShowForm)
+            ButtonCmd = new CommandAsyncParam(ShowForm)
         };
 
         private IList<OptionValueDTO> _comboOptions;

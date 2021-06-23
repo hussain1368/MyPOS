@@ -7,12 +7,12 @@ namespace POS.WPF.Common
 {
     public class AppState : BaseBindable
     {
-        public AppState(UserRepository userQuery)
+        public AppState(UserRepository userRepo)
         {
-            this.userQuery = userQuery;
+            this.userRepo = userRepo;
         }
 
-        private readonly UserRepository userQuery;
+        private readonly UserRepository userRepo;
 
         private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini" };
         public UserDTO CurrentUser
@@ -30,7 +30,7 @@ namespace POS.WPF.Common
 
         public async Task Login(string username, string password)
         {
-            CurrentUser = await userQuery.Login(username, password);
+            CurrentUser = await userRepo.Login(username, password);
         }
 
         public void Logout() => CurrentUser = null;

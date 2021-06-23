@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace POS.WPF.Commands
 {
-    public class RelayCommandAsync : RelayCommandBase
+    public class CommandAsync : CommandBase
     {
         private readonly Func<Task> _toExecute;
 
-        public RelayCommandAsync(Func<Task> toExecute)
+        public CommandAsync(Func<Task> toExecute)
         {
             _toExecute = toExecute;
         }

@@ -13,11 +13,11 @@ namespace POS.WPF.Models.ViewModels
 {
     public class InvoicesVM : BaseBindable
     {
-        public InvoicesVM(InvoiceFormVM invoiceFormContext, InvoiceRepository invoiceQuery)
+        public InvoicesVM(InvoiceFormVM invoiceFormContext, InvoiceRepository invoiceRepo)
         {
-            this.invoiceQuery = invoiceQuery;
-            LoadListCmd = new RelayCommandAsync(LoadList);
-            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
+            this.invoiceRepo = invoiceRepo;
+            LoadListCmd = new CommandAsync(LoadList);
+            ShowFormCmd = new CommandAsyncParam(ShowForm);
             InvoiceFormContext = invoiceFormContext;
             invoiceFormContext.ParentPage = this;
 
@@ -26,7 +26,7 @@ namespace POS.WPF.Models.ViewModels
                 HeaderText = "Sale and Purchase",
                 IconKind = "ArrowBack",
                 IsButtonVisible = false,
-                ButtonCmd = new RelayCommandSyncVoid(() =>
+                ButtonCmd = new CommandSync(() =>
                 {
                     HeaderContext.IsButtonVisible = false;
                     HeaderContext.HeaderText = "Sale and Purchase";
@@ -35,10 +35,10 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly InvoiceRepository invoiceQuery;
+        private readonly InvoiceRepository invoiceRepo;
 
-        public RelayCommandAsync LoadListCmd { get; set; }
-        public RelayCommandAsyncParam ShowFormCmd { get; set; }
+        public CommandAsync LoadListCmd { get; set; }
+        public CommandAsyncParam ShowFormCmd { get; set; }
         public InvoiceFormVM InvoiceFormContext { get; }
 
         private HeaderBarVM _headerContext;
@@ -80,7 +80,7 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, args) =>
             {
-                InvoicesList = await invoiceQuery.GetList((byte?)InvoiceType, IssueDate);
+                InvoicesList = await invoiceRepo.GetList((byte?)InvoiceType, IssueDate);
                 args.Session.Close(false);
             },
             null);

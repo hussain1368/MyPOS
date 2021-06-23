@@ -17,40 +17,40 @@ namespace POS.WPF.Models.ViewModels
     public class InvoiceFormVM : BaseBindable
     {
         public InvoiceFormVM(
-            ProductRepository productQuery, 
-            OptionRepository optionQuery, 
-            AccountRepository accountQuery, 
-            InvoiceRepository invoiceQuery)
+            ProductRepository productRepo, 
+            OptionRepository optionRepo, 
+            AccountRepository accountRepo, 
+            InvoiceRepository invoiceRepo)
         {
-            this.productQuery = productQuery;
-            this.optionQuery = optionQuery;
-            this.accountQuery = accountQuery;
-            this.invoiceQuery = invoiceQuery;
-            LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
-            FindByNameInputCmd = new RelayCommandAsync(FindByName);
-            FindByNameKeyUpCmd = new RelayCommandAsyncParam(FindByNameKeyUp);
-            AddInvoiceItemCmd = new RelayCommandSyncVoid(() => AddInvoiceItem(SelectedProduct));
-            DeleteInvoiceItemCmd = new RelayCommandSyncParam(DeleteInvoiceItem);
-            IncrementInvoiceItemCmd = new RelayCommandSyncParam(IncrementInvoiceItem);
-            DecrementInvoiceItemCmd = new RelayCommandSyncParam(DecrementInvoiceItem);
-            SaveCmd = new RelayCommandAsync(Save);
-            CancelCmd = new RelayCommandSyncVoid(Cancel);
+            this.productRepo = productRepo;
+            this.optionRepo = optionRepo;
+            this.accountRepo = accountRepo;
+            this.invoiceRepo = invoiceRepo;
+            LoadOptionsCmd = new CommandAsync(LoadOptions);
+            FindByNameInputCmd = new CommandAsync(FindByName);
+            FindByNameKeyUpCmd = new CommandAsyncParam(FindByNameKeyUp);
+            AddInvoiceItemCmd = new CommandSync(() => AddInvoiceItem(SelectedProduct));
+            DeleteInvoiceItemCmd = new CommandParam(DeleteInvoiceItem);
+            IncrementInvoiceItemCmd = new CommandParam(IncrementInvoiceItem);
+            DecrementInvoiceItemCmd = new CommandParam(DecrementInvoiceItem);
+            SaveCmd = new CommandAsync(Save);
+            CancelCmd = new CommandSync(Cancel);
         }
-        private readonly ProductRepository productQuery;
-        private readonly OptionRepository optionQuery;
-        private readonly AccountRepository accountQuery;
-        private readonly InvoiceRepository invoiceQuery;
+        private readonly ProductRepository productRepo;
+        private readonly OptionRepository optionRepo;
+        private readonly AccountRepository accountRepo;
+        private readonly InvoiceRepository invoiceRepo;
         public InvoicesVM ParentPage { get; set; }
 
-        public RelayCommandAsync LoadOptionsCmd { get; set; }
-        public RelayCommandAsync FindByNameInputCmd { get; set; }
-        public RelayCommandAsyncParam FindByNameKeyUpCmd { get; set; }
-        public RelayCommandSyncVoid AddInvoiceItemCmd { get; set; }
-        public RelayCommandSyncParam DeleteInvoiceItemCmd { get; set; }
-        public RelayCommandSyncParam IncrementInvoiceItemCmd { get; set; }
-        public RelayCommandSyncParam DecrementInvoiceItemCmd { get; set; }
-        public RelayCommandSyncVoid CancelCmd { get; set; }
-        public RelayCommandAsync SaveCmd { get; set; }
+        public CommandAsync LoadOptionsCmd { get; set; }
+        public CommandAsync FindByNameInputCmd { get; set; }
+        public CommandAsyncParam FindByNameKeyUpCmd { get; set; }
+        public CommandSync AddInvoiceItemCmd { get; set; }
+        public CommandParam DeleteInvoiceItemCmd { get; set; }
+        public CommandParam IncrementInvoiceItemCmd { get; set; }
+        public CommandParam DecrementInvoiceItemCmd { get; set; }
+        public CommandSync CancelCmd { get; set; }
+        public CommandAsync SaveCmd { get; set; }
 
         private InvoiceType _invoiceType = InvoiceType.Sale;
         public InvoiceType InvoiceType
@@ -130,9 +130,9 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadOptions()
         {
-            TreasuriesList = await optionQuery.GetTreasuriesList();
-            WarehousesList = await optionQuery.GetWarehousesList();
-            AccountsList = await accountQuery.GetList();
+            TreasuriesList = await optionRepo.GetTreasuriesList();
+            WarehousesList = await optionRepo.GetWarehousesList();
+            AccountsList = await accountRepo.GetList();
 
             CurrentInvoice.Treasury = TreasuriesList.FirstOrDefault(t => t.IsDefault);
             CurrentInvoice.WarehouseId = WarehousesList.FirstOrDefault(t => t.IsDefault)?.Id;
@@ -140,14 +140,14 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task FindByCode()
         {
-            var product = await productQuery.GetByCode(SearchValue);
+            var product = await productRepo.GetByCode(SearchValue);
             if (product != null) AddInvoiceItem(product);
         }
 
         private async Task FindByName()
         {
             if (!string.IsNullOrEmpty(SearchValue))
-                ProductsList = await productQuery.GetByName(SearchValue);
+                ProductsList = await productRepo.GetByName(SearchValue);
             else
                 ProductsList = Enumerable.Empty<ProductItemDTO>();
         }
@@ -252,12 +252,12 @@ namespace POS.WPF.Models.ViewModels
 
                 if (CurrentInvoice.Id == 0)
                 {
-                    await invoiceQuery.Create(data);
+                    await invoiceRepo.Create(data);
                     Cancel();
                 }
                 else
                 {
-                    await invoiceQuery.Update(data);
+                    await invoiceRepo.Update(data);
                     tempInvoiceData = data;
                 }
                 args.Session.Close(false);
@@ -324,7 +324,7 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), "FormDialogHost", async (sender, args) =>
             {
-                tempInvoiceData = await invoiceQuery.GetById(id);
+                tempInvoiceData = await invoiceRepo.GetById(id);
                 ResetInvoiceData();
                 args.Session.Close(false);
             },

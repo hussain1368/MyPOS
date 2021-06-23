@@ -2,11 +2,11 @@
 
 namespace POS.WPF.Commands
 {
-    public class RelayCommandSyncVoid : RelayCommandBase
+    public class CommandSync : CommandBase
     {
         private readonly Action _toExecute;
 
-        public RelayCommandSyncVoid(Action toExecute)
+        public CommandSync(Action toExecute)
         {
             _toExecute = toExecute;
         }

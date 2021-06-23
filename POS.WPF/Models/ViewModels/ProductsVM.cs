@@ -15,14 +15,14 @@ namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(ProductRepository productQuery, OptionRepository optionQuery, IStringLocalizer<Labels> _t)
+        public ProductsVM(ProductRepository productRepo, OptionRepository optionRepo, IStringLocalizer<Labels> _t)
         {
-            this.productQuery = productQuery;
-            this.optionQuery = optionQuery;
+            this.productRepo = productRepo;
+            this.optionRepo = optionRepo;
             this._t = _t;
             MsgContext = new MessageVM();
 
-            LoadListCmd = new RelayCommandAsync(async () =>
+            LoadListCmd = new CommandAsync(async () =>
             {
                 await DialogHost.Show(new LoadingDialog(), "GridDialog", async (sender, args) =>
                 {
@@ -30,25 +30,25 @@ namespace POS.WPF.Models.ViewModels
                     args.Session.Close(false);
                 }, null);
             });
-            LoadOptionsCmd = new RelayCommandAsync(LoadOptions);
-            ShowFormCmd = new RelayCommandAsyncParam(ShowForm);
-            SaveCmd = new RelayCommandAsync(SaveForm);
-            CancelCmd = new RelayCommandSyncVoid(() =>
+            LoadOptionsCmd = new CommandAsync(LoadOptions);
+            ShowFormCmd = new CommandAsyncParam(ShowForm);
+            SaveCmd = new CommandAsync(SaveForm);
+            CancelCmd = new CommandSync(() =>
             {
                 if (tempProductData == null) CurrentProduct = new ProductEM();
                 else ResetProductData();
             });
-            CheckAllCmd = new RelayCommandSyncParam(isChecked =>
+            CheckAllCmd = new CommandParam(isChecked =>
             {
                 foreach (var obj in ProductsList) obj.IsChecked = (bool)isChecked;
             });
-            DeleteCmd = new RelayCommandAsync(DeleteRows);
+            DeleteCmd = new CommandAsync(DeleteRows);
 
             HeaderContext = new HeaderBarVM
             {
                 HeaderText = _t["ListOfProducts"],
                 IconKind = "Add",
-                ButtonCmd = new RelayCommandAsync(async () =>
+                ButtonCmd = new CommandAsync(async () =>
                 {
                     if (TransitionerIndex == 0) await ShowForm(null);
                     else
@@ -61,18 +61,18 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly ProductRepository productQuery;
-        private readonly OptionRepository optionQuery;
+        private readonly ProductRepository productRepo;
+        private readonly OptionRepository optionRepo;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 
-        public RelayCommandAsync LoadListCmd { get; set; }
-        public RelayCommandAsync LoadOptionsCmd { get; set; }
-        public RelayCommandAsyncParam ShowFormCmd { get; set; }
-        public RelayCommandAsync SaveCmd { get; set; }
-        public RelayCommandAsync DeleteCmd { get; set; }
-        public RelayCommandSyncVoid CancelCmd { get; set; }
-        public RelayCommandSyncParam CheckAllCmd { get; set; }
+        public CommandAsync LoadListCmd { get; set; }
+        public CommandAsync LoadOptionsCmd { get; set; }
+        public CommandAsyncParam ShowFormCmd { get; set; }
+        public CommandAsync SaveCmd { get; set; }
+        public CommandAsync DeleteCmd { get; set; }
+        public CommandSync CancelCmd { get; set; }
+        public CommandParam CheckAllCmd { get; set; }
 
         private HeaderBarVM _headerContext;
         public HeaderBarVM HeaderContext
@@ -148,7 +148,7 @@ namespace POS.WPF.Models.ViewModels
             var unitId = CurrentProduct.UnitId;
             var brandId = CurrentProduct.BrandId;
 
-            ComboOptions = await optionQuery.OptionsAll();
+            ComboOptions = await optionRepo.OptionsAll();
 
             CurrentProduct.CategoryId = categoryId;
             CurrentProduct.CurrencyId = currencyId;
@@ -170,7 +170,7 @@ namespace POS.WPF.Models.ViewModels
             }
             await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
             {
-                tempProductData = await productQuery.GetById((int)id);
+                tempProductData = await productRepo.GetById((int)id);
                 ResetProductData();
                 args.Session.Close(false);
             }, null);
@@ -232,12 +232,12 @@ namespace POS.WPF.Models.ViewModels
 
             if (CurrentProduct.Id == 0)
             {
-                await productQuery.Create(data);
+                await productRepo.Create(data);
                 CurrentProduct = new ProductEM();
             }
             else
             {
-                await productQuery.Update(data);
+                await productRepo.Update(data);
                 tempProductData = data;
             }
             await LoadList();
@@ -258,7 +258,7 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await productQuery.Delete(ids);
+                await productRepo.Delete(ids);
                 await LoadList();
                 args.Session.Close(false);
                 await MsgContext.ShowSuccess($"{ids.Length} records deleted successfully!");
@@ -289,7 +289,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadList()
         {
-            var data = await productQuery.GetList(CategoryId);
+            var data = await productRepo.GetList(CategoryId);
             var _data = data.Select(p => new ProductEM
             {
                 Id = p.Id,
