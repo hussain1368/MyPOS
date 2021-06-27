@@ -35,7 +35,7 @@
                 Grid.Column="0"
                 Width="150"
                 Margin="0,0,10,0"
-                materialDesign:HintAssist.Hint="Category"
+                materialDesign:HintAssist.Hint="{loc:Labels Category}"
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 DisplayMemberPath="Name"
                 ItemsSource="{Binding CategoryList}"
@@ -43,10 +43,13 @@
                 SelectedValuePath="Id" />
             <Button
                 Margin="0,0,10,0"
+                Command="{Binding LoadListCmd}"
+                Content="{loc:Labels Search}" />
+            <Button
+                Margin="0,0,10,0"
                 Command="{Binding DeleteCmd}"
                 Content="{loc:Labels Delete}"
-                Style="{StaticResource MaterialDesignRaisedAccentButton}" />
-            <Button Command="{Binding LoadListCmd}" Content="{loc:Labels Search}" />
+                Style="{StaticResource MyAccentButton}" />
         </StackPanel>
 
         <DataGrid

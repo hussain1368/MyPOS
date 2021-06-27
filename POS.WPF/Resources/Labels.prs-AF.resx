@@ -120,6 +120,9 @@
   <data name="Accounts" xml:space="preserve">
     <value>حسابها</value>
   </data>
+  <data name="Category" xml:space="preserve">
+    <value>بخـــش</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>حذف</value>
   </data>

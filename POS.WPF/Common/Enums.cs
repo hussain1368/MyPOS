@@ -13,4 +13,10 @@
         Cash = 1,
         Loan = 2,
     }
+
+    public enum CalendarType
+    {
+        Gregorian = 1,
+        HejriShamsi = 2,
+    }
 }

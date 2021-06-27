@@ -64,7 +64,7 @@ namespace POS.WPF.Models.ViewModels
                 {
                     Text = _t["Settings"],
                     IconKind = PackIconKind.Settings,
-                    ViewModel = null
+                    ViewModel = services.GetRequiredService<SettingsVM>()
                 },
             };
             BodyContent = MenuItems[0].ViewModel;
@@ -98,5 +98,6 @@ namespace POS.WPF.Models.ViewModels
         }
 
         public string UserDisplayName => appState.CurrentUser?.DisplayName;
+        public string LayoutDirection => appState.LayoutDirection;
     }
 }

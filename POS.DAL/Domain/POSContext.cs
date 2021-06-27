@@ -24,6 +24,7 @@ namespace POS.DAL.Domain
         public virtual DbSet<OptionType> OptionTypes { get; set; }
         public virtual DbSet<OptionValue> OptionValues { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Treasury> Treasuries { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
@@ -219,6 +220,17 @@ namespace POS.DAL.Domain
                     .WithMany(p => p.ProductUnits)
                     .HasForeignKey(d => d.UnitId)
                     .HasConstraintName("FK_Product_Unit");
+            });
+
+            modelBuilder.Entity<Setting>(entity =>
+            {
+                entity.ToTable("Setting");
+
+                entity.Property(e => e.AppTitle).HasMaxLength(255);
+
+                entity.Property(e => e.Language).HasMaxLength(50);
+
+                entity.Property(e => e.LayoutName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Transaction>(entity =>

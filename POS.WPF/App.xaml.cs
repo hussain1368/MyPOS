@@ -18,13 +18,14 @@ namespace POS.WPF
         protected override void OnStartup(StartupEventArgs e)
         {
             Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            CultureInfo.CurrentUICulture = new CultureInfo("prs-AF", false);
-            //Thread.CurrentThread.CurrentCulture = new CultureInfo("prs-AF");
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceLocator.SetLocatorProvider(ServiceProvider);
+
+            var state = ServiceProvider.GetRequiredService<AppState>();
+            state.SetSettings();
 
             var window = ServiceProvider.GetRequiredService<MainWindow>();
             window.Show();
@@ -50,6 +51,7 @@ namespace POS.WPF
             services.AddScoped<AccountsVM>();
             services.AddScoped<InvoicesVM>();
             services.AddScoped<InvoiceFormVM>();
+            services.AddScoped<SettingsVM>();
 
             services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();

@@ -1,18 +1,21 @@
 ﻿using POS.DAL.DTO;
 using POS.DAL.Repository;
 using POS.WPF.Models;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace POS.WPF.Common
 {
     public class AppState : BaseBindable
     {
-        public AppState(UserRepository userRepo)
+        public AppState(UserRepository userRepo, OptionRepository optionsRepo)
         {
             this.userRepo = userRepo;
+            this.optionsRepo = optionsRepo;
         }
 
         private readonly UserRepository userRepo;
+        private readonly OptionRepository optionsRepo;
 
         private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini" };
         public UserDTO CurrentUser
@@ -20,11 +23,23 @@ namespace POS.WPF.Common
             get { return _currentUser; }
             set
             {
-                _currentUser = value;
-                OnPropertyChanged();
+                SetValue(ref _currentUser, value);
                 OnPropertyChanged(nameof(IsLoggedIn));
             }
         }
+
+        private SettingDTO _settings;
+        public SettingDTO Settings
+        {
+            get { return _settings; }
+            set
+            {
+                SetValue(ref _settings, value);
+                OnPropertyChanged(nameof(LayoutDirection));
+            }
+        }
+
+        public string LayoutDirection => Settings.Language == "en-US" ? "LeftToRight" : "RightToLeft";
 
         public bool IsLoggedIn => CurrentUser != null;
 
@@ -34,5 +49,17 @@ namespace POS.WPF.Common
         }
 
         public void Logout() => CurrentUser = null;
+
+        public void SetSettings()
+        {
+            Settings = optionsRepo.GetActiveSetting();
+            CultureInfo.CurrentUICulture = new CultureInfo(Settings.Language, false);
+            //Thread.CurrentThread.CurrentCulture = new CultureInfo("prs-AF");
+        }
+
+        public async Task UpdateSettings(SettingDTO data)
+        {
+            await optionsRepo.UpdateSetting(data);
+        }
     }
 }

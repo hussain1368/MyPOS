@@ -83,5 +83,42 @@ namespace POS.DAL.Repository
             })
             .ToListAsync();
         }
+
+        //public async Task<SettingDTO> GetActiveSetting()
+        //{
+        //    var setting = await dbContext.Settings.FirstOrDefaultAsync(s => s.IsActive);
+        //    return new SettingDTO
+        //    {
+        //        Id = setting.Id,
+        //        LayoutName = setting.LayoutName,
+        //        Language = setting.Language,
+        //        AppTitle = setting.AppTitle,
+        //        CalendarType = setting.CalendarType,
+        //        IsActive = setting.IsActive,
+        //    };
+        //}
+
+        public SettingDTO GetActiveSetting()
+        {
+            var setting = dbContext.Settings.FirstOrDefault(s => s.IsActive);
+            return new SettingDTO
+            {
+                Id = setting.Id,
+                LayoutName = setting.LayoutName,
+                Language = setting.Language,
+                AppTitle = setting.AppTitle,
+                CalendarType = setting.CalendarType,
+                IsActive = setting.IsActive,
+            };
+        }
+
+        public async Task UpdateSetting(SettingDTO data)
+        {
+            var setting = await dbContext.Settings.FindAsync(data.Id);
+            setting.Language = data.Language;
+            setting.AppTitle = data.AppTitle;
+            setting.CalendarType = data.CalendarType;
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

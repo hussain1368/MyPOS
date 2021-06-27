@@ -8,4 +8,13 @@
         <Setter Property="FontFamily" Value="Calibri" />
         <Setter Property="FontWeight" Value="Medium" />
     </Style>
+
+    <Style
+        x:Key="MyAccentButton"
+        BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"
+        TargetType="{x:Type Button}">
+        <Setter Property="FontFamily" Value="Calibri" />
+        <Setter Property="FontWeight" Value="Medium" />
+    </Style>
+
 </ResourceDictionary>

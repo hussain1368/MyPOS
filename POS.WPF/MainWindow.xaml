@@ -48,7 +48,7 @@
             <BeginStoryboard Storyboard="{StaticResource OpenMenu}" />
         </EventTrigger>
     </Window.Triggers>
-    <Grid FlowDirection="RightToLeft">
+    <Grid FlowDirection="{Binding LayoutDirection}">
         <Border
             x:Name="MainPanel"
             Margin="250,0,0,0"
