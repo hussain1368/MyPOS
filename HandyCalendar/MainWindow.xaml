@@ -1,0 +1,45 @@
+﻿<Window
+    x:Class="HandyCalendar.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:BoldReports="clr-namespace:BoldReports.UI.Xaml;assembly=BoldReports.Wpf"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Calendar App 2021"
+    Width="850"
+    Height="600"
+    Padding="10"
+    mc:Ignorable="d">
+    <Grid>
+        <StackPanel Visibility="Visible">
+            <hc:PersianDatePicker
+                Margin="10"
+                FontFamily="Calibri"
+                SelectedDateFormat="Long"
+                Style="{StaticResource MaterialDesignPersianDatePicker}" />
+            <hc:PersianDatePicker
+                Margin="10"
+                FontFamily="Calibri"
+                SelectedDateFormat="Long" />
+
+            <WrapPanel
+                Margin="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <hc:PersianCalendar
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    FontFamily="Calibri"
+                    FontWeight="Bold" />
+                <hc:PersianCalendar
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    FontFamily="Calibri"
+                    FontWeight="Bold"
+                    Style="{StaticResource MaterialDesignPersianCalendar}" />
+            </WrapPanel>
+        </StackPanel>
+    </Grid>
+</Window>

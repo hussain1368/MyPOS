@@ -2,5 +2,7 @@ POS.DAL/bin
 POS.DAL/obj
 POS.WPF/bin
 POS.WPF/obj
+HandyCalendar/bin
+HandyCalendar/obj
 .vs/
 Publish

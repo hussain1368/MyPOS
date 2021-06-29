@@ -16,7 +16,28 @@
         <FlowDocumentReader>
             <FlowDocument>
                 <Paragraph>This is a paragraph</Paragraph>
-                <Table />
+                <Table>
+                    <Table.Columns>
+                        <TableColumn />
+                        <TableColumn />
+                        <TableColumn />
+                    </Table.Columns>
+                    <TableRowGroup>
+                        <TableRow Background="LightGray">
+                            <TableCell>
+                                <Paragraph>
+                                    <Run Text="Name" />
+                                </Paragraph>
+                            </TableCell>
+                            <TableCell>
+                                <Paragraph>Category</Paragraph>
+                            </TableCell>
+                            <TableCell>
+                                <Paragraph>Price</Paragraph>
+                            </TableCell>
+                        </TableRow>
+                    </TableRowGroup>
+                </Table>
             </FlowDocument>
         </FlowDocumentReader>
     </Grid>
