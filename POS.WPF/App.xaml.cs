@@ -25,7 +25,7 @@ namespace POS.WPF
             ServiceLocator.SetLocatorProvider(ServiceProvider);
 
             var state = ServiceProvider.GetRequiredService<AppState>();
-            state.SetSettings();
+            state.LoadSettings();
 
             var window = ServiceProvider.GetRequiredService<MainWindow>();
             window.Show();

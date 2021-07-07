@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Localization;
 using POS.DAL.Repository;
 using POS.DAL.DTO;
 using POS.WPF.Commands;
-using Microsoft.Extensions.Localization;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
 

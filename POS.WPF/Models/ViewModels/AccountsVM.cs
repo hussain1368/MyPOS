@@ -23,10 +23,10 @@ namespace POS.WPF.Models.ViewModels
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(async () =>
             {
-                await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, eventArgs) =>
+                await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, args) =>
                 {
                     await LoadList();
-                    eventArgs.Session.Close(false);
+                    args.Session.Close(false);
                 }, null);
             });
             ShowFormCmd = new CommandAsyncParam(ShowForm);

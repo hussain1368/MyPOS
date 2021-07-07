@@ -69,10 +69,7 @@
                     Header="Code">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
-                            <CheckBox
-                                x:Name="CheckAllCheckBox"
-                                Command="{Binding DataContext.CheckAllCmd, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" />
+                            <CheckBox Command="{Binding DataContext.CheckAllCmd, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" />
                         </DataTemplate>
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>

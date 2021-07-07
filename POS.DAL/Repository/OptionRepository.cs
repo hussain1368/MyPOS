@@ -11,6 +11,19 @@ namespace POS.DAL.Repository
     {
         public OptionRepository(POSContext dbContext): base(dbContext) { }
 
+        public async Task<IList<OptionTypeDTO>> OptionTypes()
+        {
+            return await dbContext.OptionTypes.Select(t => new OptionTypeDTO
+            {
+                Id = t.Id,
+                Code = t.Code,
+                Name = t.Name,
+                IsReadOnly = t.IsReadOnly,
+                IsDeleted = t.IsDeleted,
+            })
+            .ToListAsync();
+        }
+
         public async Task<IList<OptionValueDTO>> OptionsByTypeId(int typeId)
         {
             var query = dbContext.OptionValues.Where(v => v.IsDeleted == false).Where(x => x.TypeId == typeId);
@@ -23,13 +36,15 @@ namespace POS.DAL.Repository
             return await SelectOptions(query);
         }
 
-        public async Task<IList<OptionValueDTO>> OptionsAll()
+        public async Task<IList<OptionValueDTO>> OptionsAll(bool includeDeleted = false)
         {
-            var query = dbContext.OptionValues.Where(v => v.IsDeleted == false);
+            var query = dbContext.OptionValues.AsQueryable();
+            if (!includeDeleted)
+                query = query.Where(v => v.IsDeleted == false);
             return await SelectOptions(query);
         }
 
-        private async Task<IList<OptionValueDTO>> SelectOptions(IQueryable<OptionValue> query)
+        public async Task<IList<OptionValueDTO>> SelectOptions(IQueryable<OptionValue> query)
         {
             return await query.Select(v => new OptionValueDTO
             {
@@ -39,6 +54,8 @@ namespace POS.DAL.Repository
                 Name = v.Name,
                 Code = v.Code,
                 IsDefault = v.IsDefault,
+                IsReadOnly = v.IsReadOnly,
+                IsDeleted = v.IsDeleted,
             })
             .ToListAsync();
         }
@@ -118,6 +135,33 @@ namespace POS.DAL.Repository
             setting.Language = data.Language;
             setting.AppTitle = data.AppTitle;
             setting.CalendarType = data.CalendarType;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task CreateOption(OptionValueDTO data)
+        {
+            await dbContext.OptionValues.AddAsync(new OptionValue
+            {
+                Code = data.Code,
+                TypeId = data.TypeId,
+                Name = data.Name,
+            });
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateOption(OptionValueDTO data)
+        {
+            var option = await dbContext.OptionValues.FindAsync(data.Id);
+            option.Code = data.Code;
+            option.TypeId = data.TypeId;
+            option.Name = data.Name;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteOptions(int[] ids)
+        {
+            var rows = await dbContext.OptionValues.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
+            foreach (var row in rows) row.IsDeleted = true;
             await dbContext.SaveChangesAsync();
         }
     }

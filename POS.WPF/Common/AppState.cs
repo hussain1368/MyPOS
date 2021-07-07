@@ -50,7 +50,7 @@ namespace POS.WPF.Common
 
         public void Logout() => CurrentUser = null;
 
-        public void SetSettings()
+        public void LoadSettings()
         {
             Settings = optionsRepo.GetActiveSetting();
             CultureInfo.CurrentUICulture = new CultureInfo(Settings.Language, false);

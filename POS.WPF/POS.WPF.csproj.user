@@ -25,6 +25,15 @@
     <Compile Update="Views\Sections\InvoiceForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Sections\OptionForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Sections\OptionsTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Sections\SettingsTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Shared\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -73,6 +82,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Sections\InvoiceForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Sections\OptionForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Sections\OptionsTab.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Sections\SettingsTab.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Shared\ConfirmDialog.xaml">

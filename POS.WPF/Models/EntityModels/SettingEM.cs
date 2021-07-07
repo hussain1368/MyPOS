@@ -4,6 +4,13 @@ namespace POS.WPF.Models.EntityModels
 {
     public class SettingEM : BaseBindable
     {
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            set { SetValue(ref _id, value); }
+        }
+
         private string _appTitle;
         public string AppTitle
         {
