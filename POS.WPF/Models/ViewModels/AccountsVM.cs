@@ -21,26 +21,11 @@ namespace POS.WPF.Models.ViewModels
             this.optionRepo = optionRepo;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
-            LoadListCmd = new CommandAsync(async () =>
-            {
-                await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, args) =>
-                {
-                    await LoadList();
-                    args.Session.Close(false);
-                }, null);
-            });
+            LoadListCmd = new CommandAsync(LoadList);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
             SaveCmd = new CommandAsync(SaveForm);
-            CancelCmd = new CommandSync(() =>
-            {
-                CurrentAccount = new AccountEM();
-                DialogHost.CloseDialogCommand.Execute(null, null);
-            });
-            CheckAllCmd = new CommandParam(isChecked =>
-            {
-                bool _isChecked = (bool)isChecked;
-                foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
-            });
+            CancelCmd = new CommandSync(CancelForm);
+            CheckAllCmd = new CommandParam(CheckAll);
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
@@ -81,21 +66,28 @@ namespace POS.WPF.Models.ViewModels
         public AccountEM CurrentAccount
         {
             get { return _currentAccount; }
-            set { _currentAccount = value; OnPropertyChanged(); }
+            set { SetValue(ref _currentAccount, value); }
         }
 
         private ObservableCollection<AccountEM> _accountsList;
         public ObservableCollection<AccountEM> AccountsList
         {
             get { return _accountsList; }
-            set { _accountsList = value; OnPropertyChanged(); }
+            set { SetValue(ref _accountsList, value); }
         }
 
         private int? _accountTypeId;
         public int? AccountTypeId
         {
             get { return _accountTypeId; }
-            set { _accountTypeId = value; OnPropertyChanged(); }
+            set { SetValue(ref _accountTypeId, value); }
+        }
+
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetValue(ref _isLoading, value); }
         }
 
         private async Task LoadOptions()
@@ -104,6 +96,16 @@ namespace POS.WPF.Models.ViewModels
         }
 
         private async Task LoadList()
+        {
+            await DialogHost.Show(new LoadingDialog(), "AccountsDH", async (sender, args) =>
+            {
+                await GetList();
+                args.Session.Close(false);
+            },
+            null);
+        }
+
+        private async Task GetList()
         {
             var data = await accountRepo.GetList(AccountTypeId);
             var _data = data.Select(m => new AccountEM
@@ -125,30 +127,41 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task ShowForm(object id)
         {
-            if (id == null) CurrentAccount = new AccountEM();
-            else
+            await DialogHost.Show(new LoadingDialog(), "AccountsDH", async (sender, args)=>
             {
-                var obj = await accountRepo.GetById((int)id);
-                CurrentAccount = new AccountEM
+                if (id == null) CurrentAccount = new AccountEM();
+                else
                 {
-                    Id = obj.Id,
-                    Name = obj.Name,
-                    Phone = obj.Phone,
-                    Address = obj.Address,
-                    Note = obj.Note,
-                    CurrencyId = obj.CurrencyId,
-                    CurrentBalance = obj.CurrentBalance,
-                    AccountTypeId = obj.AccountTypeId,
-                };
-            }
-            await DialogHost.Show(new AccountForm(), "MainDialogHost", null, null);
+                    var obj = await accountRepo.GetById((int)id);
+                    CurrentAccount = new AccountEM
+                    {
+                        Id = obj.Id,
+                        Name = obj.Name,
+                        Phone = obj.Phone,
+                        Address = obj.Address,
+                        Note = obj.Note,
+                        CurrencyId = obj.CurrencyId,
+                        CurrentBalance = obj.CurrentBalance,
+                        AccountTypeId = obj.AccountTypeId,
+                    };
+                }
+                args.Session.UpdateContent(new AccountForm());
+            },
+            null);
+        }
+
+        private void CancelForm()
+        {
+            CurrentAccount = new AccountEM();
+            DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private async Task SaveForm()
         {
             CurrentAccount.ValidateModel();
             if (CurrentAccount.HasErrors) return;
-            
+
+            IsLoading = true;
             var data = new AccountDTO
             {
                 Id = CurrentAccount.Id,
@@ -173,8 +186,15 @@ namespace POS.WPF.Models.ViewModels
             {
                 await accountRepo.Update(data);
             }
-            await LoadList();
+            await GetList();
+            IsLoading = false;
             DialogHost.CloseDialogCommand.Execute(null, null);
+        }
+
+        private void CheckAll(object isChecked)
+        {
+            bool _isChecked = (bool)isChecked;
+            foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
         }
 
         private async Task DeleteRows()
@@ -183,16 +203,14 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "MainDialogHost", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, "AccountsDH", null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
                 await accountRepo.Delete(ids);
-                await LoadList();
+                await GetList();
                 args.Session.Close(false);
-                //var content = getMsg($"{ids.Length} Records Deleted!");
-                //MessageQueue.Enqueue(content);
             });
         }
     }

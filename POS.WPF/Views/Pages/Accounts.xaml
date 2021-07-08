@@ -30,7 +30,7 @@
         <materialDesign:DialogHost
             Grid.Row="1"
             DialogTheme="Light"
-            Identifier="MainDialogHost">
+            Identifier="AccountsDH">
             <local:AccountList Margin="20,10" />
         </materialDesign:DialogHost>
     </Grid>
