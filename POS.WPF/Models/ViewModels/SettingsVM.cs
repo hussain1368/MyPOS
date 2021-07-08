@@ -157,14 +157,19 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task SaveSetting()
         {
-            var data = new SettingDTO
+            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
             {
-                Id = CurrentSetting.Id,
-                AppTitle = CurrentSetting.AppTitle,
-                Language = CurrentSetting.Language,
-                CalendarType = (byte)CurrentSetting.CalendarType,
-            };
-            await appState.UpdateSettings(data);
+                var data = new SettingDTO
+                {
+                    Id = CurrentSetting.Id,
+                    AppTitle = CurrentSetting.AppTitle,
+                    Language = CurrentSetting.Language,
+                    CalendarType = (byte)CurrentSetting.CalendarType,
+                };
+                await appState.UpdateSettings(data);
+                args.Session.Close();
+            },
+            null);
         }
 
         private void CancelOption()

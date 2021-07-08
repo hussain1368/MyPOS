@@ -60,6 +60,7 @@ namespace POS.WPF.Common
         public async Task UpdateSettings(SettingDTO data)
         {
             await optionsRepo.UpdateSetting(data);
+            Settings = data;
         }
     }
 }
