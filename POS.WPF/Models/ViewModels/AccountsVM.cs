@@ -127,11 +127,12 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task ShowForm(object id)
         {
-            await DialogHost.Show(new LoadingDialog(), "AccountsDH", async (sender, args)=>
+            CurrentAccount = new AccountEM();
+            await DialogHost.Show(new AccountForm(), "AccountsDH", async (sender, args)=>
             {
-                if (id == null) CurrentAccount = new AccountEM();
-                else
+                if (id != null)
                 {
+                    IsLoading = true;
                     var obj = await accountRepo.GetById((int)id);
                     CurrentAccount = new AccountEM
                     {
@@ -144,8 +145,8 @@ namespace POS.WPF.Models.ViewModels
                         CurrentBalance = obj.CurrentBalance,
                         AccountTypeId = obj.AccountTypeId,
                     };
+                    IsLoading = false;
                 }
-                args.Session.UpdateContent(new AccountForm());
             },
             null);
         }

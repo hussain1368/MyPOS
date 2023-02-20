@@ -14,7 +14,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <conv:IntegerConverter x:Key="IntegerConverter" />
-        <conv:RadioConverter x:Key="RadioConverter" />
+        <conv:RadioToEnumConverter x:Key="RadioConverter" />
     </UserControl.Resources>
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="Loaded" SourceName="FormGrid">
@@ -300,7 +300,6 @@
                     </TextBox>
                 </Grid>
             </Expander>
-
         </materialDesign:Card>
 
         <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
@@ -320,5 +319,4 @@
             </Button>
         </WrapPanel>
     </StackPanel>
-
 </UserControl>

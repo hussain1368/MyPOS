@@ -27,7 +27,7 @@ namespace POS.WPF
             var state = ServiceProvider.GetRequiredService<AppState>();
             state.LoadSettings();
 
-            var window = ServiceProvider.GetRequiredService<MainWindow>();
+            var window = ServiceProvider.GetRequiredService<LoginWindow>();
             window.Show();
         }
 
