@@ -4,12 +4,13 @@ using POS.DAL.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using POS.DAL.Repository.Abstraction;
 
-namespace POS.DAL.Repository
+namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class OptionRepository : BaseRepository
+    public class OptionDatabaseRepository : BaseDatabaseRepository, IOptionRepository
     {
-        public OptionRepository(POSContext dbContext): base(dbContext) { }
+        public OptionDatabaseRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task<IList<OptionTypeDTO>> OptionTypes()
         {

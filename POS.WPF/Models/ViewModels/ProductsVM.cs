@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Localization;
-using POS.DAL.Repository;
 using POS.DAL.DTO;
 using POS.WPF.Commands;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
+using POS.DAL.Repository.Abstraction;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(ProductRepository productRepo, OptionRepository optionRepo, IStringLocalizer<Labels> _t)
+        public ProductsVM(IProductRepository productRepo, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
         {
             this.productRepo = productRepo;
             this.optionRepo = optionRepo;
@@ -61,8 +61,8 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly ProductRepository productRepo;
-        private readonly OptionRepository optionRepo;
+        private readonly IProductRepository productRepo;
+        private readonly IOptionRepository optionRepo;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 

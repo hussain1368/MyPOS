@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using POS.DAL.Repository;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
 
@@ -9,7 +10,7 @@ namespace POS.WPF.Validators.ModelValidators
     {
         public ProductValidator()
         {
-            var query = ServiceLocator.Current.GetInstance<ProductRepository>();
+            var query = ServiceLocator.Current.GetInstance<IProductRepository>();
 
             RuleFor(p => p.Code).MustAsync(async (model, code, token) =>
             {

@@ -5,17 +5,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
-using POS.DAL.Repository;
 using POS.WPF.Commands;
 using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
+using POS.DAL.Repository.Abstraction;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class AccountsVM : BaseBindable
     {
-        public AccountsVM(AccountRepository accountRepo, OptionRepository optionRepo)
+        public AccountsVM(IAccountRepository accountRepo, IOptionRepository optionRepo)
         {
             this.accountRepo = accountRepo;
             this.optionRepo = optionRepo;
@@ -29,8 +29,8 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
-        private readonly AccountRepository accountRepo;
-        private readonly OptionRepository optionRepo;
+        private readonly IAccountRepository accountRepo;
+        private readonly IOptionRepository optionRepo;
 
         public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }

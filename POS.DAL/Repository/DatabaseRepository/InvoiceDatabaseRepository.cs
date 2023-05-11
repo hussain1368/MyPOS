@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
 using POS.DAL.DTO;
+using POS.DAL.Repository.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace POS.DAL.Repository
+namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class InvoiceRepository : BaseRepository
+    public class InvoiceDatabaseRepository : BaseDatabaseRepository, IInvoiceRepository
     {
-        public InvoiceRepository(POSContext dbContext) : base(dbContext) { }
+        public InvoiceDatabaseRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(InvoiceDTO data)
         {

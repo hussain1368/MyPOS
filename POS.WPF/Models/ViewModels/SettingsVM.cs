@@ -1,13 +1,12 @@
 ﻿using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Localization;
 using POS.DAL.DTO;
-using POS.DAL.Repository;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
 using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Sections;
 using POS.WPF.Views.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace POS.WPF.Models.ViewModels
 {
     public class SettingsVM : BaseBindable
     {
-        public SettingsVM(AppState appState, OptionRepository optionRepo, IStringLocalizer<Labels> _t)
+        public SettingsVM(AppState appState, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
         {
             this.appState = appState;
             this.optionRepo = optionRepo;
@@ -38,7 +37,7 @@ namespace POS.WPF.Models.ViewModels
         }
 
         private readonly AppState appState;
-        private readonly OptionRepository optionRepo;
+        private readonly IOptionRepository optionRepo;
 
         public CommandAsync SaveSettingCmd { get; set; }
         public CommandAsync LoadOptionsCmd { get; set; }

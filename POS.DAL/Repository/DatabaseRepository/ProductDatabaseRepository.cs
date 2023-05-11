@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using POS.DAL.DTO;
 using System.Linq;
 using System;
+using POS.DAL.Repository.Abstraction;
 
-namespace POS.DAL.Repository
+namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class ProductRepository : BaseRepository
+    public class ProductDatabaseRepository : BaseDatabaseRepository, IProductRepository
     {
-        public ProductRepository(POSContext dbContext) : base(dbContext)
+        public ProductDatabaseRepository(POSContext dbContext) : base(dbContext)
         {
         }
 

@@ -1,6 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
-using POS.DAL.Repository;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
 using POS.WPF.Enums;
 using POS.WPF.Views.Shared;
@@ -13,7 +13,7 @@ namespace POS.WPF.Models.ViewModels
 {
     public class InvoicesVM : BaseBindable
     {
-        public InvoicesVM(InvoiceFormVM invoiceFormContext, InvoiceRepository invoiceRepo)
+        public InvoicesVM(InvoiceFormVM invoiceFormContext, IInvoiceRepository invoiceRepo)
         {
             this.invoiceRepo = invoiceRepo;
             LoadListCmd = new CommandAsync(LoadList);
@@ -35,7 +35,7 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly InvoiceRepository invoiceRepo;
+        private readonly IInvoiceRepository invoiceRepo;
 
         public CommandAsync LoadListCmd { get; set; }
         public CommandAsyncParam ShowFormCmd { get; set; }

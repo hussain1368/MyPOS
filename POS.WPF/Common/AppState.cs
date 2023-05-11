@@ -1,5 +1,5 @@
 ﻿using POS.DAL.DTO;
-using POS.DAL.Repository;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Models;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -8,14 +8,14 @@ namespace POS.WPF.Common
 {
     public class AppState : BaseBindable
     {
-        public AppState(UserRepository userRepo, OptionRepository optionsRepo)
+        public AppState(IUserRepository userRepo, IOptionRepository optionsRepo)
         {
             this.userRepo = userRepo;
             this.optionsRepo = optionsRepo;
         }
 
-        private readonly UserRepository userRepo;
-        private readonly OptionRepository optionsRepo;
+        private readonly IUserRepository userRepo;
+        private readonly IOptionRepository optionsRepo;
 
         private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini" };
         public UserDTO CurrentUser

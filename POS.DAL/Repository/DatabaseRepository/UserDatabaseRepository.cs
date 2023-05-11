@@ -2,14 +2,15 @@
 using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
 using POS.DAL.DTO;
+using POS.DAL.Repository.Abstraction;
 using System;
 using System.Threading.Tasks;
 
-namespace POS.DAL.Repository
+namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class UserRepository : BaseRepository
+    public class UserDatabaseRepository : BaseDatabaseRepository, IUserRepository
     {
-        public UserRepository(POSContext dbContext) : base(dbContext) { }
+        public UserDatabaseRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(UserDTO data)
         {

@@ -4,12 +4,13 @@ using POS.DAL.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using POS.DAL.Repository.Abstraction;
 
-namespace POS.DAL.Repository
+namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class AccountRepository : BaseRepository
+    public class AccountDatabaseRepository : BaseDatabaseRepository, IAccountRepository
     {
-        public AccountRepository(POSContext dbContext) : base(dbContext) { }
+        public AccountDatabaseRepository(POSContext dbContext) : base(dbContext) { }
 
         public async Task Create(AccountDTO data)
         {

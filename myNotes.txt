@@ -1,0 +1,135 @@
+
+SSIS executor path:
+C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\CommonExtensions\Microsoft\SSIS\150\Binn\DTExecUI.exe
+
+Scaffold-DbContext "DataSource=D:\POS\POS.db" Microsoft.EntityFrameworkCore.Sqlite -OutputDir Domain
+
+Scaffold-DbContext "Server=KBL-DTM-HUSSAIN\SQL17;Database=POS;User ID=sa;Password=welcome;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
+
+Scaffold-DbContext "Server=localhost,1433;Database=WebPOS_Inventory;User ID=sa;Password=SQL@docker22;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
+
+
+gitToken: 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
+
+
+Items to cover in WebPOS
+-----------------------------------
+Clean Architecture
+CQRS
+AutoMapper
+IdentityServer
+Microservices
+RabbitMQ
+MassTransit
+gRPC
+API Gateway (Ocelot)
+Docker
+Git
+
+Clean Architecture
+===================================
+Core Project:
+	Interfaces
+	Entities
+	Aggregates (Grouped Entities)
+	Value Objects
+	Domain Services
+	Domain Exceptions (eg: Customer not found)
+	Domain Events/Event handlers
+	Specifications
+	Validations 
+	Enums
+	Custom Guards
+Infrastructure Project:
+	Repositories
+	DbContext
+	Cached Repositories
+	API Clients
+	File System Accessors
+	Azure Storage Accessors
+	Emailing/SMS
+	System Clock
+Web Project:
+	API Endpoints/Razor Pages/Controllers/Views
+	API Models/ViewModels
+	Filters
+	Model Binders
+	Tag Helpers
+	Composition Root (Mapping Abstractions to Implementations)
+
+
+
+Aziz Questions
+--------------
+Return Invoice explain??? not linked with original invoice
+Currency conflict between treasury, product, and account -> main currency is (treasury), account filtered based on treasury, product should be exchanged
+Currency Rate no where in the system. every where in db -> move to settings (remove from all the forms)
+BrandId not needed? -> not needed but keep 
+3 sale price for product -> (Whole sale, semi whole sale, retail sale)
+sale price, purchase price, quantity -> datatype float and editable in invoice
+Invoice edit mode: (treasury, account, warehouse) should not be changed
+Invoice: when treasury changed all the items be deleted
+Payment half cash, half loan -> after selection initial payment and remaining shown if loan selected -> only for registered accounts
+AccountName in invoice needed? -> required
+redundant cost and profit in the Invoice Item -> cost and price rquired, profit (for denormalization)
+Percentage discount? -> required for both (invoice and individual product)
+Invoice Serial Num? -> auto increment (manual)
+Invoice Items IsDeleted? not required
+
+
+
+Product Page Changes
+------------------------
+converters and validators check
+DelegateCommand
+commands asynvoid refactor, add exception handler
+
+
+C:\Users\mhhussaini\AppData\Local\Temp\xamarin-android-sdk
+
+
+https://rdweb.wvd.microsoft.com/webclient/index.html
+
+
+fakooripeyman@gmail.com
+tayebamusavi0@gmail.com
+
+
+ETS
+----------
+33E8G756
+hussaincs1368
+Kabul@2020
+
+=========================================
+Data Structure
+Design Patterns
+SOLID principles
+OOP
+Test Driven Development (TDD)
+ACID - database
+Microservices Structure
+CI/CD environment
+Agile/Agile Manifest
+Extreme/Scrum
+Git
+
+========================================
+Design Patterns:
+1. Strategy: Applying Composition, Polymorphism. (Class fields are actually objects). Writing functions in separate interface and add fields of that interface to your main class and then assign instances of different implementations of the interface to the fields
+2. Observer: Publisher and Subscribers. Publisher broadcast events and all the subscriber objects get notified
+3. Factory: Don't instantiate objects directly, but Create a class that is responsible for creating instances for you.
+4. Abstract Factory: Combination of Strategy and Factory. Sub-fields inside of the target class are also instantiated using Factory pattern (sub-factories)
+4. Singleton: Prevent instantiation of more than one instance of the class. make the constructor private and write a method that always returns the same instance.
+5. Builder: Similar for factory pattern. An object is responsible for creating other objects of other types. Director/Engineer: Used to call builder methods of the main builder class  and return the requested object to original client. Hides creation of object parts from the client.
+6. Prototype: Creating new objects by cloning/copying other objects
+
+========================================
+
+-----------------------
+SQL@docker22
+
+admin
+rabbit
+
+

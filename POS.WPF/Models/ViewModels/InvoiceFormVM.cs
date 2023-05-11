@@ -1,6 +1,6 @@
 ﻿using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
-using POS.DAL.Repository;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
 using POS.WPF.Enums;
 using POS.WPF.Models.EntityModels;
@@ -17,10 +17,10 @@ namespace POS.WPF.Models.ViewModels
     public class InvoiceFormVM : BaseBindable
     {
         public InvoiceFormVM(
-            ProductRepository productRepo, 
-            OptionRepository optionRepo, 
-            AccountRepository accountRepo, 
-            InvoiceRepository invoiceRepo)
+            IProductRepository productRepo, 
+            IOptionRepository optionRepo, 
+            IAccountRepository accountRepo, 
+            IInvoiceRepository invoiceRepo)
         {
             this.productRepo = productRepo;
             this.optionRepo = optionRepo;
@@ -36,10 +36,10 @@ namespace POS.WPF.Models.ViewModels
             SaveCmd = new CommandAsync(Save);
             CancelCmd = new CommandSync(Cancel);
         }
-        private readonly ProductRepository productRepo;
-        private readonly OptionRepository optionRepo;
-        private readonly AccountRepository accountRepo;
-        private readonly InvoiceRepository invoiceRepo;
+        private readonly IProductRepository productRepo;
+        private readonly IOptionRepository optionRepo;
+        private readonly IAccountRepository accountRepo;
+        private readonly IInvoiceRepository invoiceRepo;
         public InvoicesVM ParentPage { get; set; }
 
         public CommandAsync LoadOptionsCmd { get; set; }
