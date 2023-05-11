@@ -19,6 +19,7 @@ namespace POS.DAL.Domain
 
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<CurrencyRate> CurrencyRates { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
         public virtual DbSet<OptionType> OptionTypes { get; set; }
@@ -93,6 +94,25 @@ namespace POS.DAL.Domain
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<CurrencyRate>(entity =>
+            {
+                entity.ToTable("CurrencyRate");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Note).HasMaxLength(255);
+
+                entity.Property(e => e.RateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Currency)
+                    .WithMany(p => p.CurrencyRates)
+                    .HasForeignKey(d => d.CurrencyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CurrencyRate_Currency");
             });
 
             modelBuilder.Entity<Invoice>(entity =>
@@ -226,11 +246,17 @@ namespace POS.DAL.Domain
             {
                 entity.ToTable("Setting");
 
-                entity.Property(e => e.AppTitle).HasMaxLength(255);
+                entity.Property(e => e.AppTitle)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
-                entity.Property(e => e.Language).HasMaxLength(50);
+                entity.Property(e => e.Language)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LayoutName).HasMaxLength(50);
+                entity.Property(e => e.LayoutName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Transaction>(entity =>

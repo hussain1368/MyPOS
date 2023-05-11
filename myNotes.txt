@@ -4,12 +4,35 @@ C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\Com
 
 Scaffold-DbContext "DataSource=D:\POS\POS.db" Microsoft.EntityFrameworkCore.Sqlite -OutputDir Domain
 
-Scaffold-DbContext "Server=KBL-DTM-HUSSAIN\SQL17;Database=POS;User ID=sa;Password=welcome;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
+Scaffold-DbContext "Server=LAPTOP-L8T1DF78\SQL17;Database=POS;User ID=sa;Password=welcome;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
 
 Scaffold-DbContext "Server=localhost,1433;Database=WebPOS_Inventory;User ID=sa;Password=SQL@docker22;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
 
-
 gitToken: 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
+
+Aziz Questions
+--------------
+Return Invoice explain??? not linked with original invoice
+Currency conflict between treasury, product, and account -> main currency is (treasury), account filtered based on treasury, product should be exchanged
+Currency Rate no where in the system. every where in db -> move to settings (remove from all the forms)
+BrandId not needed? -> not needed but keep 
+3 sale price for product -> (Whole sale, semi whole sale, retail sale)
+sale price, purchase price, quantity -> datatype float and editable in invoice
+Invoice edit mode: (treasury, account, warehouse) should not be changed
+Invoice: when treasury changed all the items be deleted
+Payment half cash, half loan -> after selection initial payment and remaining shown if loan selected -> only for registered accounts
+AccountName in invoice needed? -> required
+redundant cost and profit in the Invoice Item -> cost and price rquired, profit (for denormalization)
+Percentage discount? -> required for both (invoice and individual product)
+Invoice Serial Num? -> auto increment (manual)
+Invoice Items IsDeleted? not required
+
+Product Page Changes
+------------------------
+converters and validators check
+DelegateCommand
+commands asynvoid refactor, add exception handler
+
 
 
 Items to cover in WebPOS
@@ -56,33 +79,6 @@ Web Project:
 	Model Binders
 	Tag Helpers
 	Composition Root (Mapping Abstractions to Implementations)
-
-
-
-Aziz Questions
---------------
-Return Invoice explain??? not linked with original invoice
-Currency conflict between treasury, product, and account -> main currency is (treasury), account filtered based on treasury, product should be exchanged
-Currency Rate no where in the system. every where in db -> move to settings (remove from all the forms)
-BrandId not needed? -> not needed but keep 
-3 sale price for product -> (Whole sale, semi whole sale, retail sale)
-sale price, purchase price, quantity -> datatype float and editable in invoice
-Invoice edit mode: (treasury, account, warehouse) should not be changed
-Invoice: when treasury changed all the items be deleted
-Payment half cash, half loan -> after selection initial payment and remaining shown if loan selected -> only for registered accounts
-AccountName in invoice needed? -> required
-redundant cost and profit in the Invoice Item -> cost and price rquired, profit (for denormalization)
-Percentage discount? -> required for both (invoice and individual product)
-Invoice Serial Num? -> auto increment (manual)
-Invoice Items IsDeleted? not required
-
-
-
-Product Page Changes
-------------------------
-converters and validators check
-DelegateCommand
-commands asynvoid refactor, add exception handler
 
 
 C:\Users\mhhussaini\AppData\Local\Temp\xamarin-android-sdk

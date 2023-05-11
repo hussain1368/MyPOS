@@ -11,6 +11,7 @@ namespace POS.DAL.Domain
         {
             AccountAccountTypes = new HashSet<Account>();
             AccountCurrencies = new HashSet<Account>();
+            CurrencyRates = new HashSet<CurrencyRate>();
             Invoices = new HashSet<Invoice>();
             ProductBrands = new HashSet<Product>();
             ProductCategories = new HashSet<Product>();
@@ -32,6 +33,7 @@ namespace POS.DAL.Domain
         public virtual OptionType Type { get; set; }
         public virtual ICollection<Account> AccountAccountTypes { get; set; }
         public virtual ICollection<Account> AccountCurrencies { get; set; }
+        public virtual ICollection<CurrencyRate> CurrencyRates { get; set; }
         public virtual ICollection<Invoice> Invoices { get; set; }
         public virtual ICollection<Product> ProductBrands { get; set; }
         public virtual ICollection<Product> ProductCategories { get; set; }
