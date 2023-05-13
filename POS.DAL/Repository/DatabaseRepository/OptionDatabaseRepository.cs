@@ -57,6 +57,7 @@ namespace POS.DAL.Repository.DatabaseRepository
                 IsDefault = v.IsDefault,
                 IsReadOnly = v.IsReadOnly,
                 IsDeleted = v.IsDeleted,
+                Flag = v.Flag,
             })
             .ToListAsync();
         }

@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="POS.WPF.Views.Sections.CurrencyRateTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="CurrencyDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadCurrencyRatesCmd}" PassEventArgsToCommand="True"/>
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
+    <Grid x:Name="MainGrid">
+        <Border Margin="0,10" VerticalAlignment="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Margin="0,0,0,10">
+                    <ComboBox
+                        x:Name="CurrencyDrp"
+                        Width="200"
+                        Margin="0,0,10,0"
+                        materialDesign:HintAssist.Hint="Currency"
+                        materialDesign:HintAssist.IsFloating="True"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        ItemsSource="{Binding CurrencyList}"
+                        SelectedItem="{Binding SelectedCurrency}"
+                        SelectedValue="{Binding SelectedCurrencyId}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Id" />
+                    <!--<Button
+                        Margin="0,0,10,0"
+                        Command="{Binding OpenFormCmd}"
+                        Content="Add Option"
+                        IsEnabled="{Binding CanAddOption}" />
+            <Button
+                        Margin="0,0,10,0"
+                        Command="{Binding DeleteOptionsCmd}"
+                        Content="Delete"
+                        IsEnabled="{Binding CanAddOption}"
+                        Style="{StaticResource MyAccentButton}" />-->
+                </WrapPanel>
+                <DataGrid
+                    Grid.Row="1"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserReorderColumns="False"
+                    ItemsSource="{Binding CurrencyRates}"
+                    SelectionMode="Single"
+                    SelectionUnit="CellOrRowHeader">
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn
+                            Width="Auto"
+                            Binding="{Binding IsChecked}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                            <!--<DataGridCheckBoxColumn.CellStyle>
+                        <Style BasedOn="{StaticResource MaterialDesignDataGridCell}" TargetType="DataGridCell">
+                            <Setter Property="IsEnabled" Value="{Binding IsEditable}" />
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>-->
+                            <DataGridCheckBoxColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <!--<CheckBox Command="{Binding DataContext.CheckAllCmd, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" />-->
+                                    <TextBlock Text="Check"/>
+                                </DataTemplate>
+                            </DataGridCheckBoxColumn.HeaderTemplate>
+                        </DataGridCheckBoxColumn>
+                        <DataGridTextColumn
+                            Binding="{Binding CurrencyName}"
+                            Header="Currency"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding RateDate, StringFormat='dd/MM/yyyy hh:mm tt'}"
+                            Header="Date"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding BaseValue}"
+                            Header="Base Value"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding Rate}"
+                            Header="Rate"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding FinalRate}"
+                            Header="Final Rate"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Binding="{Binding Note}"
+                            Header="Note"
+                            IsReadOnly="True" />
+                        <DataGridTemplateColumn Header="Reverse Calc" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <materialDesign:PackIcon HorizontalAlignment="Center" Kind="{Binding ReverseCalcIcon}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!--<DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                        Width="20"
+                                        Height="20"
+                                        Command="{Binding DataContext.OpenFormCmd, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Id}"
+                                        IsEnabled="{Binding IsEditable}"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        ToolTip="Open">
+                                <materialDesign:PackIcon
+                                            Width="15"
+                                            Height="15"
+                                            Kind="NoteEditOutline" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -100,8 +100,6 @@ namespace POS.DAL.Domain
             {
                 entity.ToTable("CurrencyRate");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Note).HasMaxLength(255);
 
                 entity.Property(e => e.RateDate).HasColumnType("datetime");

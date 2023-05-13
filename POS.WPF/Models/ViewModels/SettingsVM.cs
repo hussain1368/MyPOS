@@ -10,16 +10,21 @@ using POS.WPF.Views.Shared;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class SettingsVM : BaseBindable
     {
-        public SettingsVM(AppState appState, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
+        public SettingsVM(AppState appState, 
+            IOptionRepository optionRepo, 
+            ICurrencyRateRepository currencyRateRepo, 
+            IStringLocalizer<Labels> _t)
         {
             this.appState = appState;
             this.optionRepo = optionRepo;
-
+            this.currencyRateRepo = currencyRateRepo;
             LoadSettingCmd = new CommandSync(LoadSetting);
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             SaveSettingCmd = new CommandAsync(SaveSetting);
@@ -28,6 +33,8 @@ namespace POS.WPF.Models.ViewModels
             CancelOptionCmd = new CommandSync(CancelOption);
             CheckAllCmd = new CommandParam(CheckAll);
             DeleteOptionsCmd = new CommandAsync(DeleteOptions);
+            LoadCurrencyRatesCmd = new CommandAsync(LoadCurrencyRates);
+            TabChangedCmd = new CommandAsyncParam(TabChanged);
 
             HeaderContext = new HeaderBarVM
             {
@@ -38,6 +45,7 @@ namespace POS.WPF.Models.ViewModels
 
         private readonly AppState appState;
         private readonly IOptionRepository optionRepo;
+        private readonly ICurrencyRateRepository currencyRateRepo;
 
         public CommandAsync SaveSettingCmd { get; set; }
         public CommandAsync LoadOptionsCmd { get; set; }
@@ -47,6 +55,8 @@ namespace POS.WPF.Models.ViewModels
         public CommandSync CancelOptionCmd { get; set; }
         public CommandParam CheckAllCmd { get; set; }
         public CommandAsync DeleteOptionsCmd { get; set; }
+        public CommandAsync LoadCurrencyRatesCmd { get; set; }
+        public CommandAsyncParam TabChangedCmd { get; set; }
 
         private HeaderBarVM _headerContext;
         public HeaderBarVM HeaderContext
@@ -75,19 +85,18 @@ namespace POS.WPF.Models.ViewModels
 
         public IEnumerable<OptionTypeDTO> FormOptionTypes => OptionTypes.Where(t => !t.IsReadOnly).ToList();
 
-        private IEnumerable<OptionValueEM> _optionValues = Enumerable.Empty<OptionValueEM>();
-        public IEnumerable<OptionValueEM> OptionValues
+        private IEnumerable<OptionValueDTO> _optionValues = Enumerable.Empty<OptionValueDTO>();
+        public IEnumerable<OptionValueDTO> OptionValues
         {
             get { return _optionValues; }
             set
             {
                 SetValue(ref _optionValues, value);
                 OnPropertyChanged(nameof(SelectedTypeOptions));
+                OnPropertyChanged(nameof(CurrencyList));
                 OnPropertyChanged(nameof(CanAddOption));
             }
         }
-
-        public IEnumerable<OptionValueEM> SelectedTypeOptions => OptionValues.Where(v => v.TypeId == SelectedType?.Id).ToList();
 
         private OptionTypeDTO _selectedType;
         public OptionTypeDTO SelectedType
@@ -96,10 +105,30 @@ namespace POS.WPF.Models.ViewModels
             set
             {
                 SetValue(ref _selectedType, value);
-                OnPropertyChanged(nameof(SelectedTypeOptions));
                 OnPropertyChanged(nameof(CanAddOption));
+
+                SelectedTypeOptions = OptionValues.Where(v => v.TypeId == SelectedType?.Id)
+                    .Select(op => new OptionValueEM
+                    {
+                        Id = op.Id,
+                        Code = op.Code,
+                        TypeId = op.TypeId,
+                        Name = op.Name,
+                        IsDefault = op.IsDefault,
+                        IsReadOnly = op.IsReadOnly,
+                        IsDeleted = op.IsDeleted,
+                    })
+                    .ToList();
             }
         }
+
+        public IEnumerable<OptionValueEM> _selectedTypeOptions = Enumerable.Empty<OptionValueEM>();
+        public IEnumerable<OptionValueEM> SelectedTypeOptions
+        {
+            get { return _selectedTypeOptions; }
+            set { SetValue(ref _selectedTypeOptions, value); }
+        }
+
 
         public bool CanAddOption => !SelectedType?.IsReadOnly ?? false;
 
@@ -141,17 +170,9 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetOptions()
         {
-            OptionValues = (await optionRepo.OptionsAll(true)).Select(op => new OptionValueEM
-            {
-                Id = op.Id,
-                Code = op.Code,
-                TypeId = op.TypeId,
-                Name = op.Name,
-                IsDefault = op.IsDefault,
-                IsReadOnly = op.IsReadOnly,
-                IsDeleted = op.IsDeleted,
-            })
-            .ToList();
+            OptionValues = await optionRepo.OptionsAll(true);
+            // work here ...
+
         }
 
         private async Task SaveSetting()
@@ -246,6 +267,77 @@ namespace POS.WPF.Models.ViewModels
                 await GetOptions();
                 args.Session.Close(false);
             });
+        }
+
+        private IEnumerable<CurrencyRateEM> _currencyRates = Enumerable.Empty<CurrencyRateEM>();
+        public IEnumerable<CurrencyRateEM> CurrencyRates
+        {
+            get { return _currencyRates; }
+            set
+            {
+                SetValue(ref _currencyRates, value);
+            }
+        }
+
+        private async Task TabChanged(object e)
+        {
+            var args = (SelectionChangedEventArgs)e;
+            var name = ((FrameworkElement)args.OriginalSource).Name;
+            if (name != "Tabs") return;
+
+            if (SelectedTab == 2) await LoadCurrencyRates();
+        }
+
+        private async Task LoadCurrencyRates()
+        {
+            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
+            {
+                var data = await currencyRateRepo.GetList(SelectedCurrencyId);
+                CurrencyRates = data.Select(r => new CurrencyRateEM
+                {
+                    Id = r.Id,
+                    CurrencyId = r.CurrencyId,
+                    CurrencyName = r.CurrencyName,
+                    RateDate = r.RateDate,
+                    BaseValue = r.BaseValue,
+                    Rate = r.Rate,
+                    ReverseCalculation = r.ReverseCalculation,
+                    FinalRate = r.FinalRate,
+                    Note = r.Note,
+                    IsDeleted = r.IsDeleted,
+                })
+                .ToList();
+                args.Session.Close();
+            },
+            null);
+        }
+
+        public IList<OptionValueDTO> CurrencyList => OptionValues
+            .Where(v => v.TypeCode == "CRC" && v.IsDeleted == false && v.IsDefault == false)
+            .ToList();
+
+        private OptionValueDTO _selectedCurrency;
+        public OptionValueDTO SelectedCurrency
+        {
+            get { return _selectedCurrency; }
+            set
+            {
+                SetValue(ref _selectedCurrency, value);
+            }
+        }
+
+        private int? _selectedCurrencyId;
+        public int? SelectedCurrencyId
+        {
+            get { return _selectedCurrencyId; }
+            set { SetValue(ref _selectedCurrencyId, value); }
+        }
+
+        private int _selectedTab;
+        public int SelectedTab
+        {
+            get { return _selectedTab; }
+            set { SetValue(ref _selectedTab, value); }
         }
     }
 }
