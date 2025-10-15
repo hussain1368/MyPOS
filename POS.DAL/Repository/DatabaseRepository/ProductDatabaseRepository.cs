@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using POS.DAL.DTO;
 using System.Linq;
-using System;
 using POS.DAL.Repository.Abstraction;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -22,8 +21,7 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task Create(ProductDTO data)
         {
-            var model = new Product();
-            MapSingle(data, model);
+            var model = mapper.Map<Product>(data);
             await dbContext.Products.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
@@ -31,61 +29,15 @@ namespace POS.DAL.Repository.DatabaseRepository
         public async Task Update(ProductDTO data)
         {
             var model = await dbContext.Products.FindAsync(data.Id);
-            MapSingle(data, model);
+            mapper.Map(data, model);
             await dbContext.SaveChangesAsync();
-        }
-
-        private void MapSingle(ProductDTO data, Product model)
-        {
-            model.Id = data.Id;
-            model.Name = data.Name;
-            model.Cost = data.Cost;
-            model.Profit = data.Profit;
-            model.Price = data.Price;
-            model.Discount = data.Discount;
-            model.AlertQuantity = data.AlertQuantity;
-            model.InitialQuantity = data.InitialQuantity;
-            model.UnitId = data.UnitId;
-            model.BrandId = data.BrandId;
-            model.CategoryId = data.CategoryId;
-            model.CurrencyId = data.CurrencyId;
-            model.ExpiryDate = data.ExpiryDate;
-            model.Note = data.Note;
-            model.UpdatedBy = data.UpdatedBy;
-            model.UpdatedDate = data.UpdatedDate;
-            model.IsDeleted = data.IsDeleted;
-
-            if (string.IsNullOrWhiteSpace(data.Code))
-                model.Code = $"{DateTime.Now.DayOfYear}{new Random().Next(100_000_000, 900_000_000)}";
-            else
-                model.Code = data.Code;
         }
 
         public async Task<ProductDTO> GetById(int id)
         {
             var product = await dbContext.Products.FindAsync(id);
             if (product == null) return null;
-            return new ProductDTO
-            {
-                Id = product.Id,
-                Code = product.Code,
-                Name = product.Name,
-                Cost = product.Cost,
-                Profit = product.Profit,
-                Price = product.Price,
-                Discount = product.Discount,
-                AlertQuantity = product.AlertQuantity,
-                InitialQuantity = product.InitialQuantity,
-                UnitId = product.UnitId,
-                BrandId = product.BrandId,
-                CategoryId = product.CategoryId,
-                CurrencyId = product.CurrencyId,
-                ExpiryDate = product.ExpiryDate,
-                Note = product.Note,
-                UpdatedBy = product.UpdatedBy,
-                UpdatedDate = product.UpdatedDate,
-                IsDeleted = product.IsDeleted,
-            };
+            return mapper.Map<ProductDTO>(product);
         }
 
         public async Task<IEnumerable<ProductDTO>> GetList(int? categoryId)
@@ -100,14 +52,7 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var product = await dbContext.Products.SingleOrDefaultAsync(p => p.Code == code && !p.IsDeleted);
             if (product == null) return null;
-            return new ProductItemDTO
-            {
-                Id = product.Id,
-                Code = product.Code,
-                Name = product.Name,
-                Price = product.Price,
-                Discount = product.Discount,
-            };
+            return mapper.Map<ProductItemDTO>(product);
         }
 
         public async Task<IEnumerable<ProductItemDTO>> GetByName(string searchValue)
@@ -115,15 +60,9 @@ namespace POS.DAL.Repository.DatabaseRepository
             var query = dbContext.Products
                 .Where(p => p.IsDeleted == false)
                 .Where(p => p.Name.Contains(searchValue));
-            return await query.Select(p => new ProductItemDTO
-            {
-                Id = p.Id,
-                Code = p.Code,
-                Name = p.Name,
-                Price = p.Price,
-                Discount = p.Discount,
-            })
-            .Take(5).ToListAsync();
+            return await query
+                .ProjectTo<ProductItemDTO>(mapper.ConfigurationProvider)
+                .Take(5).ToListAsync();
         }
 
         public async Task Delete(int[] ids)

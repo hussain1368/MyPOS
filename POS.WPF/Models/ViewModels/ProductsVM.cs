@@ -211,27 +211,11 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task SaveToDatabase()
         {
-            var data = new ProductDTO
-            {
-                Id = CurrentProduct.Id,
-                Code = CurrentProduct.Code,
-                CategoryId = CurrentProduct.CategoryId,
-                Name = CurrentProduct.Name,
-                Cost = CurrentProduct.Cost.Value,
-                Profit = CurrentProduct.Profit.Value,
-                Price = CurrentProduct.Price.Value,
-                InitialQuantity = Convert.ToInt32(CurrentProduct.InitialQuantity),
-                CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
-                UnitId = CurrentProduct.UnitId,
-                BrandId = CurrentProduct.BrandId,
-                AlertQuantity = CurrentProduct.AlertQuantity ?? 0,
-                Discount = CurrentProduct.Discount ?? 0,
-                ExpiryDate = CurrentProduct.ExpiryDate,
-                Note = CurrentProduct.Note,
-                IsDeleted = false,
-                UpdatedBy = 1,
-                UpdatedDate = DateTime.Now,
-            };
+            var data = mapper.Map<ProductDTO>(CurrentProduct);
+            data.CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id;
+            data.UpdatedDate = DateTime.Now;
+            data.UpdatedBy = 1;
+            data.IsDeleted = false;
 
             if (CurrentProduct.Id == 0)
             {
@@ -271,23 +255,7 @@ namespace POS.WPF.Models.ViewModels
         private void ResetProductData()
         {
             if (tempProductData == null) return;
-            CurrentProduct = new ProductEM
-            {
-                Id = tempProductData.Id,
-                Code = tempProductData.Code,
-                Name = tempProductData.Name,
-                InitialQuantity = tempProductData.InitialQuantity.ToString(),
-                Cost = tempProductData.Cost,
-                Price = tempProductData.Price,
-                CategoryId = tempProductData.CategoryId,
-                CurrencyId = tempProductData.CurrencyId,
-                UnitId = tempProductData.UnitId,
-                BrandId = tempProductData.BrandId,
-                AlertQuantity = tempProductData.AlertQuantity,
-                Discount = tempProductData.Discount,
-                ExpiryDate = tempProductData.ExpiryDate,
-                Note = tempProductData.Note,
-            };
+            CurrentProduct = mapper.Map<ProductEM>(tempProductData);
         }
 
         private async Task LoadList()
