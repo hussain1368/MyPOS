@@ -16,6 +16,9 @@
             <DataTemplate DataType="{x:Type viewModels:AccountsVM}">
                 <pages:Accounts />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:TransactionsVM}">
+                <pages:Transactions />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:InvoicesVM}">
                 <pages:Invoices />
             </DataTemplate>

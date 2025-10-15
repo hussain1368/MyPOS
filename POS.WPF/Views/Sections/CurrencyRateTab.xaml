@@ -32,12 +32,11 @@
                         SelectedValue="{Binding SelectedCurrencyId}"
                         DisplayMemberPath="Name"
                         SelectedValuePath="Id" />
-                    <!--<Button
+                    <Button
                         Margin="0,0,10,0"
-                        Command="{Binding OpenFormCmd}"
-                        Content="Add Option"
-                        IsEnabled="{Binding CanAddOption}" />
-            <Button
+                        Command="{Binding OpenCurrencyFormCmd}"
+                        Content="Add Rate" />
+            <!--<Button
                         Margin="0,0,10,0"
                         Command="{Binding DeleteOptionsCmd}"
                         Content="Delete"

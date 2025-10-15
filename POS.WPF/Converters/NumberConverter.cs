@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 
 namespace POS.WPF.Converters
@@ -8,15 +10,27 @@ namespace POS.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.ToString();
+            var str = value as string;
+            if (string.IsNullOrWhiteSpace(str)) return value;
+
+            str = Regex.Replace(str, @"[^0-9.]", "");
+            var parts = str.Split(".");
+            if (int.TryParse(parts[0], out var number))
+            {
+                var suffix = "";
+                if (str.Contains(".")) suffix = $".{parts[1].Substring(0, Math.Min(3, parts[1].Length))}";
+                return $"{number.ToString("#,0")}{suffix}";
+            }
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return null;
-            var _value = System.Text.RegularExpressions.Regex.Match(value as string, @"\d+").Value;
-            if (string.IsNullOrWhiteSpace(_value)) return null;
-            return _value;
+            if (value != null)
+            {
+                return value.ToString().Replace(",", "");
+            }
+            return value;
         }
     }
 }

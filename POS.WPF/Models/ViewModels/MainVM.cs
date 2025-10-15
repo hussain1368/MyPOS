@@ -46,7 +46,7 @@ namespace POS.WPF.Models.ViewModels
                 {
                     Text = _t["Transactions"],
                     IconKind = PackIconKind.CashMultiple,
-                    ViewModel = null
+                    ViewModel = services.GetRequiredService<TransactionsVM>()
                 },
                 new MenuItemEM
                 {

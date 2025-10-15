@@ -1,0 +1,143 @@
+﻿<UserControl
+    x:Class="POS.WPF.Views.Sections.CurrencyRateForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:POS.WPF.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:layout="clr-namespace:POS.WPF.Views.Shared"
+    xmlns:local="clr-namespace:POS.WPF.Views.Sections"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:val="clr-namespace:POS.WPF.Validators.TypeValidators"
+    Padding="20,15"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Border>
+        <Grid MinWidth="450">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="Currency Rate" />
+                <ProgressBar IsIndeterminate="{Binding IsCurrencyRateLoading}" />
+            </StackPanel>
+            <ComboBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,0,10"
+                materialDesign:HintAssist.Hint="Currency"
+                materialDesign:HintAssist.IsFloating="True"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding CurrencyList}"
+                SelectedValue="{Binding CurrencyRateForm.CurrencyId, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValuePath="Id" />
+            <DatePicker
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,0,0,10"
+                VerticalAlignment="Bottom"
+                materialDesign:HintAssist.Hint="Date"
+                materialDesign:HintAssist.IsFloating="True"
+                materialDesign:TextFieldAssist.HasClearButton="True">
+                <DatePicker.SelectedDate>
+                    <Binding
+                        Path="CurrencyRateForm.RateDate"
+                        TargetNullValue=""
+                        UpdateSourceTrigger="PropertyChanged">
+                        <!--<Binding.Converter>
+                            <conv:DateTimeConverter />
+                        </Binding.Converter>-->
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="0,0,0,20"
+                materialDesign:HintAssist.Hint="Base Value"
+                materialDesign:HintAssist.IsFloating="True">
+                <TextBox.Text>
+                    <Binding
+                        Path="CurrencyRateForm.BaseValue"
+                        TargetNullValue=""
+                        UpdateSourceTrigger="LostFocus">
+                        <Binding.ValidationRules>
+                            <val:IntegerValidator />
+                        </Binding.ValidationRules>
+                        <Binding.Converter>
+                            <conv:IntegerConverter />
+                        </Binding.Converter>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="10,0,0,20"
+                materialDesign:HintAssist.Hint="Rate"
+                materialDesign:HintAssist.IsFloating="True">
+                <TextBox.Text>
+                    <Binding
+                        Path="CurrencyRateForm.Rate"
+                        TargetNullValue=""
+                        UpdateSourceTrigger="LostFocus">
+                        <Binding.ValidationRules>
+                            <val:DoubleValidator />
+                        </Binding.ValidationRules>
+                        <Binding.Converter>
+                            <conv:DoubleConverter />
+                        </Binding.Converter>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <layout:RadioBox
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="0,0,0,20">
+                <CheckBox Content="Reverse Calculation" IsChecked="{Binding CurrencyRateForm.ReverseCalculation}" />
+            </layout:RadioBox>
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="10,0,0,20"
+                materialDesign:HintAssist.Hint="Final Rate"
+                materialDesign:HintAssist.IsFloating="True"
+                IsReadOnly="True"
+                Text="{Binding CurrencyRateForm.FinalRate, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+            <WrapPanel
+                Grid.Row="4"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Right">
+                <Button
+                    Margin="10,0,0,0"
+                    Command="{Binding SaveOptionCmd}"
+                    Content="Save" />
+                <Button
+                    Margin="10,0,0,0"
+                    Command="{Binding CancelOptionCmd}"
+                    Content="Cancel" />
+            </WrapPanel>
+        </Grid>
+    </Border>
+</UserControl>

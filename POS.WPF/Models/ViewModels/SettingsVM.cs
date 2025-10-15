@@ -35,6 +35,7 @@ namespace POS.WPF.Models.ViewModels
             DeleteOptionsCmd = new CommandAsync(DeleteOptions);
             LoadCurrencyRatesCmd = new CommandAsync(LoadCurrencyRates);
             TabChangedCmd = new CommandAsyncParam(TabChanged);
+            OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
 
             HeaderContext = new HeaderBarVM
             {
@@ -57,6 +58,7 @@ namespace POS.WPF.Models.ViewModels
         public CommandAsync DeleteOptionsCmd { get; set; }
         public CommandAsync LoadCurrencyRatesCmd { get; set; }
         public CommandAsyncParam TabChangedCmd { get; set; }
+        public CommandAsyncParam OpenCurrencyFormCmd { get; set; }
 
         private HeaderBarVM _headerContext;
         public HeaderBarVM HeaderContext
@@ -302,7 +304,7 @@ namespace POS.WPF.Models.ViewModels
                     BaseValue = r.BaseValue,
                     Rate = r.Rate,
                     ReverseCalculation = r.ReverseCalculation,
-                    FinalRate = r.FinalRate,
+                    //FinalRate = r.FinalRate,
                     Note = r.Note,
                     IsDeleted = r.IsDeleted,
                 })
@@ -338,6 +340,43 @@ namespace POS.WPF.Models.ViewModels
         {
             get { return _selectedTab; }
             set { SetValue(ref _selectedTab, value); }
+        }
+
+        private CurrencyRateEM _currencyRateForm = new CurrencyRateEM();
+        public CurrencyRateEM CurrencyRateForm
+        {
+            get { return _currencyRateForm; }
+            set { SetValue(ref _currencyRateForm, value); }
+        }
+
+        private bool _isCurrencyRateLoading;
+        public bool IsCurrencyRateLoading
+        {
+            get { return _isCurrencyRateLoading; }
+            set { SetValue(ref _isCurrencyRateLoading, value); }
+        }
+
+        private async Task OpenCurrencyForm(object id)
+        {
+            //if (id != null)
+            //{
+            //    var option = OptionValues.FirstOrDefault(op => op.Id == (int)id);
+            //    CurrentOption = new OptionValueEM
+            //    {
+            //        Id = option.Id,
+            //        TypeId = option.TypeId,
+            //        Code = option.Code,
+            //        Name = option.Name,
+            //    };
+            //}
+            //else
+            //{
+            //    CurrentOption = new OptionValueEM
+            //    {
+            //        TypeId = SelectedType?.Id ?? 0
+            //    };
+            //}
+            await DialogHost.Show(new CurrencyRateForm(), "SettingsDH");
         }
     }
 }

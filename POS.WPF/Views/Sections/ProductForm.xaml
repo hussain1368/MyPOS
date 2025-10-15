@@ -95,11 +95,11 @@
                                 Path="CurrentProduct.InitialQuantity"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
+                                <!--<Binding.ValidationRules>
                                     <val:IntegerValidator />
-                                </Binding.ValidationRules>
+                                </Binding.ValidationRules>-->
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>

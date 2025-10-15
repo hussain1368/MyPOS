@@ -12,7 +12,7 @@ namespace POS.WPF.Validators.TypeValidators
             {
                 isInteger = int.TryParse(value.ToString().Replace(",", ""), out _);
             }
-            return new ValidationResult(isInteger, "Please enter a valid number");
+            return new ValidationResult(isInteger, "Please enter a valid integer");
         }
     }
 }

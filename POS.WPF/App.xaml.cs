@@ -8,6 +8,8 @@ using System.Globalization;
 using System.Threading;
 using POS.DAL.Repository.Abstraction;
 using POS.DAL.Repository.DatabaseRepository;
+using AutoMapper;
+using POS.WPF.Models.Mappings;
 
 namespace POS.WPF
 {
@@ -28,6 +30,7 @@ namespace POS.WPF
             var state = ServiceProvider.GetRequiredService<AppState>();
             state.LoadSettings();
 
+            //var window = ServiceProvider.GetRequiredService<LoginWindow>();
             var window = ServiceProvider.GetRequiredService<MainWindow>();
             window.Show();
         }
@@ -39,11 +42,13 @@ namespace POS.WPF
             services.AddScoped<IOptionRepository, OptionDatabaseRepository>();
             services.AddScoped<IProductRepository, ProductDatabaseRepository>();
             services.AddScoped<IAccountRepository, AccountDatabaseRepository>();
+            services.AddScoped<ITransactionRepository, TransactionDatabaseRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceDatabaseRepository>();
             services.AddScoped<ICurrencyRateRepository, CurrencyRateDatabaseRepository>();
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddAutoMapper(typeof(TransactionProfile).Assembly);
 
             services.AddSingleton<AppState>();
             services.AddScoped<LoginVM>();
@@ -51,6 +56,7 @@ namespace POS.WPF
             services.AddScoped<HomeVM>();
             services.AddScoped<ProductsVM>();
             services.AddScoped<AccountsVM>();
+            services.AddScoped<TransactionsVM>();
             services.AddScoped<InvoicesVM>();
             services.AddScoped<InvoiceFormVM>();
             services.AddScoped<SettingsVM>();

@@ -29,32 +29,50 @@ namespace POS.WPF.Models.EntityModels
             set { SetAndValidate(ref _rateDate, value); }
         }
 
+        //private string _rateDateText;
+        //public string RateDateText
+        //{
+        //    get { return _rateDateText; }
+        //    set { SetAndValidate(ref _rateDateText, value); }
+        //}
+
         private int? _baseValue;
         public int? BaseValue
         {
             get { return _baseValue; }
-            set { SetAndValidate(ref _baseValue, value); }
+            set { SetAndValidate(ref _baseValue, value); OnPropertyChanged(nameof(FinalRate)); }
         }
 
         private double? _rate;
         public double? Rate
         {
             get { return _rate; }
-            set { SetAndValidate(ref _rate, value); }
+            set { SetAndValidate(ref _rate, value); OnPropertyChanged(nameof(FinalRate)); }
         }
 
         private bool _reverseCalculation;
         public bool ReverseCalculation
         {
             get { return _reverseCalculation; }
-            set { SetValue(ref _reverseCalculation, value); }
+            set { SetValue(ref _reverseCalculation, value); OnPropertyChanged(nameof(FinalRate)); }
         }
 
-        private double? _finalRate;
+        //private double? _finalRate;
+        //public double? FinalRate
+        //{
+        //    get { return _finalRate; }
+        //    set { SetAndValidate(ref _finalRate, value); }
+        //}
+
         public double? FinalRate
         {
-            get { return _finalRate; }
-            set { SetAndValidate(ref _finalRate, value); }
+            get
+            {
+                if (Rate == null) return null;
+                var _finalRate = Rate / (BaseValue ?? 1d);
+                if (ReverseCalculation) _finalRate = 1d / _finalRate;
+                return Math.Round(_finalRate ?? 0, 4);
+            }
         }
 
         private string _note;

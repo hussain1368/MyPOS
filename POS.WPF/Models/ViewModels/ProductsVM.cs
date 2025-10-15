@@ -10,13 +10,15 @@ using POS.WPF.Commands;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
 using POS.DAL.Repository.Abstraction;
+using AutoMapper;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(IProductRepository productRepo, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
+        public ProductsVM(IMapper mapper, IProductRepository productRepo, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
         {
+            this.mapper = mapper;
             this.productRepo = productRepo;
             this.optionRepo = optionRepo;
             this._t = _t;
@@ -61,6 +63,7 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
+        private readonly IMapper mapper;
         private readonly IProductRepository productRepo;
         private readonly IOptionRepository optionRepo;
         private readonly IStringLocalizer<Labels> _t;
@@ -217,7 +220,7 @@ namespace POS.WPF.Models.ViewModels
                 Cost = CurrentProduct.Cost.Value,
                 Profit = CurrentProduct.Profit.Value,
                 Price = CurrentProduct.Price.Value,
-                InitialQuantity = CurrentProduct.InitialQuantity.Value,
+                InitialQuantity = Convert.ToInt32(CurrentProduct.InitialQuantity),
                 CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id,
                 UnitId = CurrentProduct.UnitId,
                 BrandId = CurrentProduct.BrandId,
@@ -273,7 +276,7 @@ namespace POS.WPF.Models.ViewModels
                 Id = tempProductData.Id,
                 Code = tempProductData.Code,
                 Name = tempProductData.Name,
-                InitialQuantity = tempProductData.InitialQuantity,
+                InitialQuantity = tempProductData.InitialQuantity.ToString(),
                 Cost = tempProductData.Cost,
                 Price = tempProductData.Price,
                 CategoryId = tempProductData.CategoryId,
@@ -290,20 +293,7 @@ namespace POS.WPF.Models.ViewModels
         private async Task LoadList()
         {
             var data = await productRepo.GetList(CategoryId);
-            var _data = data.Select(p => new ProductEM
-            {
-                Id = p.Id,
-                Code = p.Code,
-                Name = p.Name,
-                Cost = p.Cost,
-                Price = p.Price,
-                Discount = p.Discount,
-                UnitName = p.UnitName,
-                BrandName = p.BrandName,
-                CategoryName = p.CategoryName,
-                CurrencyName = p.CurrencyName,
-                CurrencyCode = p.CurrencyCode,
-            });
+            var _data = mapper.Map<IEnumerable<ProductEM>>(data);
             ProductsList = new ObservableCollection<ProductEM>(_data);
         }
     }

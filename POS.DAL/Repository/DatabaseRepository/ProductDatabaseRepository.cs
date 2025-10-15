@@ -6,13 +6,18 @@ using POS.DAL.DTO;
 using System.Linq;
 using System;
 using POS.DAL.Repository.Abstraction;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace POS.DAL.Repository.DatabaseRepository
 {
     public class ProductDatabaseRepository : BaseDatabaseRepository, IProductRepository
     {
-        public ProductDatabaseRepository(POSContext dbContext) : base(dbContext)
+        private readonly IMapper mapper;
+
+        public ProductDatabaseRepository(POSContext dbContext, IMapper mapper) : base(dbContext)
         {
+            this.mapper = mapper;
         }
 
         public async Task Create(ProductDTO data)
@@ -87,29 +92,8 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var query = dbContext.Products.Where(p => p.IsDeleted == false);
             if (categoryId != null) query = query.Where(p => p.CategoryId == categoryId);
-            return await query.Select(p => new ProductDTO
-            {
-                Id = p.Id,
-                Code = p.Code,
-                Name = p.Name,
-                Cost = p.Cost,
-                Profit = p.Profit,
-                Price = p.Price,
-                Discount = p.Discount,
-                AlertQuantity = p.AlertQuantity,
-                UnitId = p.UnitId,
-                BrandId = p.BrandId,
-                CategoryId = p.CategoryId,
-                CurrencyId = p.CurrencyId,
-                ExpiryDate = p.ExpiryDate,
-                Note = p.Note,
-                UnitName = p.UnitId != null ? p.Unit.Name : null,
-                BrandName = p.BrandId != null ? p.Brand.Name : null,
-                CategoryName = p.CategoryId != null ? p.Category.Name : null,
-                CurrencyName = p.Currency.Name,
-                CurrencyCode = p.Currency.Code,
-            })
-            .ToListAsync();
+
+            return await query.ProjectTo<ProductDTO>(mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<ProductItemDTO> GetByCode(string code)
