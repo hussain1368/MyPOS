@@ -279,6 +279,7 @@
                         Margin="10"
                         VerticalAlignment="Top"
                         materialDesign:HintAssist.Hint="Expiry Date"
+                        Language="en-GB"
                         Style="{StaticResource MaterialDesignFloatingHintDatePicker}">
                         <DatePicker.SelectedDate>
                             <Binding Path="CurrentProduct.ExpiryDate" UpdateSourceTrigger="PropertyChanged" />

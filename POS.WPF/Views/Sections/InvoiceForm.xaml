@@ -92,7 +92,8 @@
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Date"
                     materialDesign:HintAssist.IsFloating="True"
-                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    Language="en-GB">
                     <DatePicker.SelectedDate>
                         <Binding
                             Path="CurrentInvoice.IssueDate"
