@@ -12,14 +12,15 @@ namespace POS.WPF.Validators.ModelValidators
         {
             var query = ServiceLocator.Current.GetInstance<IProductRepository>();
 
-            RuleFor(p => p.Code).MustAsync(async (model, code, token) =>
-            {
-                if (string.IsNullOrWhiteSpace(code)) return true;
-                if (code.Length < 5) return false;
-                var any = await query.CheckDuplicate(model.Id, code);
-                return !any;
-            })
-            .WithMessage("Product code is invalid!");
+            //RuleFor(p => p.Code).MustAsync(async (model, code, token) =>
+            //{
+            //    if (string.IsNullOrWhiteSpace(code)) return true;
+            //    if (code.Length < 5) return false;
+            //    var any = await query.CheckDuplicate(model.Id, code);
+            //    return !any;
+            //})
+            //.WithMessage("Product code is invalid!");
+            // deal with this later *********
 
             RuleFor(p => p.Name).NotEmpty().WithMessage("This field is required");
             RuleFor(p => p.CategoryId).NotNull().WithMessage("This field is required");

@@ -32,7 +32,8 @@ namespace POS.WPF.Models.EntityModels
         public string InitialQuantity
         {
             get { return _initialQuantity; }
-            set { SetAndValidate(ref _initialQuantity, value); }
+            set { SetValue(ref _initialQuantity, value); }
+            //set { SetAndValidate(ref _initialQuantity, value); }
         }
 
         private int? _cost;

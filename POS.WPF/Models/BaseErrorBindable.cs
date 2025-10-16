@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -35,16 +36,46 @@ namespace POS.WPF.Models
             OnPropertyChanged(nameof(HasErrors));
         }
 
+        public async Task ValidateFieldAsync([CallerMemberName] string propName = "")
+        {
+            valResult = await validator.ValidateAsync(model, options => options.IncludeProperties(propName));
+            OnErrorsChanged(propName);
+            OnPropertyChanged(nameof(HasErrors));
+        }
+
         protected void SetAndValidate<F>(ref F prop, F value, [CallerMemberName] string propName = "")
         {
             SetValue(ref prop, value, propName);
             ValidateField(propName);
         }
 
+        //protected async Task SetAndValidateAsync<F>(ref F prop, F value, [CallerMemberName] string propName = "")
+        //{
+        //    SetValue(ref prop, value, propName);
+        //    await ValidateFieldAsync(propName);
+        //}
+        // deal with later *********
+
         public void ValidateModel()
         {
             valResult = validator.Validate(model);
-            foreach (var prop in valResult.Errors.Select(err => err.PropertyName))
+            NotifyFieldsErrorsChanged(valResult);
+            //foreach (var prop in valResult.Errors.Select(err => err.PropertyName))
+            //{
+            //    OnErrorsChanged(prop);
+            //}
+            //OnPropertyChanged(nameof(HasErrors));
+        }
+
+        public async Task ValidateModelAsync()
+        {
+            valResult = await validator.ValidateAsync(model);
+            NotifyFieldsErrorsChanged(valResult);
+        }
+
+        private void NotifyFieldsErrorsChanged(ValidationResult result)
+        {
+            foreach (var prop in result.Errors.Select(err => err.PropertyName))
             {
                 OnErrorsChanged(prop);
             }

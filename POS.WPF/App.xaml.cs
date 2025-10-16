@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Threading;
 using POS.DAL.Repository.Abstraction;
 using POS.DAL.Repository.DatabaseRepository;
-using AutoMapper;
 using POS.WPF.Models.Mappings;
 
 namespace POS.WPF
@@ -30,8 +29,8 @@ namespace POS.WPF
             var state = ServiceProvider.GetRequiredService<AppState>();
             state.LoadSettings();
 
-            //var window = ServiceProvider.GetRequiredService<LoginWindow>();
-            var window = ServiceProvider.GetRequiredService<MainWindow>();
+            var window = ServiceProvider.GetRequiredService<LoginWindow>();
+            //var window = ServiceProvider.GetRequiredService<MainWindow>();
             window.Show();
         }
 
@@ -48,7 +47,7 @@ namespace POS.WPF
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddAutoMapper(typeof(TransactionProfile).Assembly);
+            services.AddAutoMapper(cfg => { }, typeof(TransactionProfile).Assembly);
 
             services.AddSingleton<AppState>();
             services.AddScoped<LoginVM>();
