@@ -40,14 +40,14 @@ namespace POS.DAL.Repository.DatabaseRepository
             return mapper.Map<TransactionDTO>(model);
         }
 
-        public async Task<IEnumerable<TransactionDTO>> GetList(byte? transactionType = null, int? accountId = null, int? sourceId = null)
+        public async Task<IEnumerable<TransactionDTO>> GetList(byte? transactionType = null, int? partnerId = null, int? sourceId = null)
         {
             var query = dbContext.Transactions.Where(m => !m.IsDeleted);
 
             if (transactionType.HasValue)
                 query = query.Where(m => m.TransactionType == transactionType);
-            if (accountId.HasValue)
-                query = query.Where(m => m.PartnerId == accountId);
+            if (partnerId.HasValue)
+                query = query.Where(m => m.PartnerId == partnerId);
             if (sourceId.HasValue)
                 query = query.Where(m => m.SourceId == sourceId);
 

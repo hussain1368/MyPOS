@@ -32,12 +32,11 @@ namespace POS.WPF.Models.EntityModels
         public string InitialQuantity
         {
             get { return _initialQuantity; }
-            set { SetValue(ref _initialQuantity, value); }
-            //set { SetAndValidate(ref _initialQuantity, value); }
+            set { SetAndValidate(ref _initialQuantity, value); }
         }
 
-        private int? _cost;
-        public int? Cost
+        private string _cost;
+        public string Cost
         {
             get { return _cost; }
             set
@@ -47,8 +46,8 @@ namespace POS.WPF.Models.EntityModels
             }
         }
 
-        private int? _price;
-        public int? Price
+        private string _price;
+        public string Price
         {
             get { return _price; }
             set
@@ -58,13 +57,17 @@ namespace POS.WPF.Models.EntityModels
             }
         }
 
-        public int? Profit
+        public string Profit
         {
             get
             {
-                var _value = (Price ?? 0) - (Cost ?? 0);
-                if (_value == 0) return null;
-                return _value;
+                if (int.TryParse(Cost, out var _cost) && int.TryParse(Price, out var _price))
+                {
+                    var _value = _price - _cost;
+                    if (_value == 0) return null;
+                    return _value.ToString();
+                }
+                return null;
             }
         }
 
@@ -96,17 +99,25 @@ namespace POS.WPF.Models.EntityModels
             set { SetValue(ref _brandId, value); }
         }
 
-        private int? _alertQuantity;
-        public int? AlertQuantity
+        private string _alertQuantity;
+        public string AlertQuantity
         {
-            get { if (_alertQuantity == 0) return null; return _alertQuantity; }
-            set { SetValue(ref _alertQuantity, value); }
+            get
+            {
+                if (int.TryParse(_alertQuantity, out int _val) && _val == 0) return null; 
+                return _alertQuantity;
+            }
+            set { SetAndValidate(ref _alertQuantity, value); }
         }
 
-        private int? _discount;
-        public int? Discount
+        private string _discount;
+        public string Discount
         {
-            get { if (_discount == 0) return null; return _discount; }
+            get
+            {
+                if (int.TryParse(_discount, out int _val) && _val == 0) return null;
+                return _discount;
+            }
             set { SetAndValidate(ref _discount, value); }
         }
 

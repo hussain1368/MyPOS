@@ -8,7 +8,7 @@ namespace POS.WPF.Validators.ModelValidators
     {
         public InvoiceValidator()
         {
-            RuleFor(m => m.Wallet).NotNull().WithMessage("Treasury is required");
+            RuleFor(m => m.Wallet).NotNull().WithMessage("Wallet is required");
             RuleFor(m => m.WarehouseId).NotNull().WithMessage("Warehouse is required");
             RuleFor(m => m.IssueDate).NotNull().WithMessage("Issue date is required");
             RuleFor(m => m.CurrencyRate).NotNull().WithMessage("Currency rate is required");

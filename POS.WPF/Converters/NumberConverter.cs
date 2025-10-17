@@ -12,7 +12,9 @@ namespace POS.WPF.Converters
             var str = value as string;
             if (string.IsNullOrWhiteSpace(str)) return value;
 
-            str = Regex.Replace(str, @"[^0-9.]", "");
+            //str = Regex.Replace(str, @"[^0-9.]", "");
+            str = Regex.Replace(str, @"(?<!^)-|[^0-9.\-]", "");
+
             var parts = str.Split(".");
             if (int.TryParse(parts[0], out var number))
             {

@@ -13,7 +13,6 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <conv:IntegerConverter x:Key="IntegerConverter" />
         <conv:RadioToEnumConverter x:Key="RadioConverter" />
     </UserControl.Resources>
     <Behaviors:Interaction.Triggers>
@@ -113,11 +112,8 @@
                                 Path="CurrentProduct.Cost"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:IntegerValidator />
-                                </Binding.ValidationRules>
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>
@@ -134,11 +130,8 @@
                                 Path="CurrentProduct.Price"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:IntegerValidator />
-                                </Binding.ValidationRules>
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>
@@ -157,7 +150,7 @@
                                 Path="CurrentProduct.Profit"
                                 UpdateSourceTrigger="PropertyChanged">
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>
@@ -238,11 +231,8 @@
                                 Path="CurrentProduct.AlertQuantity"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:IntegerValidator />
-                                </Binding.ValidationRules>
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>
@@ -260,11 +250,8 @@
                                 Path="CurrentProduct.Discount"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <Binding.ValidationRules>
-                                    <val:IntegerValidator />
-                                </Binding.ValidationRules>
                                 <Binding.Converter>
-                                    <conv:IntegerConverter />
+                                    <conv:NumberConverter />
                                 </Binding.Converter>
                             </Binding>
                         </TextBox.Text>

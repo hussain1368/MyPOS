@@ -62,10 +62,10 @@ namespace POS.DAL.Repository.DatabaseRepository
             };
         }
 
-        public async Task<IEnumerable<PartnerDTO>> GetList(int? accountTypeId = null)
+        public async Task<IEnumerable<PartnerDTO>> GetList(int? partnerTypeId = null)
         {
             var query = dbContext.Partners.Where(m => !m.IsDeleted);
-            if (accountTypeId != null) query = query.Where(m => m.PartnerTypeId == accountTypeId);
+            if (partnerTypeId != null) query = query.Where(m => m.PartnerTypeId == partnerTypeId);
             return await query.Select(x => new PartnerDTO
             {
                 Id = x.Id,

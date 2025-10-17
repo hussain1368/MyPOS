@@ -130,10 +130,10 @@
     <value>Home</value>
   </data>
   <data name="ListOfProducts" xml:space="preserve">
-    <value>List of Products</value>
+    <value>Products List</value>
   </data>
   <data name="PointOfSale" xml:space="preserve">
-    <value>Point of Sale</value>
+    <value>POINT OF SALE</value>
   </data>
   <data name="ProductDetails" xml:space="preserve">
     <value>Product Details</value>
