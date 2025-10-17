@@ -25,6 +25,7 @@ namespace POS.WPF.Models.ViewModels
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
+            SetAccountNameCmd = new CommandSync(SetAccountName);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
             SaveCmd = new CommandAsync(SaveForm);
             CancelCmd = new CommandSync(CancelForm);
@@ -39,6 +40,7 @@ namespace POS.WPF.Models.ViewModels
 
         public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }
+        public CommandSync SetAccountNameCmd { get; set; }
         public CommandAsyncParam ShowFormCmd { get; set; }
         public CommandAsync SaveCmd { get; set; }
         public CommandSync CancelCmd { get; set; }
@@ -201,6 +203,23 @@ namespace POS.WPF.Models.ViewModels
         {
             bool _isChecked = (bool)isChecked;
             foreach (var obj in TransactionList) obj.IsChecked = _isChecked;
+        }
+
+        private void SetAccountName()
+        {
+            var id = CurrentTransaction.AccountId;
+            if (id.HasValue)
+            {
+                var account = AccountsList.FirstOrDefault(a => a.Id == id);
+                if (account != null)
+                {
+                    CurrentTransaction.AccountNameReadOnly = true;
+                    CurrentTransaction.AccountName = account.Name;
+                    return;
+                }
+            }
+            CurrentTransaction.AccountNameReadOnly = false;
+            CurrentTransaction.AccountName = string.Empty;
         }
 
         private async Task DeleteRows()

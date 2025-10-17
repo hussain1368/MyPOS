@@ -92,6 +92,13 @@ namespace POS.WPF.Models.EntityModels
             set { _isChecked = value; OnPropertyChanged(); }
         }
 
+        private bool _accountNameReadOnly;
+        public bool AccountNameReadOnly
+        {
+            get { return _accountNameReadOnly; }
+            set { _accountNameReadOnly = value; OnPropertyChanged(); }
+        }
+
         public string TreasuryName { get; set; }
         public string SourceName { get; set; }
         public string CurrencyName { get; set; }
