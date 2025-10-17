@@ -75,9 +75,9 @@ namespace POS.DAL.Repository.DatabaseRepository
             .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<TreasuryDTO>> GetTreasuriesList()
+        public async Task<IEnumerable<WalletDTO>> GetWalletsList()
         {
-            return await dbContext.Treasuries.Where(t => !t.IsDeleted).Select(t => new TreasuryDTO
+            return await dbContext.Wallets.Where(t => !t.IsDeleted).Select(t => new WalletDTO
             {
                 Id = t.Id,
                 Name = t.Name,

@@ -11,7 +11,7 @@ namespace POS.DAL.Repository.Abstraction
         Task CreateOption(OptionValueDTO data);
         Task DeleteOptions(int[] ids);
         SettingDTO GetActiveSetting();
-        Task<IEnumerable<TreasuryDTO>> GetTreasuriesList();
+        Task<IEnumerable<WalletDTO>> GetWalletsList();
         Task<IEnumerable<WarehouseDTO>> GetWarehousesList();
         Task<OptionValueDTO> OptionByCode(string code);
         Task<IList<OptionValueDTO>> OptionsAll(bool includeDeleted = false);

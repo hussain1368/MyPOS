@@ -105,8 +105,8 @@
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="Auto"
-                    Binding="{Binding AccountName}"
-                    Header="Account"
+                    Binding="{Binding PartnerName}"
+                    Header="Partner"
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="Auto"
@@ -122,6 +122,11 @@
                     Width="Auto"
                     Binding="{Binding PaymentType}"
                     Header="Payment Type"
+                    IsReadOnly="True" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding WalletName}"
+                    Header="Wallet"
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="Auto"

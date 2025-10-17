@@ -54,11 +54,11 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     Margin="10"
-                    materialDesign:HintAssist.Hint="Treasury"
+                    materialDesign:HintAssist.Hint="Wallet"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     DisplayMemberPath="Name"
-                    ItemsSource="{Binding TreasuriesList}"
-                    SelectedValue="{Binding CurrentInvoice.Treasury}"
+                    ItemsSource="{Binding WalletsList}"
+                    SelectedValue="{Binding CurrentInvoice.Wallet}"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
                 <ComboBox
@@ -80,8 +80,8 @@
                     materialDesign:HintAssist.Hint="Customer/Supplier"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     DisplayMemberPath="Name"
-                    ItemsSource="{Binding AccountsList}"
-                    SelectedValue="{Binding CurrentInvoice.AccountId}"
+                    ItemsSource="{Binding PartnersList}"
+                    SelectedValue="{Binding CurrentInvoice.PartnerId}"
                     SelectedValuePath="Id"
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
@@ -196,7 +196,7 @@
                             HorizontalAlignment="Center"
                             FontSize="36"
                             FontWeight="Bold"
-                            Text="{Binding CurrentInvoice.Treasury.CurrencyCode}" />
+                            Text="{Binding CurrentInvoice.Wallet.CurrencyCode}" />
                     </StackPanel>
                 </Border>
 

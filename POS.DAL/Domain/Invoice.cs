@@ -13,9 +13,9 @@ public partial class Invoice
 
     public int WarehouseId { get; set; }
 
-    public int TreasuryId { get; set; }
+    public int WalletId { get; set; }
 
-    public int? AccountId { get; set; }
+    public int? PartnerId { get; set; }
 
     public int CurrencyId { get; set; }
 
@@ -37,7 +37,7 @@ public partial class Invoice
 
     public bool IsDeleted { get; set; }
 
-    public virtual Account Account { get; set; }
+    public virtual Partner Partner { get; set; }
 
     public virtual OptionValue Currency { get; set; }
 
@@ -45,7 +45,7 @@ public partial class Invoice
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
-    public virtual Treasury Treasury { get; set; }
+    public virtual Wallet Wallet { get; set; }
 
     public virtual AppUser UpdatedByNavigation { get; set; }
 

@@ -13,8 +13,8 @@
             <DataTemplate DataType="{x:Type viewModels:ProductsVM}">
                 <pages:Products />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:AccountsVM}">
-                <pages:Accounts />
+            <DataTemplate DataType="{x:Type viewModels:PartnersVM}">
+                <pages:Partners />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:TransactionsVM}">
                 <pages:Transactions />

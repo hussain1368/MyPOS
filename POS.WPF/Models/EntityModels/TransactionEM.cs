@@ -29,18 +29,18 @@ namespace POS.WPF.Models.EntityModels
             set { _date = value; OnPropertyChanged(); ValidateField(); }
         }
 
-        private int? _accountId;
-        public int? AccountId
+        private int? _partnerId;
+        public int? PartnerId
         {
-            get { return _accountId; }
-            set { _accountId = value; OnPropertyChanged(); }
+            get { return _partnerId; }
+            set { _partnerId = value; OnPropertyChanged(); }
         }
 
-        private string _accountName;
-        public string AccountName
+        private string _partnerName;
+        public string PartnerName
         {
-            get { return _accountName; }
-            set { _accountName = value; OnPropertyChanged(); ValidateField(); }
+            get { return _partnerName; }
+            set { _partnerName = value; OnPropertyChanged(); ValidateField(); }
         }
 
         private int? _currencyId;
@@ -71,11 +71,11 @@ namespace POS.WPF.Models.EntityModels
             set { _sourceId = value; OnPropertyChanged(); ValidateField(); }
         }
 
-        private int? _treasuryId;
-        public int? TreasuryId
+        private int? _walletId;
+        public int? WalletId
         {
-            get { return _treasuryId; }
-            set { _treasuryId = value; OnPropertyChanged(); ValidateField(); }
+            get { return _walletId; }
+            set { _walletId = value; OnPropertyChanged(); ValidateField(); }
         }
 
         private string _note;
@@ -92,14 +92,14 @@ namespace POS.WPF.Models.EntityModels
             set { _isChecked = value; OnPropertyChanged(); }
         }
 
-        private bool _accountNameReadOnly;
-        public bool AccountNameReadOnly
+        private bool _walletNameReadOnly;
+        public bool PartnerNameReadOnly
         {
-            get { return _accountNameReadOnly; }
-            set { _accountNameReadOnly = value; OnPropertyChanged(); }
+            get { return _walletNameReadOnly; }
+            set { _walletNameReadOnly = value; OnPropertyChanged(); }
         }
 
-        public string TreasuryName { get; set; }
+        public string WalletName { get; set; }
         public string SourceName { get; set; }
         public string CurrencyName { get; set; }
         public string CurrencyCode { get; set; }

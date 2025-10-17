@@ -2,9 +2,9 @@
 
 namespace POS.WPF.Views.Sections
 {
-    public partial class AccountForm : UserControl
+    public partial class PartnerForm : UserControl
     {
-        public AccountForm()
+        public PartnerForm()
         {
             InitializeComponent();
         }

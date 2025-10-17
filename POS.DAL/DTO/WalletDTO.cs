@@ -1,6 +1,6 @@
 ﻿namespace POS.DAL.DTO
 {
-    public class TreasuryDTO
+    public class WalletDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

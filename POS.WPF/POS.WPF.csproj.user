@@ -16,10 +16,10 @@
     <Compile Update="Views\Pages\Settings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Sections\AccountForm.xaml.cs">
+    <Compile Update="Views\Sections\PartnerForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Sections\AccountList.xaml.cs">
+    <Compile Update="Views\Sections\PartnerList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Sections\CurrencyRateForm.xaml.cs">
@@ -61,7 +61,7 @@
     <Compile Update="Views\Shared\RadioBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Pages\Accounts.xaml.cs">
+    <Compile Update="Views\Pages\Partners.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Home.xaml.cs">
@@ -81,10 +81,10 @@
     <Page Update="Views\Pages\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Sections\AccountForm.xaml">
+    <Page Update="Views\Sections\PartnerForm.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Sections\AccountList.xaml">
+    <Page Update="Views\Sections\PartnerList.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Sections\CurrencyRateForm.xaml">
@@ -132,7 +132,7 @@
     <Page Update="Views\Shared\RadioBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Pages\Accounts.xaml">
+    <Page Update="Views\Pages\Partners.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Pages\Home.xaml">

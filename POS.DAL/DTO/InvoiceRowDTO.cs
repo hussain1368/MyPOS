@@ -8,8 +8,8 @@ namespace POS.DAL.DTO
         public string SerialNum { get; set; }
         public byte InvoiceType { get; set; }
         public int WarehouseId { get; set; }
-        public int TreasuryId { get; set; }
-        public int? AccountId { get; set; }
+        public int WalletId { get; set; }
+        public int? PartnerId { get; set; }
         public int CurrencyId { get; set; }
         public double CurrencyRate { get; set; }
         public DateTime IssueDate { get; set; }
@@ -21,6 +21,7 @@ namespace POS.DAL.DTO
 
         public string CurrencyName { get; set; }
         public string CurrencyCode { get; set; }
-        public string AccountName { get; set; }
+        public string PartnerName { get; set; }
+        public string WalletName { get; set; }
     }
 }

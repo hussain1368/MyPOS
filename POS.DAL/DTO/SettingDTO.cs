@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace POS.DAL.DTO
+﻿namespace POS.DAL.DTO
 {
     public class SettingDTO
     {

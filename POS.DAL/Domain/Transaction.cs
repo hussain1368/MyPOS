@@ -11,11 +11,11 @@ public partial class Transaction
 
     public DateTime Date { get; set; }
 
-    public int TreasuryId { get; set; }
+    public int WalletId { get; set; }
 
-    public int? AccountId { get; set; }
+    public int? PartnerId { get; set; }
 
-    public string AccountName { get; set; }
+    public string PartnerName { get; set; }
 
     public int? InvoiceId { get; set; }
 
@@ -35,7 +35,7 @@ public partial class Transaction
 
     public bool IsDeleted { get; set; }
 
-    public virtual Account Account { get; set; }
+    public virtual Partner Partner { get; set; }
 
     public virtual OptionValue Currency { get; set; }
 
@@ -43,5 +43,5 @@ public partial class Transaction
 
     public virtual OptionValue Source { get; set; }
 
-    public virtual Treasury Treasury { get; set; }
+    public virtual Wallet Wallet { get; set; }
 }

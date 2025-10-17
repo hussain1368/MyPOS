@@ -21,9 +21,9 @@ public partial class OptionValue
 
     public bool IsDeleted { get; set; }
 
-    public virtual ICollection<Account> AccountAccountTypes { get; set; } = new List<Account>();
+    public virtual ICollection<Partner> PartnerPartnerTypes { get; set; } = new List<Partner>();
 
-    public virtual ICollection<Account> AccountCurrencies { get; set; } = new List<Account>();
+    public virtual ICollection<Partner> PartnerCurrencies { get; set; } = new List<Partner>();
 
     public virtual ICollection<CurrencyRate> CurrencyRates { get; set; } = new List<CurrencyRate>();
 
@@ -41,7 +41,7 @@ public partial class OptionValue
 
     public virtual ICollection<Transaction> TransactionSources { get; set; } = new List<Transaction>();
 
-    public virtual ICollection<Treasury> Treasuries { get; set; } = new List<Treasury>();
+    public virtual ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
 
     public virtual OptionType Type { get; set; }
 }

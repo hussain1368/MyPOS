@@ -19,12 +19,12 @@ namespace POS.WPF.Models.ViewModels
         public InvoiceFormVM(
             IProductRepository productRepo, 
             IOptionRepository optionRepo, 
-            IAccountRepository accountRepo, 
+            IPartnerRepository partnerRepo, 
             IInvoiceRepository invoiceRepo)
         {
             this.productRepo = productRepo;
             this.optionRepo = optionRepo;
-            this.accountRepo = accountRepo;
+            this.partnerRepo = partnerRepo;
             this.invoiceRepo = invoiceRepo;
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             FindByNameInputCmd = new CommandAsync(FindByName);
@@ -38,7 +38,7 @@ namespace POS.WPF.Models.ViewModels
         }
         private readonly IProductRepository productRepo;
         private readonly IOptionRepository optionRepo;
-        private readonly IAccountRepository accountRepo;
+        private readonly IPartnerRepository partnerRepo;
         private readonly IInvoiceRepository invoiceRepo;
         public InvoicesVM ParentPage { get; set; }
 
@@ -101,11 +101,11 @@ namespace POS.WPF.Models.ViewModels
             set => SetValue(ref _searchValue, value);
         }
 
-        private IEnumerable<TreasuryDTO> _treasuriesList;
-        public IEnumerable<TreasuryDTO> TreasuriesList
+        private IEnumerable<WalletDTO> _walletsList;
+        public IEnumerable<WalletDTO> WalletsList
         {
-            get => _treasuriesList;
-            set => SetValue(ref _treasuriesList, value);
+            get => _walletsList;
+            set => SetValue(ref _walletsList, value);
         }
 
         private IEnumerable<WarehouseDTO> _warehousesList;
@@ -114,11 +114,11 @@ namespace POS.WPF.Models.ViewModels
             get => _warehousesList;
             set => SetValue(ref _warehousesList, value);
         }
-        private IEnumerable<AccountDTO> _accountsList;
-        public IEnumerable<AccountDTO> AccountsList
+        private IEnumerable<PartnerDTO> _partnersList;
+        public IEnumerable<PartnerDTO> PartnersList
         {
-            get => _accountsList;
-            set => SetValue(ref _accountsList, value);
+            get => _partnersList;
+            set => SetValue(ref _partnersList, value);
         }
 
         private InvoiceEM _currentInvoice = new InvoiceEM();
@@ -130,11 +130,11 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadOptions()
         {
-            TreasuriesList = await optionRepo.GetTreasuriesList();
+            WalletsList = await optionRepo.GetWalletsList();
             WarehousesList = await optionRepo.GetWarehousesList();
-            AccountsList = await accountRepo.GetList();
+            PartnersList = await partnerRepo.GetList();
 
-            CurrentInvoice.Treasury = TreasuriesList.FirstOrDefault(t => t.IsDefault);
+            CurrentInvoice.Wallet = WalletsList.FirstOrDefault(t => t.IsDefault);
             CurrentInvoice.WarehouseId = WarehousesList.FirstOrDefault(t => t.IsDefault)?.Id;
         }
 
@@ -224,9 +224,9 @@ namespace POS.WPF.Models.ViewModels
                     SerialNum = "INV00000345",
                     InvoiceType = (byte)InvoiceType,
                     WarehouseId = CurrentInvoice.WarehouseId.Value,
-                    TreasuryId = CurrentInvoice.Treasury.Id,
-                    AccountId = CurrentInvoice.AccountId,
-                    CurrencyId = CurrentInvoice.Treasury.CurrencyId,
+                    WalletId = CurrentInvoice.Wallet.Id,
+                    PartnerId = CurrentInvoice.PartnerId,
+                    CurrencyId = CurrentInvoice.Wallet.CurrencyId,
                     CurrencyRate = CurrentInvoice.CurrencyRate.Value,
                     IssueDate = CurrentInvoice.IssueDate.Value,
                     PaymentType = (byte)CurrentInvoice.PaymentType,
@@ -272,7 +272,7 @@ namespace POS.WPF.Models.ViewModels
             {
                 CurrentInvoice = new InvoiceEM
                 {
-                    Treasury = TreasuriesList.FirstOrDefault(t => t.IsDefault),
+                    Wallet = WalletsList.FirstOrDefault(t => t.IsDefault),
                     WarehouseId = WarehousesList.FirstOrDefault(t => t.IsDefault)?.Id
                 };
                 InvoiceItems.Clear();
@@ -298,8 +298,8 @@ namespace POS.WPF.Models.ViewModels
             {
                 Id = tempInvoiceData.Id,
                 WarehouseId = tempInvoiceData.WarehouseId,
-                Treasury = TreasuriesList.FirstOrDefault(t => t.Id == tempInvoiceData.TreasuryId),
-                AccountId = tempInvoiceData.AccountId,
+                Wallet = WalletsList.FirstOrDefault(t => t.Id == tempInvoiceData.WalletId),
+                PartnerId = tempInvoiceData.PartnerId,
                 CurrencyRate = tempInvoiceData.CurrencyRate,
                 IssueDate = tempInvoiceData.IssueDate,
                 PaymentType = (PaymentType)tempInvoiceData.PaymentType,

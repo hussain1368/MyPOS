@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Accounts" xml:space="preserve">
-    <value>Accounts</value>
+  <data name="Partners" xml:space="preserve">
+    <value>Partners</value>
   </data>
   <data name="Category" xml:space="preserve">
     <value>Category</value>

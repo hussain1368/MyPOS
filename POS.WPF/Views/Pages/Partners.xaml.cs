@@ -2,9 +2,9 @@
 
 namespace POS.WPF.Views.Pages
 {
-    public partial class Accounts : UserControl
+    public partial class Partners : UserControl
     {
-        public Accounts()
+        public Partners()
         {
             InitializeComponent();
         }

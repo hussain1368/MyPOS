@@ -2,9 +2,9 @@
 
 namespace POS.WPF.Models.EntityModels
 {
-    public class AccountEM : BaseErrorBindable<AccountEM>
+    public class PartnerEM : BaseErrorBindable<PartnerEM>
     {
-        public AccountEM() : base(new AccountValidator()) { }
+        public PartnerEM() : base(new PartnerValidator()) { }
 
         private int _id;
         public int Id
@@ -48,11 +48,11 @@ namespace POS.WPF.Models.EntityModels
             set { _currencyId = value; OnPropertyChanged(); ValidateField(); }
         }
 
-        private int? _accountTypeId;
-        public int? AccountTypeId
+        private int? _partnerTypeId;
+        public int? PartnerTypeId
         {
-            get { return _accountTypeId; }
-            set { _accountTypeId = value; OnPropertyChanged(); ValidateField(); }
+            get { return _partnerTypeId; }
+            set { _partnerTypeId = value; OnPropertyChanged(); ValidateField(); }
         }
 
         private int _currentBalance;
@@ -69,7 +69,7 @@ namespace POS.WPF.Models.EntityModels
             set { _isChecked = value; OnPropertyChanged(); }
         }
 
-        public string AccountTypeName { get; set; }
+        public string PartnerTypeName { get; set; }
         public string CurrencyName { get; set; }
         public string CurrencyCode { get; set; }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace POS.DAL.Domain;
 
-public partial class Treasury
+public partial class Wallet
 {
     public int Id { get; set; }
 

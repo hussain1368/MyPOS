@@ -32,9 +32,9 @@ namespace POS.WPF.Models.ViewModels
                 },
                 new MenuItemEM
                 {
-                    Text = _t["Accounts"],
+                    Text = _t["Partners"],
                     IconKind = PackIconKind.BusinessCardOutline,
-                    ViewModel = services.GetRequiredService<AccountsVM>()
+                    ViewModel = services.GetRequiredService<PartnersVM>()
                 },
                 new MenuItemEM
                 {

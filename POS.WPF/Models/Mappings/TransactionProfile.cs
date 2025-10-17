@@ -11,12 +11,12 @@ namespace POS.WPF.Models.Mappings
         public TransactionProfile()
         {
             CreateMap<Transaction, TransactionDTO>()
-               .ForMember(d => d.TreasuryName, opt => opt.MapFrom(s => s.Treasury.Name))
+               .ForMember(d => d.WalletName, opt => opt.MapFrom(s => s.Wallet.Name))
                .ForMember(d => d.SourceName, opt => opt.MapFrom(s => s.Source.Name))
                .ForMember(d => d.CurrencyCode, opt => opt.MapFrom(s => s.Currency.Code))
                .ForMember(d => d.CurrencyCode, opt => opt.MapFrom(s => s.Currency.Code))
                .ReverseMap()
-               .ForMember(d => d.Treasury, opt => opt.Ignore())
+               .ForMember(d => d.Wallet, opt => opt.Ignore())
                .ForMember(d => d.Source, opt => opt.Ignore())
                .ForMember(d => d.Currency, opt => opt.Ignore());
 

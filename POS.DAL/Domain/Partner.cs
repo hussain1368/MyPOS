@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace POS.DAL.Domain;
 
-public partial class Account
+public partial class Partner
 {
     public int Id { get; set; }
 
@@ -19,7 +19,7 @@ public partial class Account
 
     public int CurrentBalance { get; set; }
 
-    public int AccountTypeId { get; set; }
+    public int PartnerTypeId { get; set; }
 
     public int UpdatedBy { get; set; }
 
@@ -27,7 +27,7 @@ public partial class Account
 
     public bool IsDeleted { get; set; }
 
-    public virtual OptionValue AccountType { get; set; }
+    public virtual OptionValue PartnerType { get; set; }
 
     public virtual OptionValue Currency { get; set; }
 

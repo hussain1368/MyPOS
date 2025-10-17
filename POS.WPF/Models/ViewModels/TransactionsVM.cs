@@ -16,16 +16,16 @@ namespace POS.WPF.Models.ViewModels
 {
     public class TransactionsVM : BaseBindable
     {
-        public TransactionsVM(ITransactionRepository transactionRepo, IAccountRepository accountRepo, IOptionRepository optionRepo, IMapper mapper)
+        public TransactionsVM(ITransactionRepository transactionRepo, IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper)
         {
             this.transactionRepo = transactionRepo;
-            this.accountRepo = accountRepo;
+            this.partnerRepo = partnerRepo;
             this.optionRepo = optionRepo;
             this.mapper = mapper;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
-            SetAccountNameCmd = new CommandSync(SetAccountName);
+            SetPartnerNameCmd = new CommandSync(SetPartnerName);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
             SaveCmd = new CommandAsync(SaveForm);
             CancelCmd = new CommandSync(CancelForm);
@@ -34,13 +34,13 @@ namespace POS.WPF.Models.ViewModels
         }
 
         private readonly ITransactionRepository transactionRepo;
-        private readonly IAccountRepository accountRepo;
+        private readonly IPartnerRepository partnerRepo;
         private readonly IOptionRepository optionRepo;
         private readonly IMapper mapper;
 
         public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }
-        public CommandSync SetAccountNameCmd { get; set; }
+        public CommandSync SetPartnerNameCmd { get; set; }
         public CommandAsyncParam ShowFormCmd { get; set; }
         public CommandAsync SaveCmd { get; set; }
         public CommandSync CancelCmd { get; set; }
@@ -49,7 +49,7 @@ namespace POS.WPF.Models.ViewModels
 
         public HeaderBarVM Header => new HeaderBarVM
         {
-            HeaderText = "List of Transactions",
+            HeaderText = "Transactions List",
             IconKind = "Add",
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
@@ -69,18 +69,18 @@ namespace POS.WPF.Models.ViewModels
         public IList<OptionValueDTO> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
         public IList<OptionValueDTO> SourceList => ComboOptions?.Where(op => op.TypeCode == "TSR").ToList();
 
-        private IEnumerable<AccountDTO> _accountsList;
-        public IEnumerable<AccountDTO> AccountsList
+        private IEnumerable<PartnerDTO> _partnersList;
+        public IEnumerable<PartnerDTO> PartnersList
         {
-            get => _accountsList;
-            set => SetValue(ref _accountsList, value);
+            get => _partnersList;
+            set => SetValue(ref _partnersList, value);
         }
 
-        private IEnumerable<TreasuryDTO> _treasuriesList;
-        public IEnumerable<TreasuryDTO> TreasuriesList
+        private IEnumerable<WalletDTO> _walletsList;
+        public IEnumerable<WalletDTO> WalletsList
         {
-            get => _treasuriesList;
-            set => SetValue(ref _treasuriesList, value);
+            get => _walletsList;
+            set => SetValue(ref _walletsList, value);
         }
 
         private TransactionEM _currentTransaction = new TransactionEM();
@@ -97,11 +97,11 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _transactionList, value); }
         }
 
-        private int? _accountId;
-        public int? AccountId
+        private int? _partnerId;
+        public int? PartnerId
         {
-            get { return _accountId; }
-            set { SetValue(ref _accountId, value); }
+            get { return _partnerId; }
+            set { SetValue(ref _partnerId, value); }
         }
 
         private byte? _transactionType;
@@ -129,8 +129,8 @@ namespace POS.WPF.Models.ViewModels
         {
             ComboOptions = await optionRepo.OptionsAll();
 
-            TreasuriesList = await optionRepo.GetTreasuriesList();
-            AccountsList = await accountRepo.GetList();
+            WalletsList = await optionRepo.GetWalletsList();
+            PartnersList = await partnerRepo.GetList();
         }
 
         private async Task LoadList()
@@ -145,7 +145,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await transactionRepo.GetList(TransactionType, AccountId, SourceId);
+            var data = await transactionRepo.GetList(TransactionType, PartnerId, SourceId);
             var _data = mapper.Map<IEnumerable<TransactionEM>>(data);
             TransactionList = new ObservableCollection<TransactionEM>(_data);
         }
@@ -205,21 +205,21 @@ namespace POS.WPF.Models.ViewModels
             foreach (var obj in TransactionList) obj.IsChecked = _isChecked;
         }
 
-        private void SetAccountName()
+        private void SetPartnerName()
         {
-            var id = CurrentTransaction.AccountId;
+            var id = CurrentTransaction.PartnerId;
             if (id.HasValue)
             {
-                var account = AccountsList.FirstOrDefault(a => a.Id == id);
-                if (account != null)
+                var partner = PartnersList.FirstOrDefault(a => a.Id == id);
+                if (partner != null)
                 {
-                    CurrentTransaction.AccountNameReadOnly = true;
-                    CurrentTransaction.AccountName = account.Name;
+                    CurrentTransaction.PartnerNameReadOnly = true;
+                    CurrentTransaction.PartnerName = partner.Name;
                     return;
                 }
             }
-            CurrentTransaction.AccountNameReadOnly = false;
-            CurrentTransaction.AccountName = string.Empty;
+            CurrentTransaction.PartnerNameReadOnly = false;
+            CurrentTransaction.PartnerName = string.Empty;
         }
 
         private async Task DeleteRows()

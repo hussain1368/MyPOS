@@ -13,11 +13,11 @@ using POS.DAL.Repository.Abstraction;
 
 namespace POS.WPF.Models.ViewModels
 {
-    public class AccountsVM : BaseBindable
+    public class PartnersVM : BaseBindable
     {
-        public AccountsVM(IAccountRepository accountRepo, IOptionRepository optionRepo)
+        public PartnersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo)
         {
-            this.accountRepo = accountRepo;
+            this.partnerRepo = partnerRepo;
             this.optionRepo = optionRepo;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
@@ -29,7 +29,7 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
-        private readonly IAccountRepository accountRepo;
+        private readonly IPartnerRepository partnerRepo;
         private readonly IOptionRepository optionRepo;
 
         public CommandAsync LoadOptionsCmd { get; set; }
@@ -42,7 +42,7 @@ namespace POS.WPF.Models.ViewModels
 
         public HeaderBarVM Header => new HeaderBarVM
         {
-            HeaderText = "List of Accounts",
+            HeaderText = "Partners List",
             IconKind = "Add",
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
@@ -55,32 +55,32 @@ namespace POS.WPF.Models.ViewModels
             {
                 _comboOptions = value;
                 OnPropertyChanged(nameof(CurrencyList));
-                OnPropertyChanged(nameof(AccountTypeList));
+                OnPropertyChanged(nameof(PartnerTypeList));
             }
         }
 
         public IList<OptionValueDTO> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
-        public IList<OptionValueDTO> AccountTypeList => ComboOptions?.Where(op => op.TypeCode == "ATYP").ToList();
+        public IList<OptionValueDTO> PartnerTypeList => ComboOptions?.Where(op => op.TypeCode == "ATYP").ToList();
 
-        private AccountEM _currentAccount = new AccountEM();
-        public AccountEM CurrentAccount
+        private PartnerEM _currentPartner = new PartnerEM();
+        public PartnerEM CurrentPartner
         {
-            get { return _currentAccount; }
-            set { SetValue(ref _currentAccount, value); }
+            get { return _currentPartner; }
+            set { SetValue(ref _currentPartner, value); }
         }
 
-        private ObservableCollection<AccountEM> _accountsList;
-        public ObservableCollection<AccountEM> AccountsList
+        private ObservableCollection<PartnerEM> _partnersList;
+        public ObservableCollection<PartnerEM> PartnersList
         {
-            get { return _accountsList; }
-            set { SetValue(ref _accountsList, value); }
+            get { return _partnersList; }
+            set { SetValue(ref _partnersList, value); }
         }
 
-        private int? _accountTypeId;
-        public int? AccountTypeId
+        private int? _partnerTypeId;
+        public int? PartnerTypeId
         {
-            get { return _accountTypeId; }
-            set { SetValue(ref _accountTypeId, value); }
+            get { return _partnerTypeId; }
+            set { SetValue(ref _partnerTypeId, value); }
         }
 
         private bool _isLoading;
@@ -97,7 +97,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadList()
         {
-            await DialogHost.Show(new LoadingDialog(), "AccountsDH", async (sender, args) =>
+            await DialogHost.Show(new LoadingDialog(), "PartnersDH", async (sender, args) =>
             {
                 await GetList();
                 args.Session.Close(false);
@@ -107,8 +107,8 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await accountRepo.GetList(AccountTypeId);
-            var _data = data.Select(m => new AccountEM
+            var data = await partnerRepo.GetList(PartnerTypeId);
+            var _data = data.Select(m => new PartnerEM
             {
                 Id = m.Id,
                 Name = m.Name,
@@ -117,24 +117,24 @@ namespace POS.WPF.Models.ViewModels
                 Note = m.Note,
                 CurrencyId = m.CurrencyId,
                 CurrentBalance = m.CurrentBalance,
-                AccountTypeId = m.AccountTypeId,
-                AccountTypeName = m.AccountTypeName,
+                PartnerTypeId = m.PartnerTypeId,
+                PartnerTypeName = m.PartnerTypeName,
                 CurrencyName = m.CurrencyName,
                 CurrencyCode = m.CurrencyCode,
             });
-            AccountsList = new ObservableCollection<AccountEM>(_data);
+            PartnersList = new ObservableCollection<PartnerEM>(_data);
         }
 
         private async Task ShowForm(object id)
         {
-            CurrentAccount = new AccountEM();
-            await DialogHost.Show(new AccountForm(), "AccountsDH", async (sender, args)=>
+            CurrentPartner = new PartnerEM();
+            await DialogHost.Show(new PartnerForm(), "PartnersDH", async (sender, args)=>
             {
                 if (id != null)
                 {
                     IsLoading = true;
-                    var obj = await accountRepo.GetById((int)id);
-                    CurrentAccount = new AccountEM
+                    var obj = await partnerRepo.GetById((int)id);
+                    CurrentPartner = new PartnerEM
                     {
                         Id = obj.Id,
                         Name = obj.Name,
@@ -143,7 +143,7 @@ namespace POS.WPF.Models.ViewModels
                         Note = obj.Note,
                         CurrencyId = obj.CurrencyId,
                         CurrentBalance = obj.CurrentBalance,
-                        AccountTypeId = obj.AccountTypeId,
+                        PartnerTypeId = obj.PartnerTypeId,
                     };
                     IsLoading = false;
                 }
@@ -153,39 +153,39 @@ namespace POS.WPF.Models.ViewModels
 
         private void CancelForm()
         {
-            CurrentAccount = new AccountEM();
+            CurrentPartner = new PartnerEM();
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private async Task SaveForm()
         {
-            CurrentAccount.ValidateModel();
-            if (CurrentAccount.HasErrors) return;
+            CurrentPartner.ValidateModel();
+            if (CurrentPartner.HasErrors) return;
 
             IsLoading = true;
-            var data = new AccountDTO
+            var data = new PartnerDTO
             {
-                Id = CurrentAccount.Id,
-                Name = CurrentAccount.Name,
-                Phone = CurrentAccount.Phone,
-                Address = CurrentAccount.Address,
-                Note = CurrentAccount.Note,
-                CurrencyId = CurrentAccount.CurrencyId.Value,
-                AccountTypeId = CurrentAccount.AccountTypeId.Value,
-                CurrentBalance = CurrentAccount.CurrentBalance,
+                Id = CurrentPartner.Id,
+                Name = CurrentPartner.Name,
+                Phone = CurrentPartner.Phone,
+                Address = CurrentPartner.Address,
+                Note = CurrentPartner.Note,
+                CurrencyId = CurrentPartner.CurrencyId.Value,
+                PartnerTypeId = CurrentPartner.PartnerTypeId.Value,
+                CurrentBalance = CurrentPartner.CurrentBalance,
                 IsDeleted = false,
                 UpdatedBy = 1,
                 UpdatedDate = DateTime.Now,
             };
 
-            if (CurrentAccount.Id == 0)
+            if (CurrentPartner.Id == 0)
             {
-                await accountRepo.Create(data);
-                CurrentAccount = new AccountEM();
+                await partnerRepo.Create(data);
+                CurrentPartner = new PartnerEM();
             }
             else
             {
-                await accountRepo.Update(data);
+                await partnerRepo.Update(data);
             }
             await GetList();
             IsLoading = false;
@@ -195,21 +195,21 @@ namespace POS.WPF.Models.ViewModels
         private void CheckAll(object isChecked)
         {
             bool _isChecked = (bool)isChecked;
-            foreach (var obj in AccountsList) obj.IsChecked = _isChecked;
+            foreach (var obj in PartnersList) obj.IsChecked = _isChecked;
         }
 
         private async Task DeleteRows()
         {
-            var ids = AccountsList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
+            var ids = PartnersList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "AccountsDH", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, "PartnersDH", null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await accountRepo.Delete(ids);
+                await partnerRepo.Delete(ids);
                 await GetList();
                 args.Session.Close(false);
             });

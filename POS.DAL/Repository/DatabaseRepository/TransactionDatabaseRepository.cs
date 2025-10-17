@@ -47,7 +47,7 @@ namespace POS.DAL.Repository.DatabaseRepository
             if (transactionType.HasValue)
                 query = query.Where(m => m.TransactionType == transactionType);
             if (accountId.HasValue)
-                query = query.Where(m => m.AccountId == accountId);
+                query = query.Where(m => m.PartnerId == accountId);
             if (sourceId.HasValue)
                 query = query.Where(m => m.SourceId == sourceId);
 

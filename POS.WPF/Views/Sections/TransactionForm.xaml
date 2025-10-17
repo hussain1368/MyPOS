@@ -12,8 +12,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Behaviors:Interaction.Triggers>
-        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="AccountIdDrp">
-            <Behaviors:InvokeCommandAction Command="{Binding SetAccountNameCmd}" />
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="PartnerIdDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding SetPartnerNameCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
 
@@ -86,15 +86,15 @@
         <!--  row 2  -->
 
         <ComboBox
-            x:Name="AccountIdDrp"
+            x:Name="PartnerIdDrp"
             Grid.Row="2"
             Grid.Column="0"
             Margin="10"
-            materialDesign:HintAssist.Hint="Account"
+            materialDesign:HintAssist.Hint="Partner"
             materialDesign:TextFieldAssist.HasClearButton="True"
             DisplayMemberPath="Name"
-            ItemsSource="{Binding AccountsList}"
-            SelectedValue="{Binding CurrentTransaction.AccountId}"
+            ItemsSource="{Binding PartnersList}"
+            SelectedValue="{Binding CurrentTransaction.PartnerId}"
             SelectedValuePath="Id"
             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 
@@ -102,13 +102,13 @@
             Grid.Row="2"
             Grid.Column="2"
             Margin="10"
-            materialDesign:HintAssist.Hint="Account Name"
+            materialDesign:HintAssist.Hint="Partner Name"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}">
             <TextBox.Text>
-                <Binding Path="CurrentTransaction.AccountName" UpdateSourceTrigger="PropertyChanged" />
+                <Binding Path="CurrentTransaction.PartnerName" UpdateSourceTrigger="PropertyChanged" />
             </TextBox.Text>
             <TextBox.IsReadOnly>
-                <Binding Path="CurrentTransaction.AccountNameReadOnly" UpdateSourceTrigger="PropertyChanged" />
+                <Binding Path="CurrentTransaction.PartnerNameReadOnly" UpdateSourceTrigger="PropertyChanged" />
             </TextBox.IsReadOnly>
         </TextBox>
 
@@ -150,11 +150,11 @@
             Grid.Row="4"
             Grid.Column="0"
             Margin="10"
-            materialDesign:HintAssist.Hint="Treasury"
+            materialDesign:HintAssist.Hint="Wallet"
             materialDesign:TextFieldAssist.HasClearButton="True"
             DisplayMemberPath="Name"
-            ItemsSource="{Binding TreasuriesList}"
-            SelectedValue="{Binding CurrentTransaction.TreasuryId}"
+            ItemsSource="{Binding WalletsList}"
+            SelectedValue="{Binding CurrentTransaction.WalletId}"
             SelectedValuePath="Id"
             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
 

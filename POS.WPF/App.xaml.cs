@@ -40,7 +40,7 @@ namespace POS.WPF
             services.AddScoped<IUserRepository, UserDatabaseRepository>();
             services.AddScoped<IOptionRepository, OptionDatabaseRepository>();
             services.AddScoped<IProductRepository, ProductDatabaseRepository>();
-            services.AddScoped<IAccountRepository, AccountDatabaseRepository>();
+            services.AddScoped<IPartnerRepository, PartnerDatabaseRepository>();
             services.AddScoped<ITransactionRepository, TransactionDatabaseRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceDatabaseRepository>();
             services.AddScoped<ICurrencyRateRepository, CurrencyRateDatabaseRepository>();
@@ -54,7 +54,7 @@ namespace POS.WPF
             services.AddScoped<MainVM>();
             services.AddScoped<HomeVM>();
             services.AddScoped<ProductsVM>();
-            services.AddScoped<AccountsVM>();
+            services.AddScoped<PartnersVM>();
             services.AddScoped<TransactionsVM>();
             services.AddScoped<InvoicesVM>();
             services.AddScoped<InvoiceFormVM>();

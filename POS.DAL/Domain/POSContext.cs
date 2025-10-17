@@ -15,7 +15,7 @@ public partial class POSContext : DbContext
     {
     }
 
-    public virtual DbSet<Account> Accounts { get; set; }
+    public virtual DbSet<Partner> Partners { get; set; }
 
     public virtual DbSet<AppUser> AppUsers { get; set; }
 
@@ -35,7 +35,7 @@ public partial class POSContext : DbContext
 
     public virtual DbSet<Transaction> Transactions { get; set; }
 
-    public virtual DbSet<Treasury> Treasuries { get; set; }
+    public virtual DbSet<Wallet> Wallets { get; set; }
 
     public virtual DbSet<Warehouse> Warehouses { get; set; }
 
@@ -44,9 +44,9 @@ public partial class POSContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Account>(entity =>
+        modelBuilder.Entity<Partner>(entity =>
         {
-            entity.ToTable("Account");
+            entity.ToTable("Partner");
 
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.Name)
@@ -55,15 +55,13 @@ public partial class POSContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(50);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.AccountType).WithMany(p => p.AccountAccountTypes)
-                .HasForeignKey(d => d.AccountTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Account_AccountType");
+            entity.HasOne(d => d.PartnerType).WithMany(p => p.PartnerPartnerTypes)
+                .HasForeignKey(d => d.PartnerTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.Currency).WithMany(p => p.AccountCurrencies)
+            entity.HasOne(d => d.Currency).WithMany(p => p.PartnerCurrencies)
                 .HasForeignKey(d => d.CurrencyId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Account_Currency");
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<AppUser>(entity =>
@@ -111,19 +109,17 @@ public partial class POSContext : DbContext
                 .HasMaxLength(50);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Account).WithMany(p => p.Invoices)
-                .HasForeignKey(d => d.AccountId)
-                .HasConstraintName("FK_Invoice_Account");
+            entity.HasOne(d => d.Partner).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.PartnerId);
 
             entity.HasOne(d => d.Currency).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.CurrencyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Invoice_Currency");
 
-            entity.HasOne(d => d.Treasury).WithMany(p => p.Invoices)
-                .HasForeignKey(d => d.TreasuryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Invoice_Treasury");
+            entity.HasOne(d => d.Wallet).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.WalletId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.UpdatedBy)
@@ -228,15 +224,14 @@ public partial class POSContext : DbContext
         {
             entity.ToTable("Transaction");
 
-            entity.Property(e => e.AccountName)
+            entity.Property(e => e.PartnerName)
                 .IsRequired()
                 .HasMaxLength(255);
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Account).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.AccountId)
-                .HasConstraintName("FK_Transaction_Account");
+            entity.HasOne(d => d.Partner).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.PartnerId);
 
             entity.HasOne(d => d.Currency).WithMany(p => p.TransactionCurrencies)
                 .HasForeignKey(d => d.CurrencyId)
@@ -252,26 +247,24 @@ public partial class POSContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transaction_OptionValue");
 
-            entity.HasOne(d => d.Treasury).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.TreasuryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Transaction_Treasury");
+            entity.HasOne(d => d.Wallet).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.WalletId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        modelBuilder.Entity<Treasury>(entity =>
+        modelBuilder.Entity<Wallet>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Box");
 
-            entity.ToTable("Treasury");
+            entity.ToTable("Wallet");
 
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            entity.HasOne(d => d.Currency).WithMany(p => p.Treasuries)
+            entity.HasOne(d => d.Currency).WithMany(p => p.Wallets)
                 .HasForeignKey(d => d.CurrencyId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Treasury_Currency");
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Warehouse>(entity =>

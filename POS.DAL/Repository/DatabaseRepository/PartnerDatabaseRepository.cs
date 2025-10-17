@@ -8,26 +8,26 @@ using POS.DAL.Repository.Abstraction;
 
 namespace POS.DAL.Repository.DatabaseRepository
 {
-    public class AccountDatabaseRepository : BaseDatabaseRepository, IAccountRepository
+    public class PartnerDatabaseRepository : BaseDatabaseRepository, IPartnerRepository
     {
-        public AccountDatabaseRepository(POSContext dbContext) : base(dbContext) { }
+        public PartnerDatabaseRepository(POSContext dbContext) : base(dbContext) { }
 
-        public async Task Create(AccountDTO data)
+        public async Task Create(PartnerDTO data)
         {
-            var model = new Account();
+            var model = new Partner();
             MapSingle(data, model);
-            await dbContext.Accounts.AddAsync(model);
+            await dbContext.Partners.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(AccountDTO data)
+        public async Task Update(PartnerDTO data)
         {
-            var model = await dbContext.Accounts.FindAsync(data.Id);
+            var model = await dbContext.Partners.FindAsync(data.Id);
             MapSingle(data, model);
             await dbContext.SaveChangesAsync();
         }
 
-        private void MapSingle(AccountDTO data, Account model)
+        private void MapSingle(PartnerDTO data, Partner model)
         {
             model.Id = data.Id;
             model.Name = data.Name;
@@ -36,17 +36,17 @@ namespace POS.DAL.Repository.DatabaseRepository
             model.Note = data.Note;
             model.CurrencyId = data.CurrencyId;
             model.CurrentBalance = data.CurrentBalance;
-            model.AccountTypeId = data.AccountTypeId;
+            model.PartnerTypeId = data.PartnerTypeId;
             model.UpdatedBy = data.UpdatedBy;
             model.UpdatedDate = data.UpdatedDate;
             model.IsDeleted = data.IsDeleted;
         }
 
-        public async Task<AccountDTO> GetById(int id)
+        public async Task<PartnerDTO> GetById(int id)
         {
-            var model = await dbContext.Accounts.FindAsync(id);
+            var model = await dbContext.Partners.FindAsync(id);
             if (model == null) return null;
-            return new AccountDTO
+            return new PartnerDTO
             {
                 Id = model.Id,
                 Name = model.Name,
@@ -55,18 +55,18 @@ namespace POS.DAL.Repository.DatabaseRepository
                 Note = model.Note,
                 CurrencyId = model.CurrencyId,
                 CurrentBalance = model.CurrentBalance,
-                AccountTypeId = model.AccountTypeId,
+                PartnerTypeId = model.PartnerTypeId,
                 UpdatedBy = model.UpdatedBy,
                 UpdatedDate = model.UpdatedDate,
                 IsDeleted = model.IsDeleted,
             };
         }
 
-        public async Task<IEnumerable<AccountDTO>> GetList(int? accountTypeId = null)
+        public async Task<IEnumerable<PartnerDTO>> GetList(int? accountTypeId = null)
         {
-            var query = dbContext.Accounts.Where(m => !m.IsDeleted);
-            if (accountTypeId != null) query = query.Where(m => m.AccountTypeId == accountTypeId);
-            return await query.Select(x => new AccountDTO
+            var query = dbContext.Partners.Where(m => !m.IsDeleted);
+            if (accountTypeId != null) query = query.Where(m => m.PartnerTypeId == accountTypeId);
+            return await query.Select(x => new PartnerDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -75,11 +75,11 @@ namespace POS.DAL.Repository.DatabaseRepository
                 Note = x.Note,
                 CurrencyId = x.CurrencyId,
                 CurrentBalance = x.CurrentBalance,
-                AccountTypeId = x.AccountTypeId,
+                PartnerTypeId = x.PartnerTypeId,
                 UpdatedBy = x.UpdatedBy,
                 UpdatedDate = x.UpdatedDate,
                 IsDeleted = x.IsDeleted,
-                AccountTypeName = x.AccountType.Name,
+                PartnerTypeName = x.PartnerType.Name,
                 CurrencyName = x.Currency.Name,
                 CurrencyCode = x.Currency.Code,
             })
@@ -88,7 +88,7 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task Delete(int[] ids)
         {
-            var rows = await dbContext.Accounts.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
+            var rows = await dbContext.Partners.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
             foreach (var row in rows) row.IsDeleted = true;
             await dbContext.SaveChangesAsync();
         }

@@ -33,8 +33,8 @@ namespace POS.DAL.Repository.DatabaseRepository
             model.SerialNum = data.SerialNum;
             model.InvoiceType = data.InvoiceType;
             model.WarehouseId = data.WarehouseId;
-            model.TreasuryId = data.TreasuryId;
-            model.AccountId = data.AccountId;
+            model.WalletId = data.WalletId;
+            model.PartnerId = data.PartnerId;
             model.CurrencyId = data.CurrencyId;
             model.CurrencyRate = data.CurrencyRate;
             model.IssueDate = data.IssueDate;
@@ -72,8 +72,8 @@ namespace POS.DAL.Repository.DatabaseRepository
                 SerialNum = row.SerialNum,
                 InvoiceType = row.InvoiceType,
                 WarehouseId = row.WarehouseId,
-                TreasuryId = row.TreasuryId,
-                AccountId = row.AccountId,
+                WalletId = row.WalletId,
+                PartnerId = row.PartnerId,
                 CurrencyId = row.CurrencyId,
                 CurrencyRate = row.CurrencyRate,
                 IssueDate = row.IssueDate,
@@ -110,9 +110,10 @@ namespace POS.DAL.Repository.DatabaseRepository
                 SerialNum = i.SerialNum,
                 InvoiceType = i.InvoiceType,
                 WarehouseId = i.WarehouseId,
-                TreasuryId = i.TreasuryId,
-                AccountId = i.AccountId,
-                AccountName = i.Account != null ? i.Account.Name : "---",
+                WalletId = i.WalletId,
+                WalletName = i.Wallet.Name,
+                PartnerId = i.PartnerId,
+                PartnerName = i.Partner != null ? i.Partner.Name : "---",
                 CurrencyId = i.CurrencyId,
                 CurrencyRate = i.CurrencyRate,
                 CurrencyCode = i.Currency.Code,

@@ -16,11 +16,11 @@ namespace POS.WPF.Models.EntityModels
             set => SetValue(ref _id, value);
         }
 
-        private TreasuryDTO _treasury;
-        public TreasuryDTO Treasury
+        private WalletDTO _wallet;
+        public WalletDTO Wallet
         {
-            get => _treasury;
-            set => SetAndValidate(ref _treasury, value);
+            get => _wallet;
+            set => SetAndValidate(ref _wallet, value);
         }
 
         private int? _warehouseId;
@@ -30,11 +30,11 @@ namespace POS.WPF.Models.EntityModels
             set => SetAndValidate(ref _warehouseId, value);
         }
 
-        private int? _accountId;
-        public int? AccountId
+        private int? _partnerId;
+        public int? PartnerId
         {
-            get => _accountId;
-            set => SetValue(ref _accountId, value);
+            get => _partnerId;
+            set => SetValue(ref _partnerId, value);
         }
 
         private DateTime? _issueDate = DateTime.Now;
@@ -64,5 +64,7 @@ namespace POS.WPF.Models.EntityModels
             get => _note;
             set => SetValue(ref _note, value);
         }
+
+        public string WalletName { get; set; }
     }
 }
