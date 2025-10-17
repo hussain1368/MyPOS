@@ -13,7 +13,13 @@
         <Behaviors:EventTrigger EventName="Loaded" SourceName="AccountsGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
         </Behaviors:EventTrigger>
-        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="AccountTypeCombo">
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="AccountIdCombo">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="TransactionTypeCombo">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="SourceIdCombo">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
@@ -28,30 +34,38 @@
             Margin="0,0,0,10"
             LastChildFill="False">
             <ComboBox
-                x:Name="AccountTypeCombo"
+                x:Name="AccountIdCombo"
                 Width="150"
-                materialDesign:HintAssist.Hint="Account Type"
+                materialDesign:HintAssist.Hint="Account"
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 DisplayMemberPath="Name"
                 DockPanel.Dock="Left"
-                ItemsSource="{Binding AccountTypeList}"
-                SelectedValue="{Binding AccountTypeId}"
+                ItemsSource="{Binding AccountsList}"
+                SelectedValue="{Binding AccountId}"
                 SelectedValuePath="Id" />
             <ComboBox
+                x:Name="TransactionTypeCombo"
                 Width="150"
                 Margin="10,0,0,0"
                 materialDesign:HintAssist.Hint="Transaction Type"
                 materialDesign:TextFieldAssist.HasClearButton="True"
-                DockPanel.Dock="Left">
-                <ComboBoxItem Content="Payment" />
-                <ComboBoxItem Content="Receipt" />
+                DockPanel.Dock="Left"
+                SelectedValue="{Binding TransactionType}"
+                SelectedValuePath="Tag">
+                <ComboBoxItem Content="Deposit" Tag="1" />
+                <ComboBoxItem Content="Withdrawal" Tag="2" />
             </ComboBox>
             <ComboBox
+                x:Name="SourceIdCombo"
                 Width="150"
                 Margin="10,0,0,0"
                 materialDesign:HintAssist.Hint="Source"
                 materialDesign:TextFieldAssist.HasClearButton="True"
-                DockPanel.Dock="Left" />
+                DisplayMemberPath="Name"
+                DockPanel.Dock="Left"
+                ItemsSource="{Binding SourceList}"
+                SelectedValue="{Binding SourceId}"
+                SelectedValuePath="Id" />
             <Button
                 Margin="10,0,0,0"
                 Command="{Binding DeleteCmd}"
@@ -93,7 +107,12 @@
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="Auto"
-                    Binding="{Binding Date, StringFormat='yyyy/MM/dd'}"
+                    Binding="{Binding CurrencyCode}"
+                    Header="Currency"
+                    IsReadOnly="True" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding Date, StringFormat='dd/MM/yyyy'}"
                     Header="Date"
                     IsReadOnly="True" />
                 <DataGridTextColumn
@@ -103,8 +122,18 @@
                     IsReadOnly="True" />
                 <DataGridTextColumn
                     Width="Auto"
-                    Binding="{Binding CurrencyCode}"
-                    Header="Currency"
+                    Binding="{Binding AccountName}"
+                    Header="Account"
+                    IsReadOnly="True" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding TreasuryName}"
+                    Header="Treasury"
+                    IsReadOnly="True" />
+                <DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding SourceName}"
+                    Header="Source"
                     IsReadOnly="True" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>

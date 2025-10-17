@@ -19,4 +19,11 @@
         Gregorian = 1,
         HejriShamsi = 2,
     }
+
+    public enum TransactionType
+    {
+        None = 0,
+        Deposit = 1,
+        Withdrawal = 2,
+    }
 }

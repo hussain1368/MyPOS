@@ -19,67 +19,45 @@ namespace POS.DAL.Repository.DatabaseRepository
             this.mapper = mapper;
         }
 
-        public async Task Create(AccountDTO data)
+        public async Task Create(TransactionDTO data)
         {
-            var model = new Account();
-            MapSingle(data, model);
-            await dbContext.Accounts.AddAsync(model);
+            var model = mapper.Map<Transaction>(data);
+            await dbContext.Transactions.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task Update(AccountDTO data)
+        public async Task Update(TransactionDTO data)
         {
-            var model = await dbContext.Accounts.FindAsync(data.Id);
-            MapSingle(data, model);
+            var model = await dbContext.Transactions.FindAsync(data.Id);
+            mapper.Map(data, model);
             await dbContext.SaveChangesAsync();
         }
 
-        private void MapSingle(AccountDTO data, Account model)
+        public async Task<TransactionDTO> GetById(int id)
         {
-            model.Id = data.Id;
-            model.Name = data.Name;
-            model.Phone = data.Phone;
-            model.Address = data.Address;
-            model.Note = data.Note;
-            model.CurrencyId = data.CurrencyId;
-            model.CurrentBalance = data.CurrentBalance;
-            model.AccountTypeId = data.AccountTypeId;
-            model.UpdatedBy = data.UpdatedBy;
-            model.UpdatedDate = data.UpdatedDate;
-            model.IsDeleted = data.IsDeleted;
-        }
-
-        public async Task<AccountDTO> GetById(int id)
-        {
-            var model = await dbContext.Accounts.FindAsync(id);
+            var model = await dbContext.Transactions.FindAsync(id);
             if (model == null) return null;
-            return new AccountDTO
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Phone = model.Phone,
-                Address = model.Address,
-                Note = model.Note,
-                CurrencyId = model.CurrencyId,
-                CurrentBalance = model.CurrentBalance,
-                AccountTypeId = model.AccountTypeId,
-                UpdatedBy = model.UpdatedBy,
-                UpdatedDate = model.UpdatedDate,
-                IsDeleted = model.IsDeleted,
-            };
+            return mapper.Map<TransactionDTO>(model);
         }
 
-        public async Task<IEnumerable<TransactionDTO>> GetList()
+        public async Task<IEnumerable<TransactionDTO>> GetList(byte? transactionType = null, int? accountId = null, int? sourceId = null)
         {
             var query = dbContext.Transactions.Where(m => !m.IsDeleted);
+
+            if (transactionType.HasValue)
+                query = query.Where(m => m.TransactionType == transactionType);
+            if (accountId.HasValue)
+                query = query.Where(m => m.AccountId == accountId);
+            if (sourceId.HasValue)
+                query = query.Where(m => m.SourceId == sourceId);
+
             return await query.ProjectTo<TransactionDTO>(mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task Delete(int[] ids)
         {
-            var rows = await dbContext.Accounts.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
-            foreach (var row in rows) row.IsDeleted = true;
-            await dbContext.SaveChangesAsync();
+            var rows = await dbContext.Transactions.Where(m => ids.Any(id => m.Id == id))
+                .ExecuteUpdateAsync(m => m.SetProperty(p => p.IsDeleted, p => true));
         }
     }
 }

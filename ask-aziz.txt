@@ -1,0 +1,4 @@
+currency -> confirmation
+return (sale or purchase)
+sale and purchase (UNIT)
+price definition in the product?

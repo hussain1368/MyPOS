@@ -30,7 +30,7 @@
         <materialDesign:DialogHost
             Grid.Row="1"
             DialogTheme="Light"
-            Identifier="TransactionListDH">
+            Identifier="TransactionsDH">
             <local:TransactionList Margin="20,10" />
         </materialDesign:DialogHost>
     </Grid>

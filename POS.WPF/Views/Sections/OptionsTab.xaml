@@ -14,7 +14,7 @@
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>-->
-    
+
     <Grid x:Name="MainGrid">
         <Border Margin="0,10" VerticalAlignment="Top">
             <Grid>

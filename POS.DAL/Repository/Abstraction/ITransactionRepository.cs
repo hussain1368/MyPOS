@@ -6,10 +6,10 @@ namespace POS.DAL.Repository.Abstraction
 {
     public interface ITransactionRepository
     {
-        Task Create(AccountDTO data);
+        Task Create(TransactionDTO data);
         Task Delete(int[] ids);
-        Task<AccountDTO> GetById(int id);
-        Task<IEnumerable<TransactionDTO>> GetList();
-        Task Update(AccountDTO data);
+        Task<TransactionDTO> GetById(int id);
+        Task<IEnumerable<TransactionDTO>> GetList(byte? transactionType = null, int? accountId = null, int? sourceId = null);
+        Task Update(TransactionDTO data);
     }
 }

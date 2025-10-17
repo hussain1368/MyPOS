@@ -4,9 +4,7 @@ C:\Program Files (x86)\Microsoft SQL Server Management Studio 18\Common7\IDE\Com
 
 Scaffold-DbContext "DataSource=D:\POS\POS.db" Microsoft.EntityFrameworkCore.Sqlite -OutputDir Domain
 
-Scaffold-DbContext "Server=LAPTOP-L8T1DF78\SQL17;Database=POS;User ID=sa;Password=welcome;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
-
-Scaffold-DbContext "Server=localhost,1433;Database=WebPOS_Inventory;User ID=sa;Password=SQL@docker22;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
+Scaffold-DbContext "Server=LAPTOP-L8T1DF78\SQL17;Database=POS;User ID=sa;Password=welcome;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Domain -UseDatabaseNames
 
 gitToken: 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
 

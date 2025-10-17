@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-#nullable disable
+namespace POS.DAL.Domain;
 
-namespace POS.DAL.Domain
+public partial class OptionType
 {
-    public partial class OptionType
-    {
-        public OptionType()
-        {
-            OptionValues = new HashSet<OptionValue>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public bool IsReadOnly { get; set; }
-        public bool IsDeleted { get; set; }
+    public string Name { get; set; }
 
-        public virtual ICollection<OptionValue> OptionValues { get; set; }
-    }
+    public string Code { get; set; }
+
+    public bool IsReadOnly { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public virtual ICollection<OptionValue> OptionValues { get; set; } = new List<OptionValue>();
 }

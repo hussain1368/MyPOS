@@ -20,7 +20,7 @@ namespace POS.WPF.Converters
                 if (str.Contains(".")) suffix = $".{parts[1].Substring(0, Math.Min(3, parts[1].Length))}";
                 return $"{number.ToString("#,0")}{suffix}";
             }
-            return value;
+            return str;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

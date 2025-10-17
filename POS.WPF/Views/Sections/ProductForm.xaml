@@ -95,9 +95,6 @@
                                 Path="CurrentProduct.InitialQuantity"
                                 TargetNullValue=""
                                 UpdateSourceTrigger="PropertyChanged">
-                                <!--<Binding.ValidationRules>
-                                    <val:IntegerValidator />
-                                </Binding.ValidationRules>-->
                                 <Binding.Converter>
                                     <conv:NumberConverter />
                                 </Binding.Converter>

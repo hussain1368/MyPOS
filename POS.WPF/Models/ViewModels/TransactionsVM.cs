@@ -16,9 +16,10 @@ namespace POS.WPF.Models.ViewModels
 {
     public class TransactionsVM : BaseBindable
     {
-        public TransactionsVM(ITransactionRepository transactionRepo, IOptionRepository optionRepo, IMapper mapper)
+        public TransactionsVM(ITransactionRepository transactionRepo, IAccountRepository accountRepo, IOptionRepository optionRepo, IMapper mapper)
         {
             this.transactionRepo = transactionRepo;
+            this.accountRepo = accountRepo;
             this.optionRepo = optionRepo;
             this.mapper = mapper;
 
@@ -32,6 +33,7 @@ namespace POS.WPF.Models.ViewModels
         }
 
         private readonly ITransactionRepository transactionRepo;
+        private readonly IAccountRepository accountRepo;
         private readonly IOptionRepository optionRepo;
         private readonly IMapper mapper;
 
@@ -58,18 +60,32 @@ namespace POS.WPF.Models.ViewModels
             {
                 _comboOptions = value;
                 OnPropertyChanged(nameof(CurrencyList));
-                OnPropertyChanged(nameof(AccountTypeList));
+                OnPropertyChanged(nameof(SourceList));
             }
         }
 
         public IList<OptionValueDTO> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
-        public IList<OptionValueDTO> AccountTypeList => ComboOptions?.Where(op => op.TypeCode == "ATYP").ToList();
+        public IList<OptionValueDTO> SourceList => ComboOptions?.Where(op => op.TypeCode == "TSR").ToList();
 
-        private AccountEM _currentAccount = new AccountEM();
-        public AccountEM CurrentAccount
+        private IEnumerable<AccountDTO> _accountsList;
+        public IEnumerable<AccountDTO> AccountsList
         {
-            get { return _currentAccount; }
-            set { SetValue(ref _currentAccount, value); }
+            get => _accountsList;
+            set => SetValue(ref _accountsList, value);
+        }
+
+        private IEnumerable<TreasuryDTO> _treasuriesList;
+        public IEnumerable<TreasuryDTO> TreasuriesList
+        {
+            get => _treasuriesList;
+            set => SetValue(ref _treasuriesList, value);
+        }
+
+        private TransactionEM _currentTransaction = new TransactionEM();
+        public TransactionEM CurrentTransaction
+        {
+            get { return _currentTransaction; }
+            set { SetValue(ref _currentTransaction, value); }
         }
 
         private ObservableCollection<TransactionEM> _transactionList;
@@ -79,11 +95,25 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _transactionList, value); }
         }
 
-        private int? _accountTypeId;
-        public int? AccountTypeId
+        private int? _accountId;
+        public int? AccountId
         {
-            get { return _accountTypeId; }
-            set { SetValue(ref _accountTypeId, value); }
+            get { return _accountId; }
+            set { SetValue(ref _accountId, value); }
+        }
+
+        private byte? _transactionType;
+        public byte? TransactionType
+        {
+            get { return _transactionType; }
+            set { SetValue(ref _transactionType, value); }
+        }
+
+        private int? _sourceId;
+        public int? SourceId
+        {
+            get { return _sourceId; }
+            set { SetValue(ref _sourceId, value); }
         }
 
         private bool _isLoading;
@@ -96,11 +126,14 @@ namespace POS.WPF.Models.ViewModels
         private async Task LoadOptions()
         {
             ComboOptions = await optionRepo.OptionsAll();
+
+            TreasuriesList = await optionRepo.GetTreasuriesList();
+            AccountsList = await accountRepo.GetList();
         }
 
         private async Task LoadList()
         {
-            await DialogHost.Show(new LoadingDialog(), "TransactionListDH", async (sender, args) =>
+            await DialogHost.Show(new LoadingDialog(), "TransactionsDH", async (sender, args) =>
             {
                 await GetList();
                 args.Session.Close(false);
@@ -110,31 +143,21 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await transactionRepo.GetList();
+            var data = await transactionRepo.GetList(TransactionType, AccountId, SourceId);
             var _data = mapper.Map<IEnumerable<TransactionEM>>(data);
             TransactionList = new ObservableCollection<TransactionEM>(_data);
         }
 
         private async Task ShowForm(object id)
         {
-            CurrentAccount = new AccountEM();
-            await DialogHost.Show(new AccountForm(), "AccountsDH", async (sender, args)=>
+            CurrentTransaction = new TransactionEM();
+            await DialogHost.Show(new TransactionForm(), "TransactionsDH", async (sender, args)=>
             {
                 if (id != null)
                 {
                     IsLoading = true;
                     var obj = await transactionRepo.GetById((int)id);
-                    CurrentAccount = new AccountEM
-                    {
-                        Id = obj.Id,
-                        Name = obj.Name,
-                        Phone = obj.Phone,
-                        Address = obj.Address,
-                        Note = obj.Note,
-                        CurrencyId = obj.CurrencyId,
-                        CurrentBalance = obj.CurrentBalance,
-                        AccountTypeId = obj.AccountTypeId,
-                    };
+                    CurrentTransaction = mapper.Map<TransactionEM>(obj);
                     IsLoading = false;
                 }
             },
@@ -143,35 +166,27 @@ namespace POS.WPF.Models.ViewModels
 
         private void CancelForm()
         {
-            CurrentAccount = new AccountEM();
+            CurrentTransaction = new TransactionEM();
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private async Task SaveForm()
         {
-            CurrentAccount.ValidateModel();
-            if (CurrentAccount.HasErrors) return;
+            CurrentTransaction.ValidateModel();
+            if (CurrentTransaction.HasErrors) return;
 
             IsLoading = true;
-            var data = new AccountDTO
-            {
-                Id = CurrentAccount.Id,
-                Name = CurrentAccount.Name,
-                Phone = CurrentAccount.Phone,
-                Address = CurrentAccount.Address,
-                Note = CurrentAccount.Note,
-                CurrencyId = CurrentAccount.CurrencyId.Value,
-                AccountTypeId = CurrentAccount.AccountTypeId.Value,
-                CurrentBalance = CurrentAccount.CurrentBalance,
-                IsDeleted = false,
-                UpdatedBy = 1,
-                UpdatedDate = DateTime.Now,
-            };
 
-            if (CurrentAccount.Id == 0)
+            var data = mapper.Map<TransactionDTO>(CurrentTransaction);
+
+            data.IsDeleted = false;
+            data.UpdatedBy = 1;
+            data.UpdatedDate = DateTime.Now;
+
+            if (CurrentTransaction.Id == 0)
             {
                 await transactionRepo.Create(data);
-                CurrentAccount = new AccountEM();
+                CurrentTransaction = new TransactionEM();
             }
             else
             {
@@ -194,7 +209,7 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "AccountsDH", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, "TransactionsDH", null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();

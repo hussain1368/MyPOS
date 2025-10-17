@@ -42,10 +42,10 @@ namespace POS.DAL.Repository.DatabaseRepository
         public async Task<UserDTO> Login(string username, string password)
         {
             var user = await dbContext.AppUsers.SingleOrDefaultAsync(u => u.Username == username);
-            if (user == null) throw new ApplicationException("Incorrect Username!");
+            if (user == null) throw new ApplicationException("The username is wrong!");
             var hasher = new PasswordHasher<AppUser>();
             var result = hasher.VerifyHashedPassword(user, user.Password, password);
-            if (result != PasswordVerificationResult.Success) throw new ApplicationException("Incorrect Password!");
+            if (result != PasswordVerificationResult.Success) throw new ApplicationException("The password is wrong!");
             return new UserDTO
             {
                 Id = user.Id,

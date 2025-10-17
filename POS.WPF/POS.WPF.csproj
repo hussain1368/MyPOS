@@ -43,6 +43,9 @@
     <Compile Update="Views\Pages\Transactions.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Sections\TransactionForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Sections\TransactionList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
