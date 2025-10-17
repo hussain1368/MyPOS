@@ -261,9 +261,24 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadList()
         {
-            var data = await productRepo.GetList(CategoryId);
-            var _data = mapper.Map<IEnumerable<ProductEM>>(data);
+            var result = await productRepo.GetList(CategoryId, PageIndex);
+            var _data = mapper.Map<IEnumerable<ProductEM>>(result.Products);
             ProductsList = new ObservableCollection<ProductEM>(_data);
+            PageCount = result.PageCount;
+        }
+
+        private int _pageIndex = 1;
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set => SetValue(ref _pageIndex, value);
+        }
+
+        private int _pageCount = 0;
+        public int PageCount
+        {
+            get => _pageCount;
+            set => SetValue(ref _pageCount, value);
         }
     }
 }

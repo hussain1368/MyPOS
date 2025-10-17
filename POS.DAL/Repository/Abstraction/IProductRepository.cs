@@ -12,7 +12,7 @@ namespace POS.DAL.Repository.Abstraction
         Task<ProductItemDTO> GetByCode(string code);
         Task<ProductDTO> GetById(int id);
         Task<IEnumerable<ProductItemDTO>> GetByName(string searchValue);
-        Task<IEnumerable<ProductDTO>> GetList(int? categoryId);
+        Task<ProductResult> GetList(int? categoryId, int page = 1);
         Task Update(ProductDTO data);
     }
 }

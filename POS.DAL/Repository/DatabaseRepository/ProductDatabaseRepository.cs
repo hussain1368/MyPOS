@@ -7,6 +7,7 @@ using System.Linq;
 using POS.DAL.Repository.Abstraction;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using System;
 
 namespace POS.DAL.Repository.DatabaseRepository
 {
@@ -40,12 +41,21 @@ namespace POS.DAL.Repository.DatabaseRepository
             return mapper.Map<ProductDTO>(product);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetList(int? categoryId)
+        public async Task<ProductResult> GetList(int? categoryId, int page = 1)
         {
             var query = dbContext.Products.Where(p => p.IsDeleted == false);
             if (categoryId != null) query = query.Where(p => p.CategoryId == categoryId);
 
-            return await query.ProjectTo<ProductDTO>(mapper.ConfigurationProvider).ToListAsync();
+            var pageSize = 3;
+            var rowCount = await query.CountAsync();
+            var pageCount = Math.Ceiling((double)rowCount / pageSize);
+
+            var data = await query.ProjectTo<ProductDTO>(mapper.ConfigurationProvider)
+                .OrderByDescending(p => p.UpdatedDate)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
+
+            return new ProductResult { Products = data, PageCount = (int)pageCount };
         }
 
         public async Task<ProductItemDTO> GetByCode(string code)
