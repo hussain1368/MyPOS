@@ -1,8 +1,10 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
 using POS.WPF.Enums;
+using POS.WPF.Views.Sections;
 using POS.WPF.Views.Shared;
 using System;
 using System.Collections.Generic;
@@ -13,9 +15,11 @@ namespace POS.WPF.Models.ViewModels
 {
     public class InvoicesVM : BaseBindable
     {
-        public InvoicesVM(InvoiceFormVM invoiceFormContext, IInvoiceRepository invoiceRepo)
+        public InvoicesVM(InvoiceFormVM invoiceFormContext, IInvoiceRepository invoiceRepo, IMapper mapper)
         {
-            this.invoiceRepo = invoiceRepo;
+            _mapper = mapper;
+            _invoiceRepo = invoiceRepo;
+
             LoadListCmd = new CommandAsync(LoadList);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
             InvoiceFormContext = invoiceFormContext;
@@ -35,7 +39,8 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly IInvoiceRepository invoiceRepo;
+        private readonly IInvoiceRepository _invoiceRepo;
+        private readonly IMapper _mapper;
 
         public CommandAsync LoadListCmd { get; set; }
         public CommandAsyncParam ShowFormCmd { get; set; }
@@ -80,10 +85,27 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), "MainDialogHost", async (sender, args) =>
             {
-                InvoicesList = await invoiceRepo.GetList((byte?)InvoiceType, IssueDate);
+                var data = await _invoiceRepo.GetList((byte?)InvoiceType, IssueDate, PageIndex);
+                InvoicesList = data.Invoices;
+                PageCount = data.PageCount;
+
                 args.Session.Close(false);
             },
             null);
+        }
+
+        private int _pageIndex = 1;
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set => SetValue(ref _pageIndex, value);
+        }
+
+        private int _pageCount = 0;
+        public int PageCount
+        {
+            get => _pageCount;
+            set => SetValue(ref _pageCount, value);
         }
 
         private async Task ShowForm(object param)

@@ -9,7 +9,7 @@
     xmlns:viewModels="clr-namespace:POS.WPF.Models.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
-            <!--view models-->
+            <!--  view models  -->
             <DataTemplate DataType="{x:Type viewModels:HomeVM}">
                 <pages:Home />
             </DataTemplate>
@@ -28,7 +28,7 @@
             <DataTemplate DataType="{x:Type viewModels:SettingsVM}">
                 <pages:Settings />
             </DataTemplate>
-            <!--styles-->
+            <!--  styles  -->
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources />
                 <hc:Theme />

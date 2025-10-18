@@ -87,8 +87,8 @@ namespace POS.WPF.Models.ViewModels
         private MessageVM _msgContext;
         public MessageVM MsgContext
         {
-            get { return _msgContext; }
-            set { SetValue(ref _msgContext, value); }
+            get => _msgContext;
+            set => SetValue(ref _msgContext, value);
         }
 
         public bool IsEditMode => CurrentProduct.Id != 0;

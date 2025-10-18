@@ -46,7 +46,6 @@ namespace POS.DAL.Repository.DatabaseRepository
             var query = dbContext.Products.Where(p => p.IsDeleted == false);
             if (categoryId != null) query = query.Where(p => p.CategoryId == categoryId);
 
-            var pageSize = 3;
             var rowCount = await query.CountAsync();
             var pageCount = Math.Ceiling((double)rowCount / pageSize);
 

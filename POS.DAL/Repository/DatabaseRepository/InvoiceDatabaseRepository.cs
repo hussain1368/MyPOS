@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
@@ -11,12 +13,16 @@ namespace POS.DAL.Repository.DatabaseRepository
 {
     public class InvoiceDatabaseRepository : BaseDatabaseRepository, IInvoiceRepository
     {
-        public InvoiceDatabaseRepository(POSContext dbContext) : base(dbContext) { }
+        public InvoiceDatabaseRepository(POSContext dbContext, IMapper mapper) : base(dbContext)
+        {
+            _mapper = mapper;
+        }
+
+        private readonly IMapper _mapper;
 
         public async Task Create(InvoiceDTO data)
         {
-            var model = new Invoice();
-            MapSingle(data, model);
+            var model = _mapper.Map<Invoice>(data);
             await dbContext.Invoices.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
@@ -24,40 +30,8 @@ namespace POS.DAL.Repository.DatabaseRepository
         public async Task Update(InvoiceDTO data)
         {
             var model = await dbContext.Invoices.FindAsync(data.Id);
-            MapSingle(data, model);
+            _mapper.Map(data, model);
             await dbContext.SaveChangesAsync();
-        }
-
-        private void MapSingle(InvoiceDTO data, Invoice model)
-        {
-            model.SerialNum = data.SerialNum;
-            model.InvoiceType = data.InvoiceType;
-            model.WarehouseId = data.WarehouseId;
-            model.WalletId = data.WalletId;
-            model.PartnerId = data.PartnerId;
-            model.CurrencyId = data.CurrencyId;
-            model.CurrencyRate = data.CurrencyRate;
-            model.IssueDate = data.IssueDate;
-            model.PaymentType = data.PaymentType;
-            model.Note = data.Note;
-            model.UpdatedBy = data.UpdatedBy;
-            model.UpdatedDate = data.UpdatedDate;
-            model.IsDeleted = false;
-            model.ItemsCount = data.Items.Count();
-            model.TotalPrice = data.Items.Sum(i => i.TotalPrice);
-
-            model.InvoiceItems = data.Items.Select(i => new InvoiceItem
-            {
-                ProductId = i.ProductId,
-                UnitPrice = i.UnitPrice,
-                TotalPrice = i.TotalPrice,
-                Cost = i.Cost,
-                Profit = i.Profit,
-                UnitDiscount = i.UnitDiscount,
-                TotalDiscount = i.TotalDiscount,
-                Quantity = i.Quantity,
-            })
-            .ToList();
         }
 
         public async Task<InvoiceDTO> GetById(int id)
@@ -66,66 +40,28 @@ namespace POS.DAL.Repository.DatabaseRepository
                 .Include(i => i.InvoiceItems).ThenInclude(i => i.Product)
                 .SingleOrDefaultAsync(i => i.Id == id);
 
-            var invoice = new InvoiceDTO
-            {
-                Id = row.Id,
-                SerialNum = row.SerialNum,
-                InvoiceType = row.InvoiceType,
-                WarehouseId = row.WarehouseId,
-                WalletId = row.WalletId,
-                PartnerId = row.PartnerId,
-                CurrencyId = row.CurrencyId,
-                CurrencyRate = row.CurrencyRate,
-                IssueDate = row.IssueDate,
-                PaymentType = row.PaymentType,
-                Note = row.Note,
-                UpdatedBy = row.UpdatedBy,
-                UpdatedDate = row.UpdatedDate,
-            };
-            invoice.Items = row.InvoiceItems.Select(i => new InvoiceItemDTO
-            {
-                ProductId = i.ProductId,
-                ProductName = i.Product.Name,
-                ProductCode = i.Product.Code,
-                UnitPrice = i.UnitPrice,
-                TotalPrice = i.TotalPrice,
-                Cost = i.Cost,
-                Profit = i.Profit,
-                UnitDiscount = i.UnitDiscount,
-                TotalDiscount = i.TotalDiscount,
-                Quantity = i.Quantity,
-            })
-            .ToList();
-            return invoice;
+            return _mapper.Map<InvoiceDTO>(row);
         }
 
-        public async Task<IEnumerable<InvoiceRowDTO>> GetList(byte? invoiceType, DateTime? issueDate)
+        public async Task<InvoiceResult> GetList(byte? invoiceType, DateTime? issueDate, int page = 1)
         {
             var query = dbContext.Invoices.Where(i => i.IsDeleted == false);
             if (invoiceType != null) query = query.Where(i => i.InvoiceType == invoiceType);
             if (issueDate != null) query = query.Where(i => i.IssueDate == issueDate);
-            return await query.Select(i => new InvoiceRowDTO
+
+            var rowCount = await query.CountAsync();
+            var pageCount = Math.Ceiling((double)rowCount / pageSize);
+
+            var data = await query.ProjectTo<InvoiceRowDTO>(_mapper.ConfigurationProvider)
+                .OrderByDescending(p => p.UpdatedDate)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
+
+            return new InvoiceResult
             {
-                Id = i.Id,
-                SerialNum = i.SerialNum,
-                InvoiceType = i.InvoiceType,
-                WarehouseId = i.WarehouseId,
-                WalletId = i.WalletId,
-                WalletName = i.Wallet.Name,
-                PartnerId = i.PartnerId,
-                PartnerName = i.Partner != null ? i.Partner.Name : "---",
-                CurrencyId = i.CurrencyId,
-                CurrencyRate = i.CurrencyRate,
-                CurrencyCode = i.Currency.Code,
-                CurrencyName = i.Currency.Name,
-                IssueDate = i.IssueDate,
-                PaymentType = i.PaymentType,
-                UpdatedBy = i.UpdatedBy,
-                UpdatedDate = i.UpdatedDate,
-                ItemsCount = i.ItemsCount,
-                TotalPrice = i.TotalPrice,
-            })
-            .ToListAsync();
+                Invoices = data,
+                PageCount = (int)pageCount
+            };
         }
     }
 }

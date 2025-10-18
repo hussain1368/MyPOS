@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
@@ -17,15 +18,18 @@ namespace POS.WPF.Models.ViewModels
     public class InvoiceFormVM : BaseBindable
     {
         public InvoiceFormVM(
-            IProductRepository productRepo, 
-            IOptionRepository optionRepo, 
-            IPartnerRepository partnerRepo, 
-            IInvoiceRepository invoiceRepo)
+            IProductRepository productRepo,
+            IOptionRepository optionRepo,
+            IPartnerRepository partnerRepo,
+            IInvoiceRepository invoiceRepo,
+            IMapper mapper)
         {
-            this.productRepo = productRepo;
-            this.optionRepo = optionRepo;
-            this.partnerRepo = partnerRepo;
-            this.invoiceRepo = invoiceRepo;
+            _productRepo = productRepo;
+            _optionRepo = optionRepo;
+            _partnerRepo = partnerRepo;
+            _invoiceRepo = invoiceRepo;
+            _mapper = mapper;
+
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             FindByNameInputCmd = new CommandAsync(FindByName);
             FindByNameKeyUpCmd = new CommandAsyncParam(FindByNameKeyUp);
@@ -36,10 +40,12 @@ namespace POS.WPF.Models.ViewModels
             SaveCmd = new CommandAsync(Save);
             CancelCmd = new CommandSync(Cancel);
         }
-        private readonly IProductRepository productRepo;
-        private readonly IOptionRepository optionRepo;
-        private readonly IPartnerRepository partnerRepo;
-        private readonly IInvoiceRepository invoiceRepo;
+
+        private readonly IMapper _mapper;
+        private readonly IProductRepository _productRepo;
+        private readonly IOptionRepository _optionRepo;
+        private readonly IPartnerRepository _partnerRepo;
+        private readonly IInvoiceRepository _invoiceRepo;
         public InvoicesVM ParentPage { get; set; }
 
         public CommandAsync LoadOptionsCmd { get; set; }
@@ -130,9 +136,9 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadOptions()
         {
-            WalletsList = await optionRepo.GetWalletsList();
-            WarehousesList = await optionRepo.GetWarehousesList();
-            PartnersList = await partnerRepo.GetList();
+            WalletsList = await _optionRepo.GetWalletsList();
+            WarehousesList = await _optionRepo.GetWarehousesList();
+            PartnersList = await _partnerRepo.GetList();
 
             CurrentInvoice.Wallet = WalletsList.FirstOrDefault(t => t.IsDefault);
             CurrentInvoice.WarehouseId = WarehousesList.FirstOrDefault(t => t.IsDefault)?.Id;
@@ -140,14 +146,14 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task FindByCode()
         {
-            var product = await productRepo.GetByCode(SearchValue);
+            var product = await _productRepo.GetByCode(SearchValue);
             if (product != null) AddInvoiceItem(product);
         }
 
         private async Task FindByName()
         {
             if (!string.IsNullOrEmpty(SearchValue))
-                ProductsList = await productRepo.GetByName(SearchValue);
+                ProductsList = await _productRepo.GetByName(SearchValue);
             else
                 ProductsList = Enumerable.Empty<ProductItemDTO>();
         }
@@ -218,46 +224,22 @@ namespace POS.WPF.Models.ViewModels
 
             await DialogHost.Show(new LoadingDialog(), "FormDialogHost", async (send, args) =>
             {
-                var data = new InvoiceDTO
-                {
-                    Id = CurrentInvoice.Id,
-                    SerialNum = "INV00000345",
-                    InvoiceType = (byte)InvoiceType,
-                    WarehouseId = CurrentInvoice.WarehouseId.Value,
-                    WalletId = CurrentInvoice.Wallet.Id,
-                    PartnerId = CurrentInvoice.PartnerId,
-                    CurrencyId = CurrentInvoice.Wallet.CurrencyId,
-                    CurrencyRate = CurrentInvoice.CurrencyRate.Value,
-                    IssueDate = CurrentInvoice.IssueDate.Value,
-                    PaymentType = (byte)CurrentInvoice.PaymentType,
-                    Note = CurrentInvoice.Note,
-                    UpdatedBy = 1,
-                    UpdatedDate = DateTime.Now,
-                };
+                var data = _mapper.Map<InvoiceDTO>(CurrentInvoice);
+                data.SerialNum = "INV00000345";
+                data.InvoiceType = (byte)InvoiceType;
+                data.UpdatedBy = 1;
+                data.UpdatedDate = DateTime.Now;
 
-                data.Items = InvoiceItems.Select(i => new InvoiceItemDTO
-                {
-                    ProductId = i.ProductId,
-                    ProductName = i.ProductName,
-                    ProductCode = i.ProductCode,
-                    UnitPrice = i.UnitPrice,
-                    TotalPrice = i.TotalPrice,
-                    Cost = 0,
-                    Profit = 0,
-                    UnitDiscount = i.UnitDiscount,
-                    TotalDiscount = i.TotalDiscount,
-                    Quantity = i.Quantity,
-                })
-                .ToList();
+                data.Items = _mapper.Map<IList<InvoiceItemDTO>>(InvoiceItems);
 
                 if (CurrentInvoice.Id == 0)
                 {
-                    await invoiceRepo.Create(data);
+                    await _invoiceRepo.Create(data);
                     Cancel();
                 }
                 else
                 {
-                    await invoiceRepo.Update(data);
+                    await _invoiceRepo.Update(data);
                     tempInvoiceData = data;
                 }
                 args.Session.Close(false);
@@ -294,29 +276,12 @@ namespace POS.WPF.Models.ViewModels
 
         private void ResetInvoiceData()
         {
-            CurrentInvoice = new InvoiceEM
-            {
-                Id = tempInvoiceData.Id,
-                WarehouseId = tempInvoiceData.WarehouseId,
-                Wallet = WalletsList.FirstOrDefault(t => t.Id == tempInvoiceData.WalletId),
-                PartnerId = tempInvoiceData.PartnerId,
-                CurrencyRate = tempInvoiceData.CurrencyRate,
-                IssueDate = tempInvoiceData.IssueDate,
-                PaymentType = (PaymentType)tempInvoiceData.PaymentType,
-                Note = tempInvoiceData.Note,
-            };
+            CurrentInvoice = _mapper.Map<InvoiceEM>(tempInvoiceData);
+            CurrentInvoice.Wallet = WalletsList.FirstOrDefault(t => t.Id == tempInvoiceData.WalletId);
+
             InvoiceType = (InvoiceType)tempInvoiceData.InvoiceType;
 
-            var items = tempInvoiceData.Items.Select(i => new InvoiceItemEM
-            {
-                ProductId = i.ProductId,
-                ProductCode = i.ProductCode,
-                ProductName = i.ProductName,
-                UnitPrice = i.UnitPrice,
-                UnitDiscount = i.UnitDiscount,
-                Quantity = i.Quantity,
-            })
-            .ToList();
+            var items = _mapper.Map<IList<InvoiceItemEM>>(tempInvoiceData.Items);
             InvoiceItems = new ObservableCollection<InvoiceItemEM>(items);
         }
 
@@ -324,7 +289,7 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), "FormDialogHost", async (sender, args) =>
             {
-                tempInvoiceData = await invoiceRepo.GetById(id);
+                tempInvoiceData = await _invoiceRepo.GetById(id);
                 ResetInvoiceData();
                 args.Session.Close(false);
             },
