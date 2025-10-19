@@ -8,7 +8,6 @@
     xmlns:local="clr-namespace:POS.WPF.Views.Sections"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:val="clr-namespace:POS.WPF.Validators.TypeValidators"
     Padding="20,15"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -49,7 +48,7 @@
                 materialDesign:HintAssist.IsFloating="True"
                 DisplayMemberPath="Name"
                 ItemsSource="{Binding CurrencyList}"
-                SelectedValue="{Binding CurrencyRateForm.CurrencyId, UpdateSourceTrigger=PropertyChanged}"
+                SelectedValue="{Binding CurrentCurrencyRate.CurrencyId, UpdateSourceTrigger=PropertyChanged}"
                 SelectedValuePath="Id" />
             <DatePicker
                 Grid.Row="1"
@@ -62,13 +61,9 @@
                 Language="en-GB">
                 <DatePicker.SelectedDate>
                     <Binding
-                        Path="CurrencyRateForm.RateDate"
+                        Path="CurrentCurrencyRate.RateDate"
                         TargetNullValue=""
-                        UpdateSourceTrigger="PropertyChanged">
-                        <!--<Binding.Converter>
-                            <conv:DateTimeConverter />
-                        </Binding.Converter>-->
-                    </Binding>
+                        UpdateSourceTrigger="PropertyChanged" />
                 </DatePicker.SelectedDate>
             </DatePicker>
             <TextBox
@@ -79,14 +74,11 @@
                 materialDesign:HintAssist.IsFloating="True">
                 <TextBox.Text>
                     <Binding
-                        Path="CurrencyRateForm.BaseValue"
+                        Path="CurrentCurrencyRate.BaseValue"
                         TargetNullValue=""
-                        UpdateSourceTrigger="LostFocus">
-                        <Binding.ValidationRules>
-                            <val:IntegerValidator />
-                        </Binding.ValidationRules>
+                        UpdateSourceTrigger="PropertyChanged">
                         <Binding.Converter>
-                            <conv:IntegerConverter />
+                            <conv:NumberConverter />
                         </Binding.Converter>
                     </Binding>
                 </TextBox.Text>
@@ -99,14 +91,11 @@
                 materialDesign:HintAssist.IsFloating="True">
                 <TextBox.Text>
                     <Binding
-                        Path="CurrencyRateForm.Rate"
+                        Path="CurrentCurrencyRate.Rate"
                         TargetNullValue=""
-                        UpdateSourceTrigger="LostFocus">
-                        <Binding.ValidationRules>
-                            <val:DoubleValidator />
-                        </Binding.ValidationRules>
+                        UpdateSourceTrigger="PropertyChanged">
                         <Binding.Converter>
-                            <conv:DoubleConverter />
+                            <conv:NumberConverter />
                         </Binding.Converter>
                     </Binding>
                 </TextBox.Text>
@@ -116,7 +105,7 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Margin="0,0,0,20">
-                <CheckBox Content="Reverse Calculation" IsChecked="{Binding CurrencyRateForm.ReverseCalculation}" />
+                <CheckBox Content="Reverse Calculation" IsChecked="{Binding CurrentCurrencyRate.ReverseCalculation}" />
             </layout:RadioBox>
             <TextBox
                 Grid.Row="3"
@@ -125,19 +114,25 @@
                 materialDesign:HintAssist.Hint="Final Rate"
                 materialDesign:HintAssist.IsFloating="True"
                 IsReadOnly="True"
-                Text="{Binding CurrencyRateForm.FinalRate, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+                Text="{Binding CurrentCurrencyRate.FinalRate, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
             <WrapPanel
                 Grid.Row="4"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Right">
                 <Button
+                    Width="85"
                     Margin="10,0,0,0"
-                    Command="{Binding SaveOptionCmd}"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsCurrencyRateLoading}"
+                    materialDesign:ButtonProgressAssist.Value="-1"
+                    Command="{Binding SaveCurrencyRateCmd}"
                     Content="Save" />
                 <Button
+                    Width="85"
                     Margin="10,0,0,0"
-                    Command="{Binding CancelOptionCmd}"
-                    Content="Cancel" />
+                    Command="{Binding CancelCurrencyRateCmd}"
+                    Content="Cancel"
+                    Style="{StaticResource MaterialDesignOutlinedButton}" />
             </WrapPanel>
         </Grid>
     </Border>

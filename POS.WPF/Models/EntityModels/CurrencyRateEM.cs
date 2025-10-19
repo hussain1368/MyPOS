@@ -29,22 +29,15 @@ namespace POS.WPF.Models.EntityModels
             set { SetAndValidate(ref _rateDate, value); }
         }
 
-        //private string _rateDateText;
-        //public string RateDateText
-        //{
-        //    get { return _rateDateText; }
-        //    set { SetAndValidate(ref _rateDateText, value); }
-        //}
-
-        private int? _baseValue;
-        public int? BaseValue
+        private string _baseValue = "1";
+        public string BaseValue
         {
             get { return _baseValue; }
             set { SetAndValidate(ref _baseValue, value); OnPropertyChanged(nameof(FinalRate)); }
         }
 
-        private double? _rate;
-        public double? Rate
+        private string _rate;
+        public string Rate
         {
             get { return _rate; }
             set { SetAndValidate(ref _rate, value); OnPropertyChanged(nameof(FinalRate)); }
@@ -57,21 +50,18 @@ namespace POS.WPF.Models.EntityModels
             set { SetValue(ref _reverseCalculation, value); OnPropertyChanged(nameof(FinalRate)); }
         }
 
-        //private double? _finalRate;
-        //public double? FinalRate
-        //{
-        //    get { return _finalRate; }
-        //    set { SetAndValidate(ref _finalRate, value); }
-        //}
-
         public double? FinalRate
         {
             get
             {
-                if (Rate == null) return null;
-                var _finalRate = Rate / (BaseValue ?? 1d);
-                if (ReverseCalculation) _finalRate = 1d / _finalRate;
-                return Math.Round(_finalRate ?? 0, 4);
+                if (double.TryParse(Rate, out double _rate) && double.TryParse(BaseValue, out double _baseValue))
+                {
+                    if (_baseValue == 0) return null;
+                    var _finalRate = _rate / _baseValue;
+                    if (ReverseCalculation) _finalRate = 1d / _finalRate;
+                    return Math.Round(_finalRate, 6);
+                }
+                return null;
             }
         }
 

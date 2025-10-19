@@ -99,7 +99,7 @@
                                     Path="CurrentSetting.CalendarType" />
                             </RadioButton.IsChecked>
                         </RadioButton>
-                        <RadioButton Margin="0,0,10,0" Content="Hejri Shamsi">
+                        <RadioButton Margin="0,0,10,0" Content="Persian">
                             <RadioButton.IsChecked>
                                 <Binding
                                     Converter="{StaticResource RadioConverter}"

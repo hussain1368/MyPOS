@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Localization;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
@@ -7,6 +8,7 @@ using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Sections;
 using POS.WPF.Views.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,25 +19,32 @@ namespace POS.WPF.Models.ViewModels
 {
     public class SettingsVM : BaseBindable
     {
-        public SettingsVM(AppState appState, 
-            IOptionRepository optionRepo, 
-            ICurrencyRateRepository currencyRateRepo, 
-            IStringLocalizer<Labels> _t)
+        public SettingsVM(AppState appState,
+            IOptionRepository optionRepo,
+            ICurrencyRateRepository currencyRateRepo,
+            IStringLocalizer<Labels> _t,
+            IMapper mapper)
         {
-            this.appState = appState;
-            this.optionRepo = optionRepo;
-            this.currencyRateRepo = currencyRateRepo;
+            _mapper = mapper;
+            _appState = appState;
+            _optionRepo = optionRepo;
+            _currencyRateRepo = currencyRateRepo;
+
+            TabChangedCmd = new CommandAsyncParam(TabChanged);
             LoadSettingCmd = new CommandSync(LoadSetting);
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             SaveSettingCmd = new CommandAsync(SaveSetting);
+
             OpenFormCmd = new CommandAsyncParam(OpenForm);
             SaveOptionCmd = new CommandAsync(SaveOption);
             CancelOptionCmd = new CommandSync(CancelOption);
             CheckAllCmd = new CommandParam(CheckAll);
             DeleteOptionsCmd = new CommandAsync(DeleteOptions);
-            LoadCurrencyRatesCmd = new CommandAsync(LoadCurrencyRates);
-            TabChangedCmd = new CommandAsyncParam(TabChanged);
+
             OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
+            LoadCurrencyRatesCmd = new CommandAsyncParam(LoadCurrencyRates);
+            SaveCurrencyRateCmd = new CommandAsync(SaveCurrencyRate);
+            CancelCurrencyRateCmd = new CommandSync(CancelCurrencyRate);
 
             HeaderContext = new HeaderBarVM
             {
@@ -44,9 +53,10 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly AppState appState;
-        private readonly IOptionRepository optionRepo;
-        private readonly ICurrencyRateRepository currencyRateRepo;
+        private readonly IMapper _mapper;
+        private readonly AppState _appState;
+        private readonly IOptionRepository _optionRepo;
+        private readonly ICurrencyRateRepository _currencyRateRepo;
 
         public CommandAsync SaveSettingCmd { get; set; }
         public CommandAsync LoadOptionsCmd { get; set; }
@@ -56,9 +66,12 @@ namespace POS.WPF.Models.ViewModels
         public CommandSync CancelOptionCmd { get; set; }
         public CommandParam CheckAllCmd { get; set; }
         public CommandAsync DeleteOptionsCmd { get; set; }
-        public CommandAsync LoadCurrencyRatesCmd { get; set; }
         public CommandAsyncParam TabChangedCmd { get; set; }
+
         public CommandAsyncParam OpenCurrencyFormCmd { get; set; }
+        public CommandAsyncParam LoadCurrencyRatesCmd { get; set; }
+        public CommandAsync SaveCurrencyRateCmd { get; set; }
+        public CommandSync CancelCurrencyRateCmd { get; set; }
 
         private HeaderBarVM _headerContext;
         public HeaderBarVM HeaderContext
@@ -152,10 +165,10 @@ namespace POS.WPF.Models.ViewModels
         {
             CurrentSetting = new SettingEM
             {
-                Id = appState.Settings.Id,
-                AppTitle = appState.Settings.AppTitle,
-                Language = appState.Settings.Language,
-                CalendarType = (Enums.CalendarType)appState.Settings.CalendarType,
+                Id = _appState.Settings.Id,
+                AppTitle = _appState.Settings.AppTitle,
+                Language = _appState.Settings.Language,
+                CalendarType = (Enums.CalendarType)_appState.Settings.CalendarType,
             };
         }
 
@@ -163,7 +176,7 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
             {
-                OptionTypes = await optionRepo.OptionTypes();
+                OptionTypes = await _optionRepo.OptionTypes();
                 await GetOptions();
                 args.Session.Close();
             },
@@ -172,7 +185,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetOptions()
         {
-            OptionValues = await optionRepo.OptionsAll(true);
+            OptionValues = await _optionRepo.OptionsAll(true);
             // work here ...
 
         }
@@ -188,7 +201,7 @@ namespace POS.WPF.Models.ViewModels
                     Language = CurrentSetting.Language,
                     CalendarType = (byte)CurrentSetting.CalendarType,
                 };
-                await appState.UpdateSettings(data);
+                await _appState.UpdateSettings(data);
                 args.Session.Close();
             },
             null);
@@ -214,9 +227,9 @@ namespace POS.WPF.Models.ViewModels
             };
             IsOptionLoading = true;
             if (CurrentOption.Id == 0)
-                await optionRepo.CreateOption(data);
+                await _optionRepo.CreateOption(data);
             else
-                await optionRepo.UpdateOption(data);
+                await _optionRepo.UpdateOption(data);
             await GetOptions();
             IsOptionLoading = false;
             DialogHost.CloseDialogCommand.Execute(null, null);
@@ -265,7 +278,7 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await optionRepo.DeleteOptions(ids);
+                await _optionRepo.DeleteOptions(ids);
                 await GetOptions();
                 args.Session.Close(false);
             });
@@ -287,31 +300,30 @@ namespace POS.WPF.Models.ViewModels
             var name = ((FrameworkElement)args.OriginalSource).Name;
             if (name != "Tabs") return;
 
-            if (SelectedTab == 2) await LoadCurrencyRates();
+            if (SelectedTab == 2) await LoadCurrencyRates(true);
         }
 
-        private async Task LoadCurrencyRates()
+        private async Task LoadCurrencyRates(object showLoading)
         {
-            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
+            var LoadThem = async () =>
             {
-                var data = await currencyRateRepo.GetList(SelectedCurrencyId);
-                CurrencyRates = data.Select(r => new CurrencyRateEM
+                var data = await _currencyRateRepo.GetList(SelectedCurrencyId);
+                CurrencyRates = _mapper.Map<IEnumerable<CurrencyRateEM>>(data);
+            };
+
+            if ((bool)showLoading == false)
+            {
+                await LoadThem();
+            }
+            else
+            {
+                await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
                 {
-                    Id = r.Id,
-                    CurrencyId = r.CurrencyId,
-                    CurrencyName = r.CurrencyName,
-                    RateDate = r.RateDate,
-                    BaseValue = r.BaseValue,
-                    Rate = r.Rate,
-                    ReverseCalculation = r.ReverseCalculation,
-                    //FinalRate = r.FinalRate,
-                    Note = r.Note,
-                    IsDeleted = r.IsDeleted,
-                })
-                .ToList();
-                args.Session.Close();
-            },
-            null);
+                    await LoadThem();
+                    args.Session.Close();
+                },
+                null);
+            }
         }
 
         public IList<OptionValueDTO> CurrencyList => OptionValues
@@ -342,11 +354,11 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _selectedTab, value); }
         }
 
-        private CurrencyRateEM _currencyRateForm = new CurrencyRateEM();
-        public CurrencyRateEM CurrencyRateForm
+        private CurrencyRateEM _currentCurrencyRate = new CurrencyRateEM();
+        public CurrencyRateEM CurrentCurrencyRate
         {
-            get { return _currencyRateForm; }
-            set { SetValue(ref _currencyRateForm, value); }
+            get { return _currentCurrencyRate; }
+            set { SetValue(ref _currentCurrencyRate, value); }
         }
 
         private bool _isCurrencyRateLoading;
@@ -358,25 +370,37 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task OpenCurrencyForm(object id)
         {
-            //if (id != null)
-            //{
-            //    var option = OptionValues.FirstOrDefault(op => op.Id == (int)id);
-            //    CurrentOption = new OptionValueEM
-            //    {
-            //        Id = option.Id,
-            //        TypeId = option.TypeId,
-            //        Code = option.Code,
-            //        Name = option.Name,
-            //    };
-            //}
-            //else
-            //{
-            //    CurrentOption = new OptionValueEM
-            //    {
-            //        TypeId = SelectedType?.Id ?? 0
-            //    };
-            //}
+            CurrentCurrencyRate = new CurrencyRateEM
+            {
+                CurrencyId = SelectedCurrencyId,
+                RateDate = DateTime.Now,
+            };
             await DialogHost.Show(new CurrencyRateForm(), "SettingsDH");
+        }
+
+        private void CancelCurrencyRate()
+        {
+            CurrentCurrencyRate = new CurrencyRateEM();
+            DialogHost.CloseDialogCommand.Execute(null, null);
+        }
+
+        private async Task SaveCurrencyRate()
+        {
+            CurrentCurrencyRate.ValidateModel();
+            if (CurrentCurrencyRate.HasErrors) return;
+
+            IsCurrencyRateLoading = true;
+            var data = _mapper.Map<CurrencyRateDTO>(CurrentCurrencyRate);
+            data.IsDeleted = false;
+            data.UpdatedBy = 1;
+            data.UpdatedDate = DateTime.Now;
+
+            await _currencyRateRepo.Create(data);
+            CurrentCurrencyRate = new CurrencyRateEM();
+
+            await LoadCurrencyRates(false);
+            IsCurrencyRateLoading = false;
+            DialogHost.CloseDialogCommand.Execute(null, null);
         }
     }
 }
