@@ -4,10 +4,7 @@ using POS.DAL.DTO;
 using POS.WPF.Enums;
 using POS.WPF.Models.EntityModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace POS.WPF.Models.Mappings
 {

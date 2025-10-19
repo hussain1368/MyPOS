@@ -9,7 +9,8 @@ namespace POS.DAL.Repository.Abstraction
         Task Create(PartnerDTO data);
         Task Delete(int[] ids);
         Task<PartnerDTO> GetById(int id);
-        Task<IEnumerable<PartnerDTO>> GetList(int? partnerTypeId = null);
+        Task<IEnumerable<PartnerDTO>> GetList();
+        Task<PartnerResult> GetList(int? partnerTypeId = null, int page = 1);
         Task Update(PartnerDTO data);
     }
 }

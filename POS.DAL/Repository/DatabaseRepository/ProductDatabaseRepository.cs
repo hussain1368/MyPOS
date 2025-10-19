@@ -76,9 +76,8 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task Delete(int[] ids)
         {
-            var products = await dbContext.Products.Where(p => ids.Any(id => id == p.Id)).ToListAsync();
-            foreach (var product in products) product.IsDeleted = true;
-            await dbContext.SaveChangesAsync();
+            await dbContext.Products.Where(p => ids.Any(id => id == p.Id))
+                .ExecuteUpdateAsync(m => m.SetProperty(p => p.IsDeleted, p => true));
         }
 
         public async Task<bool> CheckDuplicate(int id, string code)

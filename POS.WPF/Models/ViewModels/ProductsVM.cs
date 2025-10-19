@@ -19,12 +19,12 @@ namespace POS.WPF.Models.ViewModels
         public ProductsVM(IMapper mapper, 
             IProductRepository productRepo, 
             IOptionRepository optionRepo, 
-            IStringLocalizer<Labels> _t)
+            IStringLocalizer<Labels> t)
         {
-            this.mapper = mapper;
-            this.productRepo = productRepo;
-            this.optionRepo = optionRepo;
-            this._t = _t;
+            _mapper = mapper;
+            _productRepo = productRepo;
+            _optionRepo = optionRepo;
+            _t = t;
             MsgContext = new MessageVM();
 
             LoadListCmd = new CommandAsync(async () =>
@@ -55,14 +55,14 @@ namespace POS.WPF.Models.ViewModels
 
             HeaderContext = new HeaderBarVM
             {
-                HeaderText = _t["ListOfProducts"],
+                HeaderText = t["ListOfProducts"],
                 IconKind = "Add",
                 ButtonCmd = new CommandAsync(async () =>
                 {
                     if (TransitionerIndex == 0) await ShowForm(null);
                     else
                     {
-                        HeaderContext.HeaderText = _t["ListOfProducts"];
+                        HeaderContext.HeaderText = t["ListOfProducts"];
                         HeaderContext.IconKind = "Add";
                         TransitionerIndex--;
                     }
@@ -70,9 +70,9 @@ namespace POS.WPF.Models.ViewModels
             };
         }
 
-        private readonly IMapper mapper;
-        private readonly IProductRepository productRepo;
-        private readonly IOptionRepository optionRepo;
+        private readonly IMapper _mapper;
+        private readonly IProductRepository _productRepo;
+        private readonly IOptionRepository _optionRepo;
         private readonly IStringLocalizer<Labels> _t;
         private ProductDTO tempProductData;
 
@@ -158,7 +158,7 @@ namespace POS.WPF.Models.ViewModels
             var unitId = CurrentProduct.UnitId;
             var brandId = CurrentProduct.BrandId;
 
-            ComboOptions = await optionRepo.OptionsAll();
+            ComboOptions = await _optionRepo.OptionsAll();
 
             CurrentProduct.CategoryId = categoryId;
             CurrentProduct.CurrencyId = currencyId;
@@ -180,7 +180,7 @@ namespace POS.WPF.Models.ViewModels
             }
             await DialogHost.Show(new LoadingDialog(), "FormDialog", async (sender, args) =>
             {
-                tempProductData = await productRepo.GetById((int)id);
+                tempProductData = await _productRepo.GetById((int)id);
                 ResetProductData();
                 args.Session.Close(false);
             }, null);
@@ -219,7 +219,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task SaveToDatabase()
         {
-            var data = mapper.Map<ProductDTO>(CurrentProduct);
+            var data = _mapper.Map<ProductDTO>(CurrentProduct);
             data.CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id;
             data.UpdatedDate = DateTime.Now;
             data.UpdatedBy = 1;
@@ -227,12 +227,12 @@ namespace POS.WPF.Models.ViewModels
 
             if (CurrentProduct.Id == 0)
             {
-                await productRepo.Create(data);
+                await _productRepo.Create(data);
                 CurrentProduct = new ProductEM();
             }
             else
             {
-                await productRepo.Update(data);
+                await _productRepo.Update(data);
                 tempProductData = data;
             }
             await LoadList();
@@ -253,7 +253,7 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await productRepo.Delete(ids);
+                await _productRepo.Delete(ids);
                 await LoadList();
                 args.Session.Close(false);
                 await MsgContext.ShowSuccess($"{ids.Length} records deleted successfully!");
@@ -263,13 +263,13 @@ namespace POS.WPF.Models.ViewModels
         private void ResetProductData()
         {
             if (tempProductData == null) return;
-            CurrentProduct = mapper.Map<ProductEM>(tempProductData);
+            CurrentProduct = _mapper.Map<ProductEM>(tempProductData);
         }
 
         private async Task LoadList()
         {
-            var result = await productRepo.GetList(CategoryId, PageIndex);
-            var _data = mapper.Map<IEnumerable<ProductEM>>(result.Products);
+            var result = await _productRepo.GetList(CategoryId, PageIndex);
+            var _data = _mapper.Map<IEnumerable<ProductEM>>(result.Products);
             ProductsList = new ObservableCollection<ProductEM>(_data);
             PageCount = result.PageCount;
         }

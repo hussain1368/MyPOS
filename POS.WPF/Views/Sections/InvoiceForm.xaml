@@ -116,11 +116,11 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="10"
-                    IsReadOnly="{Binding PartnerNameReadOnly}"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Customer/Supplier Name"
                     materialDesign:HintAssist.IsFloating="True"
-                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    IsReadOnly="{Binding PartnerNameReadOnly}">
                     <TextBox.Text>
                         <Binding
                             Path="CurrentInvoice.PartnerName"

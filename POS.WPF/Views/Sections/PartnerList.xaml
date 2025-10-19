@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
@@ -21,6 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DockPanel
@@ -113,5 +115,26 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+        <Border Grid.Row="2" Margin="0,10,0,10">
+            <Border.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="/Styles/HandyButton.xaml" />
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </Border.Resources>
+
+            <hc:Pagination
+                IsJumpEnabled="False"
+                MaxPageCount="{Binding PageCount}"
+                PageIndex="{Binding PageIndex, Mode=TwoWay}">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="PageUpdated">
+                        <hc:EventToCommand Command="{Binding LoadListCmd}" PassEventArgsToCommand="True" />
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </hc:Pagination>
+        </Border>
     </Grid>
 </UserControl>

@@ -10,15 +10,17 @@ using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
 using POS.DAL.Repository.Abstraction;
+using AutoMapper;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class PartnersVM : BaseBindable
     {
-        public PartnersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo)
+        public PartnersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper)
         {
-            this.partnerRepo = partnerRepo;
-            this.optionRepo = optionRepo;
+            _partnerRepo = partnerRepo;
+            _optionRepo = optionRepo;
+            _mapper = mapper;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
@@ -29,8 +31,9 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
-        private readonly IPartnerRepository partnerRepo;
-        private readonly IOptionRepository optionRepo;
+        private readonly IPartnerRepository _partnerRepo;
+        private readonly IOptionRepository _optionRepo;
+        private readonly IMapper _mapper;
 
         public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }
@@ -90,9 +93,23 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _isLoading, value); }
         }
 
+        private int _pageIndex = 1;
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set => SetValue(ref _pageIndex, value);
+        }
+
+        private int _pageCount = 0;
+        public int PageCount
+        {
+            get => _pageCount;
+            set => SetValue(ref _pageCount, value);
+        }
+
         private async Task LoadOptions()
         {
-            ComboOptions = await optionRepo.OptionsAll();
+            ComboOptions = await _optionRepo.OptionsAll();
         }
 
         private async Task LoadList()
@@ -107,22 +124,10 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await partnerRepo.GetList(PartnerTypeId);
-            var _data = data.Select(m => new PartnerEM
-            {
-                Id = m.Id,
-                Name = m.Name,
-                Phone = m.Phone,
-                Address = m.Address,
-                Note = m.Note,
-                CurrencyId = m.CurrencyId,
-                CurrentBalance = m.CurrentBalance,
-                PartnerTypeId = m.PartnerTypeId,
-                PartnerTypeName = m.PartnerTypeName,
-                CurrencyName = m.CurrencyName,
-                CurrencyCode = m.CurrencyCode,
-            });
+            var result = await _partnerRepo.GetList(PartnerTypeId, PageIndex);
+            var _data = _mapper.Map<IEnumerable<PartnerEM>>(result.Partners);
             PartnersList = new ObservableCollection<PartnerEM>(_data);
+            PageCount = result.PageCount;
         }
 
         private async Task ShowForm(object id)
@@ -133,18 +138,8 @@ namespace POS.WPF.Models.ViewModels
                 if (id != null)
                 {
                     IsLoading = true;
-                    var obj = await partnerRepo.GetById((int)id);
-                    CurrentPartner = new PartnerEM
-                    {
-                        Id = obj.Id,
-                        Name = obj.Name,
-                        Phone = obj.Phone,
-                        Address = obj.Address,
-                        Note = obj.Note,
-                        CurrencyId = obj.CurrencyId,
-                        CurrentBalance = obj.CurrentBalance,
-                        PartnerTypeId = obj.PartnerTypeId,
-                    };
+                    var obj = await _partnerRepo.GetById((int)id);
+                    CurrentPartner = _mapper.Map<PartnerEM>(obj);
                     IsLoading = false;
                 }
             },
@@ -163,29 +158,19 @@ namespace POS.WPF.Models.ViewModels
             if (CurrentPartner.HasErrors) return;
 
             IsLoading = true;
-            var data = new PartnerDTO
-            {
-                Id = CurrentPartner.Id,
-                Name = CurrentPartner.Name,
-                Phone = CurrentPartner.Phone,
-                Address = CurrentPartner.Address,
-                Note = CurrentPartner.Note,
-                CurrencyId = CurrentPartner.CurrencyId.Value,
-                PartnerTypeId = CurrentPartner.PartnerTypeId.Value,
-                CurrentBalance = CurrentPartner.CurrentBalance,
-                IsDeleted = false,
-                UpdatedBy = 1,
-                UpdatedDate = DateTime.Now,
-            };
+            var data = _mapper.Map<PartnerDTO>(CurrentPartner);
+            data.IsDeleted = false;
+            data.UpdatedBy = 1;
+            data.UpdatedDate = DateTime.Now;
 
             if (CurrentPartner.Id == 0)
             {
-                await partnerRepo.Create(data);
+                await _partnerRepo.Create(data);
                 CurrentPartner = new PartnerEM();
             }
             else
             {
-                await partnerRepo.Update(data);
+                await _partnerRepo.Update(data);
             }
             await GetList();
             IsLoading = false;
@@ -209,7 +194,7 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await partnerRepo.Delete(ids);
+                await _partnerRepo.Delete(ids);
                 await GetList();
                 args.Session.Close(false);
             });
