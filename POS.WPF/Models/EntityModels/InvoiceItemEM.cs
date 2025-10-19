@@ -14,6 +14,8 @@
         public string ProductName { get; set; }
         public int UnitPrice { get; set; }
         public int UnitDiscount { get; set; }
+        public int CurrencyId { get; set; }
+        public string CurrencyCode { get; set; }
 
         private int _quantity;
         public int Quantity

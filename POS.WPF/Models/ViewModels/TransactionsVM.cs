@@ -227,7 +227,7 @@ namespace POS.WPF.Models.ViewModels
             var ids = TransactionList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
-            var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
+            var view = new ConfirmDialog(new MyDialogVM { Message = message });
             var obj = await DialogHost.Show(view, "TransactionsDH", null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;

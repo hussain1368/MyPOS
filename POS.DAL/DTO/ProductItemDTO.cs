@@ -7,7 +7,10 @@
         public string Name { get; set; }
         public int Price { get; set; }
         public int Discount { get; set; }
+        public int CurrencyId { get; set; }
+        public string CurrencyCode { get; set; }
+        public string NameAndPrice { get; set; }
 
-        public override string ToString() => Name;
+        public override string ToString() => NameAndPrice;
     }
 }

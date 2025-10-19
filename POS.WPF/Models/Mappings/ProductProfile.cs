@@ -9,7 +9,9 @@ namespace POS.WPF.Models.Mappings
     {
         public ProductProfile()
         {
-            CreateMap<Product, ProductItemDTO>();
+            CreateMap<Product, ProductItemDTO>()
+                .ForMember(d => d.CurrencyCode, opt => opt.MapFrom(s => s.Currency.Code))
+                .ForMember(d => d.NameAndPrice, opt => opt.MapFrom(s => $"{s.Name} = {s.Price} {s.Currency.Code}"));
 
             CreateMap<Product, ProductDTO>()
                .ForMember(d => d.UnitName, opt => opt.MapFrom(s => s.Unit != null ? s.Unit.Name : null))

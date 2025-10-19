@@ -15,5 +15,8 @@
 
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
+
+        public int CurrencyId { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

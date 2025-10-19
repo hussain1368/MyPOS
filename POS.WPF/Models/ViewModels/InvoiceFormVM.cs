@@ -91,6 +91,8 @@ namespace POS.WPF.Models.ViewModels
             set => SetValue(ref _invoiceItems, value);
         }
 
+        public string InvoiceCurrencyCode => InvoiceItems.FirstOrDefault()?.CurrencyCode ?? "---";
+
         public int InvoiceTotalPrice => InvoiceItems.Sum(i => i.TotalPrice);
 
         private ProductItemDTO _selectedProduct;
@@ -168,6 +170,19 @@ namespace POS.WPF.Models.ViewModels
         private void AddInvoiceItem(ProductItemDTO product)
         {
             if (product == null) return;
+
+            if (InvoiceItems.Count() != 0)
+            {
+                if (InvoiceItems.First().CurrencyId != product.CurrencyId)
+                {
+                    var message = "All products in the invoice must be of the same currency";
+                    DialogHost.Show(new AlertDialog(new MyDialogVM { Message = message }), "FormDialogHost");
+                    SearchValue = string.Empty;
+                    ProductsList = Enumerable.Empty<ProductItemDTO>();
+                    return;
+                }
+            }
+
             var productFound = InvoiceItems.FirstOrDefault(p => p.ProductId == product.Id);
             if (productFound == null)
             {
@@ -178,6 +193,8 @@ namespace POS.WPF.Models.ViewModels
                     ProductName = product.Name,
                     UnitPrice = product.Price,
                     UnitDiscount = product.Discount,
+                    CurrencyId = product.CurrencyId,
+                    CurrencyCode = product.CurrencyCode,
                     Quantity = 1,
                 });
                 UpdateItemsIndexes();
@@ -185,6 +202,7 @@ namespace POS.WPF.Models.ViewModels
             else productFound.Quantity++;
 
             OnPropertyChanged(nameof(InvoiceTotalPrice));
+            OnPropertyChanged(nameof(InvoiceCurrencyCode));
             SearchValue = string.Empty;
             ProductsList = Enumerable.Empty<ProductItemDTO>();
         }
@@ -195,6 +213,7 @@ namespace POS.WPF.Models.ViewModels
             InvoiceItems.RemoveAt(_index);
             UpdateItemsIndexes();
             OnPropertyChanged(nameof(InvoiceTotalPrice));
+            OnPropertyChanged(nameof(InvoiceCurrencyCode));
         }
 
         private void IncrementInvoiceItem(object index)
@@ -229,6 +248,7 @@ namespace POS.WPF.Models.ViewModels
                 data.InvoiceType = (byte)InvoiceType;
                 data.UpdatedBy = 1;
                 data.UpdatedDate = DateTime.Now;
+                data.CurrencyId = InvoiceItems.First().CurrencyId;
 
                 data.Items = _mapper.Map<IList<InvoiceItemDTO>>(InvoiceItems);
 
@@ -295,6 +315,7 @@ namespace POS.WPF.Models.ViewModels
             },
             null);
             OnPropertyChanged(nameof(InvoiceTotalPrice));
+            OnPropertyChanged(nameof(InvoiceCurrencyCode));
             UpdateItemsIndexes();
         }
     }

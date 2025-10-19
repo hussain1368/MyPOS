@@ -38,6 +38,7 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var row = await dbContext.Invoices
                 .Include(i => i.InvoiceItems).ThenInclude(i => i.Product)
+                .Include(i => i.Currency)
                 .SingleOrDefaultAsync(i => i.Id == id);
 
             return _mapper.Map<InvoiceDTO>(row);

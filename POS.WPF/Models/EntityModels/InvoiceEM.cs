@@ -44,8 +44,8 @@ namespace POS.WPF.Models.EntityModels
             set => SetAndValidate(ref _issueDate, value);
         }
 
-        private double? _currencyRate = 1;
-        public double? CurrencyRate
+        private string _currencyRate = "1";
+        public string CurrencyRate
         {
             get => _currencyRate;
             set => SetAndValidate(ref _currencyRate, value);

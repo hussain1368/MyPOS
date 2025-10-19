@@ -188,7 +188,7 @@ namespace POS.WPF.Models.ViewModels
             if (string.IsNullOrWhiteSpace(CurrentProduct.Code))
             {
                 var message = "Product code is blank. Do you want to generate a new code?";
-                await DialogHost.Show(new ConfirmDialog(new ConfirmDialogVM { Message = message }), "FormDialog", null, async (sender, args) =>
+                await DialogHost.Show(new ConfirmDialog(new MyDialogVM { Message = message }), "FormDialog", null, async (sender, args) =>
                 {
                     if (args.Parameter is bool param && param == false) return;
                     args.Cancel();
@@ -240,7 +240,7 @@ namespace POS.WPF.Models.ViewModels
                 return;
             }
             string message = $"Are you sure to delete ({ids.Length}) records?";
-            var view = new ConfirmDialog(new ConfirmDialogVM { Message = message });
+            var view = new ConfirmDialog(new MyDialogVM { Message = message });
             var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;

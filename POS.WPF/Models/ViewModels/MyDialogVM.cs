@@ -1,6 +1,6 @@
 ﻿namespace POS.WPF.Models.ViewModels
 {
-    public class ConfirmDialogVM
+    public class MyDialogVM
     {
         public string Message { get; set; }
     }

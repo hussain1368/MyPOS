@@ -114,7 +114,11 @@
                         <Binding
                             Path="CurrentInvoice.CurrencyRate"
                             TargetNullValue=""
-                            UpdateSourceTrigger="PropertyChanged" />
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.Converter>
+                                <conv:NumberConverter />
+                            </Binding.Converter>
+                        </Binding>
                     </TextBox.Text>
                 </TextBox>
 
@@ -196,7 +200,7 @@
                             HorizontalAlignment="Center"
                             FontSize="36"
                             FontWeight="Bold"
-                            Text="{Binding CurrentInvoice.Wallet.CurrencyCode}" />
+                            Text="{Binding InvoiceCurrencyCode}" />
                     </StackPanel>
                 </Border>
 

@@ -24,6 +24,8 @@ namespace POS.WPF.Models.Mappings
             CreateMap<InvoiceItem, InvoiceItemDTO>()
                 .ForMember(d => d.ProductCode, opt => opt.MapFrom(s => s.Product.Code))
                 .ForMember(d => d.ProductName, opt => opt.MapFrom(s => s.Product.Name))
+                .ForMember(d => d.CurrencyId, opt => opt.MapFrom(s => s.Invoice.CurrencyId))
+                .ForMember(d => d.CurrencyCode, opt => opt.MapFrom(s => s.Invoice.Currency.Code))
                 .ReverseMap()
                 .ForMember(d => d.Product, opt => opt.Ignore());
 
@@ -37,8 +39,8 @@ namespace POS.WPF.Models.Mappings
                 .ForMember(d => d.PaymentType, opt => opt.MapFrom(s => (PaymentType)s.PaymentType))
                 .ReverseMap()
                 .ForMember(d => d.PaymentType, opt => opt.MapFrom(s => (byte)s.PaymentType))
-                .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.Wallet.Id))
-                .ForMember(d => d.CurrencyId, opt => opt.MapFrom(s => s.Wallet.CurrencyId));
+                //.ForMember(d => d.CurrencyId, opt => opt.MapFrom(s => s.Wallet.CurrencyId))
+                .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.Wallet.Id));
 
             CreateMap<InvoiceItemDTO, InvoiceItemEM>()
                 .ReverseMap();

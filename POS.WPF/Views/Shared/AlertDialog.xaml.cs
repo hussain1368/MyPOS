@@ -3,9 +3,9 @@ using System.Windows.Controls;
 
 namespace POS.WPF.Views.Shared
 {
-    public partial class ConfirmDialog : UserControl
+    public partial class AlertDialog : UserControl
     {
-        public ConfirmDialog(MyDialogVM context)
+        public AlertDialog(MyDialogVM context)
         {
             InitializeComponent();
             DataContext = context;
