@@ -37,6 +37,31 @@ namespace POS.WPF.Models.EntityModels
             set => SetValue(ref _partnerId, value);
         }
 
+        private string _partnerName;
+        public string PartnerName
+        {
+            get => _partnerName;
+            set => SetValue(ref _partnerName, value);
+        }
+
+        private string _amountPaid;
+        public string AmountPaid
+        {
+            get => _amountPaid;
+            set => SetAndValidate(ref _amountPaid, value);
+        }
+
+        private string _overallDiscount;
+        public string OverallDiscount
+        {
+            get
+            {
+                if (double.TryParse(_overallDiscount, out double _val) && _val == 0) return null;
+                return _overallDiscount;
+            }
+            set => SetAndValidate(ref _overallDiscount, value);
+        }
+
         private DateTime? _issueDate = DateTime.Now;
         public DateTime? IssueDate
         {

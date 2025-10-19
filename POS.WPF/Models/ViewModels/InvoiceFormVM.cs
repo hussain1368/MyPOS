@@ -39,6 +39,19 @@ namespace POS.WPF.Models.ViewModels
             DecrementInvoiceItemCmd = new CommandParam(DecrementInvoiceItem);
             SaveCmd = new CommandAsync(Save);
             CancelCmd = new CommandSync(Cancel);
+
+            SetPartnerNameCmd = new CommandSync(() =>
+            {
+                if (CurrentInvoice.PartnerId != null)
+                {
+                    CurrentInvoice.PartnerName = PartnersList.FirstOrDefault(p => p.Id == CurrentInvoice.PartnerId)?.Name;
+                }
+                else
+                {
+                    CurrentInvoice.PartnerName = string.Empty;
+                }
+                OnPropertyChanged(nameof(PartnerNameReadOnly));
+            });
         }
 
         private readonly IMapper _mapper;
@@ -55,8 +68,11 @@ namespace POS.WPF.Models.ViewModels
         public CommandParam DeleteInvoiceItemCmd { get; set; }
         public CommandParam IncrementInvoiceItemCmd { get; set; }
         public CommandParam DecrementInvoiceItemCmd { get; set; }
+        public CommandSync SetPartnerNameCmd { get; set; }
         public CommandSync CancelCmd { get; set; }
         public CommandAsync SaveCmd { get; set; }
+
+        public bool PartnerNameReadOnly => CurrentInvoice.PartnerId != null;
 
         private InvoiceType _invoiceType = InvoiceType.Sale;
         public InvoiceType InvoiceType

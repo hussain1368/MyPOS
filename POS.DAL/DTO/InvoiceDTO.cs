@@ -11,10 +11,13 @@ namespace POS.DAL.DTO
         public int WarehouseId { get; set; }
         public int WalletId { get; set; }
         public int? PartnerId { get; set; }
+        public string PartnerName { get; set; }
         public int CurrencyId { get; set; }
         public double CurrencyRate { get; set; }
         public DateTime IssueDate { get; set; }
         public byte PaymentType { get; set; }
+        public double AmountPaid { get; set; }
+        public double OverallDiscount { get; set; }
         public string Note { get; set; }
         public int UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }

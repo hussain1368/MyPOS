@@ -17,6 +17,8 @@ public partial class Invoice
 
     public int? PartnerId { get; set; }
 
+    public string PartnerName { get; set; }
+
     public int CurrencyId { get; set; }
 
     public double CurrencyRate { get; set; }
@@ -24,6 +26,10 @@ public partial class Invoice
     public DateTime IssueDate { get; set; }
 
     public byte PaymentType { get; set; }
+
+    public double AmountPaid { get; set; }
+
+    public double OverallDiscount { get; set; }
 
     public int TotalPrice { get; set; }
 

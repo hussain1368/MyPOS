@@ -32,14 +32,12 @@ namespace POS.WPF.Models.Mappings
             CreateMap<Invoice, InvoiceRowDTO>()
                 .ForMember(d => d.WalletName, opt => opt.MapFrom(s => s.Wallet.Name))
                 .ForMember(d => d.CurrencyCode, opt => opt.MapFrom(s => s.Currency.Code))
-                .ForMember(d => d.CurrencyName, opt => opt.MapFrom(s => s.Currency.Name))
-                .ForMember(d => d.PartnerName, opt => opt.MapFrom(s => s.Partner != null ? s.Partner.Name : null));
+                .ForMember(d => d.CurrencyName, opt => opt.MapFrom(s => s.Currency.Name));
 
             CreateMap<InvoiceDTO, InvoiceEM>()
                 .ForMember(d => d.PaymentType, opt => opt.MapFrom(s => (PaymentType)s.PaymentType))
                 .ReverseMap()
                 .ForMember(d => d.PaymentType, opt => opt.MapFrom(s => (byte)s.PaymentType))
-                //.ForMember(d => d.CurrencyId, opt => opt.MapFrom(s => s.Wallet.CurrencyId))
                 .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.Wallet.Id));
 
             CreateMap<InvoiceItemDTO, InvoiceItemEM>()

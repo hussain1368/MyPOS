@@ -29,6 +29,25 @@ namespace POS.WPF.Validators.ModelValidators
             RuleFor(m => m.PaymentType)
                 .NotEqual(PaymentType.None)
                 .WithMessage("Payment type is required");
+
+            RuleFor(m => m.AmountPaid)
+                .NotEmpty()
+                .WithMessage("This field is required")
+                .Must(val => double.TryParse(val, out double _val) && _val >= 0)
+                .WithMessage("Please input a valid number");
+
+            When(p => !string.IsNullOrEmpty(p.OverallDiscount), () =>
+            {
+                RuleFor(p => p.OverallDiscount)
+                    .Must(val => double.TryParse(val, out var _val) && _val >= 0)
+                    .WithMessage("Please enter a valid number")
+                    .Must((obj, val) =>
+                    {
+                        // Check if overall discount is not more than total price
+                        return true;
+                    })
+                    .WithMessage("Discount should not be more total price");
+            });
         }
     }
 }

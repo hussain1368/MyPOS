@@ -33,7 +33,7 @@ namespace POS.WPF.Validators.ModelValidators
             RuleFor(p => p.InitialQuantity)
                 .NotEmpty()
                 .WithMessage("This field is required")
-                .Must(val => int.TryParse(val, out var _val) && _val > 0)
+                .Must(val => int.TryParse(val, out var _val) && _val >= 0)
                 .WithMessage("Please enter a valid number");
 
             RuleFor(p => p.Cost)

@@ -16,7 +16,10 @@ namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(IMapper mapper, IProductRepository productRepo, IOptionRepository optionRepo, IStringLocalizer<Labels> _t)
+        public ProductsVM(IMapper mapper, 
+            IProductRepository productRepo, 
+            IOptionRepository optionRepo, 
+            IStringLocalizer<Labels> _t)
         {
             this.mapper = mapper;
             this.productRepo = productRepo;
@@ -32,18 +35,22 @@ namespace POS.WPF.Models.ViewModels
                     args.Session.Close(false);
                 }, null);
             });
+
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
             SaveCmd = new CommandAsync(SaveForm);
+
             CancelCmd = new CommandSync(() =>
             {
                 if (tempProductData == null) CurrentProduct = new ProductEM();
                 else ResetProductData();
             });
+
             CheckAllCmd = new CommandParam(isChecked =>
             {
                 foreach (var obj in ProductsList) obj.IsChecked = (bool)isChecked;
             });
+
             DeleteCmd = new CommandAsync(DeleteRows);
 
             HeaderContext = new HeaderBarVM

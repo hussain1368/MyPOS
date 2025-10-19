@@ -20,6 +20,9 @@
         <Behaviors:EventTrigger EventName="Loaded" SourceName="FormGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" />
         </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="PartnerDrp">
+            <Behaviors:InvokeCommandAction Command="{Binding SetPartnerNameCmd}" />
+        </Behaviors:EventTrigger>
         <Behaviors:EventTrigger EventName="PreviewTextInput" SourceName="ProductDrp">
             <Behaviors:InvokeCommandAction Command="{Binding FindByNameInputCmd}" />
         </Behaviors:EventTrigger>
@@ -36,8 +39,10 @@
         Header="{Binding FormTitle}"
         Style="{DynamicResource MaterialDesignCardGroupBox}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
+
             <Grid x:Name="FormGrid">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -50,43 +55,10 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <ComboBox
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="10"
-                    materialDesign:HintAssist.Hint="Wallet"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding WalletsList}"
-                    SelectedValue="{Binding CurrentInvoice.Wallet}"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
-
-                <ComboBox
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="10"
-                    materialDesign:HintAssist.Hint="Warehouse"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding WarehousesList}"
-                    SelectedValue="{Binding CurrentInvoice.WarehouseId}"
-                    SelectedValuePath="Id"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
-
-                <ComboBox
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Margin="10"
-                    materialDesign:HintAssist.Hint="Customer/Supplier"
-                    materialDesign:TextFieldAssist.HasClearButton="True"
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding PartnersList}"
-                    SelectedValue="{Binding CurrentInvoice.PartnerId}"
-                    SelectedValuePath="Id"
-                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                <!--  row 0  -->
 
                 <DatePicker
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.Column="0"
                     Margin="10"
                     VerticalAlignment="Bottom"
@@ -102,9 +74,64 @@
                     </DatePicker.SelectedDate>
                 </DatePicker>
 
+                <ComboBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10"
+                    materialDesign:HintAssist.Hint="Wallet"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding WalletsList}"
+                    SelectedValue="{Binding CurrentInvoice.Wallet}"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+                <ComboBox
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="10"
+                    materialDesign:HintAssist.Hint="Warehouse"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding WarehousesList}"
+                    SelectedValue="{Binding CurrentInvoice.WarehouseId}"
+                    SelectedValuePath="Id"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
+                <!--  row 1  -->
+
+                <ComboBox
+                    x:Name="PartnerDrp"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="10"
+                    materialDesign:HintAssist.Hint="Customer/Supplier"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding PartnersList}"
+                    SelectedValue="{Binding CurrentInvoice.PartnerId}"
+                    SelectedValuePath="Id"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+
                 <TextBox
                     Grid.Row="1"
                     Grid.Column="1"
+                    Margin="10"
+                    IsReadOnly="{Binding PartnerNameReadOnly}"
+                    VerticalAlignment="Bottom"
+                    materialDesign:HintAssist.Hint="Customer/Supplier Name"
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    <TextBox.Text>
+                        <Binding
+                            Path="CurrentInvoice.PartnerName"
+                            TargetNullValue=""
+                            UpdateSourceTrigger="PropertyChanged" />
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="2"
                     Margin="10"
                     VerticalAlignment="Bottom"
                     materialDesign:HintAssist.Hint="Currency Rate"
@@ -122,9 +149,11 @@
                     </TextBox.Text>
                 </TextBox>
 
+                <!--  row 2  -->
+
                 <layout:RadioBox
-                    Grid.Row="1"
-                    Grid.Column="2"
+                    Grid.Row="2"
+                    Grid.Column="0"
                     Margin="10"
                     Label="Payment Type"
                     Tag="{Binding CurrentInvoice.PaymentType}">
@@ -156,9 +185,51 @@
                     </StackPanel>
                 </layout:RadioBox>
 
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="10"
+                    VerticalAlignment="Bottom"
+                    materialDesign:HintAssist.Hint="Overall Discount"
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    <TextBox.Text>
+                        <Binding
+                            Path="CurrentInvoice.OverallDiscount"
+                            TargetNullValue=""
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.Converter>
+                                <conv:NumberConverter />
+                            </Binding.Converter>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="10"
+                    VerticalAlignment="Bottom"
+                    materialDesign:HintAssist.Hint="Amount Paid"
+                    materialDesign:HintAssist.IsFloating="True"
+                    materialDesign:TextFieldAssist.HasClearButton="True">
+                    <TextBox.Text>
+                        <Binding
+                            Path="CurrentInvoice.AmountPaid"
+                            TargetNullValue=""
+                            UpdateSourceTrigger="PropertyChanged">
+                            <Binding.Converter>
+                                <conv:NumberConverter />
+                            </Binding.Converter>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <!--  row 3  -->
+
                 <my:MyComboBox
                     x:Name="ProductDrp"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="0"
                     Margin="10"
                     VerticalAlignment="Top"
@@ -173,7 +244,7 @@
                     Text="{Binding SearchValue, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBox
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Margin="10"
@@ -182,8 +253,10 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                     Text="{Binding CurrentInvoice.Note}" />
 
+                <!--  row 4  -->
+
                 <Border
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Grid.Column="0"
                     Height="150"
                     Margin="10"
@@ -206,7 +279,7 @@
 
                 <DataGrid
                     x:Name="ItemsDataGrid"
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     MinHeight="150"
@@ -312,8 +385,10 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
+                <!--  row 5  -->
+
                 <StackPanel
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Margin="10"
@@ -331,6 +406,7 @@
                         Content="Cancel" />
                 </StackPanel>
             </Grid>
+
         </ScrollViewer>
     </GroupBox>
 </UserControl>
