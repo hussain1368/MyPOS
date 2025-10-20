@@ -10,6 +10,7 @@ namespace POS.DAL.Repository.Abstraction
     {
         Task CreateOption(OptionValueDTO data);
         Task DeleteOptions(int[] ids);
+        Task RestoreOptions(int[] ids);
         SettingDTO GetActiveSetting();
         Task<IEnumerable<WalletDTO>> GetWalletsList();
         Task<IEnumerable<WarehouseDTO>> GetWarehousesList();

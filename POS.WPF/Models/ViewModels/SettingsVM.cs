@@ -35,18 +35,19 @@ namespace POS.WPF.Models.ViewModels
             SaveSettingCmd = new CommandAsync(SaveSetting);
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
-            OpenFormCmd = new CommandAsyncParam(OpenForm);
+            OpenOptionFormCmd = new CommandAsyncParam(OpenOptionForm);
             SaveOptionCmd = new CommandAsync(SaveOption);
             CancelOptionCmd = new CommandSync(CancelOption);
-            CheckAllCmd = new CommandParam(CheckAll);
+            CheckAllOptionsCmd = new CommandParam(CheckAllOptions);
             DeleteOptionsCmd = new CommandAsync(DeleteOptions);
+            RestoreOptionsCmd = new CommandAsync(RestoreOptions);
 
-            DeleteCurrencyRateCmd = new CommandAsync(DeleteCurrencyRate);
-            CheckAllCurrencyRateCmd = new CommandParam(CheckAllCurrencyRate);
-            OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
             LoadCurrencyRatesCmd = new CommandAsync(LoadCurrencyRates);
+            OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
             SaveCurrencyRateCmd = new CommandAsync(SaveCurrencyRate);
             CancelCurrencyRateCmd = new CommandSync(CancelCurrencyRate);
+            CheckAllCurrencyRateCmd = new CommandParam(CheckAllCurrencyRate);
+            DeleteCurrencyRateCmd = new CommandAsync(DeleteCurrencyRate);
 
             HeaderContext = new HeaderBarVM
             {
@@ -59,23 +60,26 @@ namespace POS.WPF.Models.ViewModels
         private readonly AppState _appState;
         private readonly IOptionRepository _optionRepo;
         private readonly ICurrencyRateRepository _currencyRateRepo;
+        private const string dialogHost = "SettingsDH"; 
 
-        public CommandAsync SaveSettingCmd { get; set; }
-        public CommandAsync LoadOptionsCmd { get; set; }
+        public CommandAsyncParam TabChangedCmd { get; set; }
         public CommandSync LoadSettingCmd { get; set; }
-        public CommandAsyncParam OpenFormCmd { get; set; }
+        public CommandAsync SaveSettingCmd { get; set; }
+
+        public CommandAsync LoadOptionsCmd { get; set; }
+        public CommandAsyncParam OpenOptionFormCmd { get; set; }
         public CommandAsync SaveOptionCmd { get; set; }
         public CommandSync CancelOptionCmd { get; set; }
-        public CommandParam CheckAllCmd { get; set; }
+        public CommandParam CheckAllOptionsCmd { get; set; }
         public CommandAsync DeleteOptionsCmd { get; set; }
-        public CommandAsyncParam TabChangedCmd { get; set; }
+        public CommandAsync RestoreOptionsCmd { get; set; }
 
-        public CommandAsync DeleteCurrencyRateCmd { get; set; }
-        public CommandParam CheckAllCurrencyRateCmd { get; set; }
         public CommandAsync LoadCurrencyRatesCmd { get; set; }
         public CommandAsyncParam OpenCurrencyFormCmd { get; set; }
         public CommandAsync SaveCurrencyRateCmd { get; set; }
         public CommandSync CancelCurrencyRateCmd { get; set; }
+        public CommandParam CheckAllCurrencyRateCmd { get; set; }
+        public CommandAsync DeleteCurrencyRateCmd { get; set; }
 
         private HeaderBarVM _headerContext;
         public HeaderBarVM HeaderContext
@@ -106,6 +110,36 @@ namespace POS.WPF.Models.ViewModels
             get { return _currentSetting; }
             set { SetValue(ref _currentSetting, value); }
         }
+
+        private void LoadSetting()
+        {
+            CurrentSetting = new SettingEM
+            {
+                Id = _appState.Settings.Id,
+                AppTitle = _appState.Settings.AppTitle,
+                Language = _appState.Settings.Language,
+                CalendarType = (Enums.CalendarType)_appState.Settings.CalendarType,
+            };
+        }
+
+        private async Task SaveSetting()
+        {
+            await DialogHost.Show(new LoadingDialog(), dialogHost, async (sender, args) =>
+            {
+                var data = new SettingDTO
+                {
+                    Id = CurrentSetting.Id,
+                    AppTitle = CurrentSetting.AppTitle,
+                    Language = CurrentSetting.Language,
+                    CalendarType = (byte)CurrentSetting.CalendarType,
+                };
+                await _appState.UpdateSettings(data);
+                args.Session.Close();
+            },
+            null);
+        }
+
+        // ============== Options Tab ==============
 
         private IEnumerable<OptionTypeDTO> _optionTypes = Enumerable.Empty<OptionTypeDTO>();
         public IEnumerable<OptionTypeDTO> OptionTypes
@@ -142,19 +176,25 @@ namespace POS.WPF.Models.ViewModels
                 SetValue(ref _selectedType, value);
                 OnPropertyChanged(nameof(CanAddOption));
 
-                SelectedTypeOptions = OptionValues.Where(v => v.TypeId == SelectedType?.Id)
-                    .Select(op => new OptionValueEM
-                    {
-                        Id = op.Id,
-                        Code = op.Code,
-                        TypeId = op.TypeId,
-                        Name = op.Name,
-                        IsDefault = op.IsDefault,
-                        IsReadOnly = op.IsReadOnly,
-                        IsDeleted = op.IsDeleted,
-                    })
-                    .ToList();
+                SetSelectedOptionValues();
             }
+        }
+
+        private void SetSelectedOptionValues()
+        {
+            SelectedTypeOptions = OptionValues
+                .Where(v => v.TypeId == SelectedType?.Id)
+                .Select(op => new OptionValueEM
+                {
+                    Id = op.Id,
+                    Code = op.Code,
+                    TypeId = op.TypeId,
+                    Name = op.Name,
+                    IsDefault = op.IsDefault,
+                    IsReadOnly = op.IsReadOnly,
+                    IsDeleted = op.IsDeleted,
+                })
+                .ToList();
         }
 
         public IEnumerable<OptionValueEM> _selectedTypeOptions = Enumerable.Empty<OptionValueEM>();
@@ -163,7 +203,6 @@ namespace POS.WPF.Models.ViewModels
             get { return _selectedTypeOptions; }
             set { SetValue(ref _selectedTypeOptions, value); }
         }
-
 
         public bool CanAddOption => !SelectedType?.IsReadOnly ?? false;
 
@@ -181,50 +220,21 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _isOptionLoading, value); }
         }
 
-        private void LoadSetting()
-        {
-            CurrentSetting = new SettingEM
-            {
-                Id = _appState.Settings.Id,
-                AppTitle = _appState.Settings.AppTitle,
-                Language = _appState.Settings.Language,
-                CalendarType = (Enums.CalendarType)_appState.Settings.CalendarType,
-            };
-        }
-
         private async Task LoadOptions()
         {
-            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
+            await DialogHost.Show(new LoadingDialog(), dialogHost, async (sender, args) =>
             {
                 OptionTypes = await _optionRepo.OptionTypes();
-                await GetOptions();
+                await GetOptionsValues();
                 args.Session.Close();
             },
             null);
         }
 
-        private async Task GetOptions()
+        private async Task GetOptionsValues()
         {
             OptionValues = await _optionRepo.OptionsAll(true);
-            // work here ...
-
-        }
-
-        private async Task SaveSetting()
-        {
-            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
-            {
-                var data = new SettingDTO
-                {
-                    Id = CurrentSetting.Id,
-                    AppTitle = CurrentSetting.AppTitle,
-                    Language = CurrentSetting.Language,
-                    CalendarType = (byte)CurrentSetting.CalendarType,
-                };
-                await _appState.UpdateSettings(data);
-                args.Session.Close();
-            },
-            null);
+            SetSelectedOptionValues();
         }
 
         private void CancelOption()
@@ -246,16 +256,19 @@ namespace POS.WPF.Models.ViewModels
                 Name = CurrentOption.Name,
             };
             IsOptionLoading = true;
+
             if (CurrentOption.Id == 0)
                 await _optionRepo.CreateOption(data);
             else
                 await _optionRepo.UpdateOption(data);
-            await GetOptions();
+
+            await GetOptionsValues();
+
             IsOptionLoading = false;
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
-        private async Task OpenForm(object id)
+        private async Task OpenOptionForm(object id)
         {
             if (id != null)
             {
@@ -275,10 +288,10 @@ namespace POS.WPF.Models.ViewModels
                     TypeId = SelectedType?.Id ?? 0
                 };
             }
-            await DialogHost.Show(new OptionForm(), "SettingsDH");
+            await DialogHost.Show(new OptionForm(), dialogHost);
         }
 
-        private void CheckAll(object isChecked)
+        private void CheckAllOptions(object isChecked)
         {
             bool _isChecked = (bool)isChecked;
             foreach (var obj in SelectedTypeOptions)
@@ -293,18 +306,33 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) options?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "SettingsDH", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, dialogHost, null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
+
                 await _optionRepo.DeleteOptions(ids);
-                await GetOptions();
+                await GetOptionsValues();
+
                 args.Session.Close(false);
             });
         }
 
-        // ============== Currency Rate Section ==============
+        private async Task RestoreOptions()
+        {
+            var ids = SelectedTypeOptions.Where(m => m.IsChecked && !m.IsReadOnly).Select(m => m.Id).ToArray();
+            if (ids.Length == 0) return;
+
+            await DialogHost.Show(new LoadingDialog(), dialogHost, async (sender, args) =>
+            {
+                await _optionRepo.RestoreOptions(ids);
+                await GetOptionsValues();
+                args.Session.Close(false);
+            }, null);
+        }
+
+        // ============== Currency Rate Tab ==============
 
         private IEnumerable<CurrencyRateEM> _currencyRates = Enumerable.Empty<CurrencyRateEM>();
         public IEnumerable<CurrencyRateEM> CurrencyRates
@@ -318,7 +346,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadCurrencyRates()
         {
-            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
+            await DialogHost.Show(new LoadingDialog(), dialogHost, async (sender, args) =>
             {
                 await GetCurrencyRates();
                 args.Session.Close();
@@ -375,7 +403,7 @@ namespace POS.WPF.Models.ViewModels
                 CurrencyId = SelectedCurrencyId,
                 RateDate = DateTime.Now,
             };
-            await DialogHost.Show(new CurrencyRateForm(), "SettingsDH");
+            await DialogHost.Show(new CurrencyRateForm(), dialogHost);
         }
 
         private void CancelCurrencyRate()
@@ -416,7 +444,7 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "SettingsDH", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, dialogHost, null, async (sender, args) =>
             {
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();

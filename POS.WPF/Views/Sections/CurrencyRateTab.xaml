@@ -41,7 +41,6 @@
                         DisplayMemberPath="Name"
                         DockPanel.Dock="Left"
                         ItemsSource="{Binding CurrencyList}"
-                        SelectedItem="{Binding SelectedCurrency}"
                         SelectedValue="{Binding SelectedCurrencyId}"
                         SelectedValuePath="Id" />
                     <DatePicker

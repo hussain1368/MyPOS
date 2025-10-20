@@ -162,9 +162,14 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task DeleteOptions(int[] ids)
         {
-            var rows = await dbContext.OptionValues.Where(m => ids.Any(id => m.Id == id)).ToListAsync();
-            foreach (var row in rows) row.IsDeleted = true;
-            await dbContext.SaveChangesAsync();
+            var rows = await dbContext.OptionValues.Where(m => ids.Any(id => m.Id == id))
+                .ExecuteUpdateAsync(m => m.SetProperty(m => m.IsDeleted, true));
+        }
+
+        public async Task RestoreOptions(int[] ids)
+        {
+            var rows = await dbContext.OptionValues.Where(m => ids.Any(id => m.Id == id))
+                .ExecuteUpdateAsync(m => m.SetProperty(m => m.IsDeleted, false));
         }
     }
 }

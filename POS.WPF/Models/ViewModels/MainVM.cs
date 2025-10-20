@@ -13,7 +13,11 @@ namespace POS.WPF.Models.ViewModels
     {
         public MainVM(IServiceProvider services, AppState appState, IStringLocalizer<Labels> t)
         {
-            ViewChangedCmd = new CommandSync(() => BodyContent = MenuItems[SelectedIndex].ViewModel);
+            ViewChangedCmd = new CommandSync(() =>
+            {
+                BodyContent = MenuItems[SelectedIndex].ViewModel;
+            });
+
             this.appState = appState;
             _t = t;
             MenuItems = new ObservableCollection<MenuItemEM>()
@@ -26,6 +30,18 @@ namespace POS.WPF.Models.ViewModels
                 },
                 new MenuItemEM
                 {
+                    Text = _t["SaleAndPurchase"],
+                    IconKind = PackIconKind.Cart,
+                    ViewModel = services.GetRequiredService<InvoicesVM>()
+                },
+                new MenuItemEM
+                {
+                    Text = _t["Transactions"],
+                    IconKind = PackIconKind.CreditCardSyncOutline,
+                    ViewModel = services.GetRequiredService<TransactionsVM>()
+                },
+                new MenuItemEM
+                {
                     Text = _t["Products"],
                     IconKind = PackIconKind.PackageVariant,
                     ViewModel = services.GetRequiredService<ProductsVM>()
@@ -35,18 +51,6 @@ namespace POS.WPF.Models.ViewModels
                     Text = _t["Partners"],
                     IconKind = PackIconKind.BusinessCardOutline,
                     ViewModel = services.GetRequiredService<PartnersVM>()
-                },
-                new MenuItemEM
-                {
-                    Text = _t["SaleAndPurchase"],
-                    IconKind = PackIconKind.Cart,
-                    ViewModel = services.GetRequiredService<InvoicesVM>()
-                },
-                new MenuItemEM
-                {
-                    Text = _t["Transactions"],
-                    IconKind = PackIconKind.CashMultiple,
-                    ViewModel = services.GetRequiredService<TransactionsVM>()
                 },
                 new MenuItemEM
                 {
@@ -68,7 +72,6 @@ namespace POS.WPF.Models.ViewModels
                 },
             };
             BodyContent = MenuItems[0].ViewModel;
-            
         }
 
         private readonly AppState appState;
