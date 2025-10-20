@@ -50,12 +50,13 @@
                     materialDesign:HintAssist.Hint="Date"
                     materialDesign:TextFieldAssist.HasClearButton="True"
                     Language="en-GB"
-                    SelectedDate="{Binding IssueDate}" />
+                    SelectedDate="{Binding IssueDate}">
+                    <Behaviors:Interaction.Behaviors>
+                        <beh:DatePickerClearButtonBehavior />
+                    </Behaviors:Interaction.Behaviors>
+                </DatePicker>
             </WrapPanel>
             <WrapPanel HorizontalAlignment="Right">
-                <!--<Button Content="New Sale" Command="{Binding ShowFormCmd}"/>
-                <Button Content="New Purchase" Command="{Binding ShowFormCmd}" Margin="5 0"/>
-                <Button Content="New Return" Command="{Binding ShowFormCmd}"/>-->
                 <Button HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Behaviors:Interaction.Behaviors>
                         <beh:DropDownButtonBehavior />

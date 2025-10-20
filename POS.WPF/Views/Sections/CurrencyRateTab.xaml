@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:beh="clr-namespace:POS.WPF.Common"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -51,13 +52,16 @@
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         DockPanel.Dock="Left"
                         Language="en-GB"
-                        Loaded="RateDatePicker_Loaded">
+                       >
                         <DatePicker.SelectedDate>
                             <Binding
                                 Path="SelectedRateDate"
                                 TargetNullValue="{x:Null}"
                                 UpdateSourceTrigger="PropertyChanged" />
                         </DatePicker.SelectedDate>
+                        <Behaviors:Interaction.Behaviors>
+                            <beh:DatePickerClearButtonBehavior />
+                        </Behaviors:Interaction.Behaviors>
                     </DatePicker>
                     <Button
                         Margin="10,0,0,0"
@@ -99,7 +103,7 @@
                             Header="Currency"
                             IsReadOnly="True" />
                         <DataGridTextColumn
-                            Binding="{Binding RateDate, StringFormat='yyyy/MM/dd hh:mm tt'}"
+                            Binding="{Binding RateDate, StringFormat='dd/MM/yyyy hh:mm tt'}"
                             Header="Date"
                             IsReadOnly="True" />
                         <DataGridTextColumn

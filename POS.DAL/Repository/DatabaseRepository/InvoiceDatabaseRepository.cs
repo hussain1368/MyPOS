@@ -48,7 +48,7 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var query = dbContext.Invoices.Where(i => i.IsDeleted == false);
             if (invoiceType != null) query = query.Where(i => i.InvoiceType == invoiceType);
-            if (issueDate != null) query = query.Where(i => i.IssueDate == issueDate);
+            if (issueDate != null) query = query.Where(i => i.IssueDate.Date == issueDate.Value.Date);
 
             var rowCount = await query.CountAsync();
             var pageCount = Math.Ceiling((double)rowCount / pageSize);
