@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:core="clr-namespace:Microsoft.Xaml.Behaviors.Core;assembly=Microsoft.Xaml.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,11 +14,10 @@
 
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="CurrencyDrp">
-            <Behaviors:InvokeCommandAction Command="{Binding LoadCurrencyRatesCmd}" PassEventArgsToCommand="True">
-                <Behaviors:InvokeCommandAction.CommandParameter>
-                    <system:Boolean>True</system:Boolean>
-                </Behaviors:InvokeCommandAction.CommandParameter>
-            </Behaviors:InvokeCommandAction>
+            <Behaviors:InvokeCommandAction Command="{Binding LoadCurrencyRatesCmd}" />
+        </Behaviors:EventTrigger>
+        <Behaviors:EventTrigger EventName="SelectedDateChanged" SourceName="RateDatePicker">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadCurrencyRatesCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
 
@@ -37,7 +37,6 @@
                         Width="200"
                         Margin="0,0,10,0"
                         materialDesign:HintAssist.Hint="Currency"
-                        materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         DisplayMemberPath="Name"
                         DockPanel.Dock="Left"
@@ -45,14 +44,30 @@
                         SelectedItem="{Binding SelectedCurrency}"
                         SelectedValue="{Binding SelectedCurrencyId}"
                         SelectedValuePath="Id" />
-                    <Button
+                    <DatePicker
+                        x:Name="RateDatePicker"
+                        Width="200"
                         Margin="0,0,10,0"
+                        materialDesign:HintAssist.Hint="Date"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        DockPanel.Dock="Left"
+                        Language="en-GB"
+                        Loaded="RateDatePicker_Loaded">
+                        <DatePicker.SelectedDate>
+                            <Binding
+                                Path="SelectedRateDate"
+                                TargetNullValue="{x:Null}"
+                                UpdateSourceTrigger="PropertyChanged" />
+                        </DatePicker.SelectedDate>
+                    </DatePicker>
+                    <Button
+                        Margin="10,0,0,0"
                         Command="{Binding DeleteCurrencyRateCmd}"
                         Content="Delete"
                         DockPanel.Dock="Right"
                         Style="{StaticResource MyAccentButton}" />
                     <Button
-                        Margin="0,0,10,0"
+                        Margin="10,0,0,0"
                         Command="{Binding OpenCurrencyFormCmd}"
                         Content="Add New Rate"
                         DockPanel.Dock="Right" />

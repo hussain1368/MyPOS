@@ -22,30 +22,35 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <WrapPanel Grid.Row="0" Margin="0,0,0,10">
+                <DockPanel
+                    Grid.Row="0"
+                    Margin="0,0,0,10"
+                    LastChildFill="False">
                     <ComboBox
                         x:Name="OptionTypeDrp"
                         Width="200"
                         Margin="0,0,10,0"
                         materialDesign:HintAssist.Hint="Option Type"
-                        materialDesign:HintAssist.IsFloating="True"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         DisplayMemberPath="Name"
+                        DockPanel.Dock="Left"
                         ItemsSource="{Binding OptionTypes}"
                         SelectedItem="{Binding SelectedType}"
                         SelectedValuePath="Id" />
                     <Button
-                        Margin="0,0,10,0"
-                        Command="{Binding OpenFormCmd}"
-                        Content="Add Option"
-                        IsEnabled="{Binding CanAddOption}" />
-                    <Button
-                        Margin="0,0,10,0"
+                        Margin="10,0,0,0"
                         Command="{Binding DeleteOptionsCmd}"
                         Content="Delete"
+                        DockPanel.Dock="Right"
                         IsEnabled="{Binding CanAddOption}"
                         Style="{StaticResource MyAccentButton}" />
-                </WrapPanel>
+                    <Button
+                        Margin="10,0,0,0"
+                        Command="{Binding OpenFormCmd}"
+                        Content="Add New Option"
+                        DockPanel.Dock="Right"
+                        IsEnabled="{Binding CanAddOption}" />
+                </DockPanel>
                 <DataGrid
                     Grid.Row="1"
                     AutoGenerateColumns="False"

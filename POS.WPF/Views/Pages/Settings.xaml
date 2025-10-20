@@ -30,7 +30,7 @@
             Identifier="SettingsDH">
             <Behaviors:Interaction.Triggers>
                 <Behaviors:EventTrigger EventName="Loaded">
-                    <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" PassEventArgsToCommand="True" />
+                    <Behaviors:InvokeCommandAction Command="{Binding LoadCurrencyRatesCmd}" PassEventArgsToCommand="True" />
                 </Behaviors:EventTrigger>
             </Behaviors:Interaction.Triggers>
             <Border Padding="20,0">
@@ -38,14 +38,14 @@
                     x:Name="Tabs"
                     SelectedIndex="{Binding SelectedTab}"
                     Style="{StaticResource MaterialDesignTabControl}">
-                    <TabItem Header="Settings">
-                        <sections:SettingsTab />
+                    <TabItem Header="Currency Rate">
+                        <sections:CurrencyRateTab />
                     </TabItem>
                     <TabItem Header="Options">
                         <sections:OptionsTab />
                     </TabItem>
-                    <TabItem Header="Currency Rate">
-                        <sections:CurrencyRateTab />
+                    <TabItem Header="Settings">
+                        <sections:SettingsTab />
                     </TabItem>
                 </TabControl>
             </Border>

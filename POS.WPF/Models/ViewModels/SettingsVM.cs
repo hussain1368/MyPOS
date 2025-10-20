@@ -32,9 +32,9 @@ namespace POS.WPF.Models.ViewModels
 
             TabChangedCmd = new CommandAsyncParam(TabChanged);
             LoadSettingCmd = new CommandSync(LoadSetting);
-            LoadOptionsCmd = new CommandAsync(LoadOptions);
             SaveSettingCmd = new CommandAsync(SaveSetting);
 
+            LoadOptionsCmd = new CommandAsync(LoadOptions);
             OpenFormCmd = new CommandAsyncParam(OpenForm);
             SaveOptionCmd = new CommandAsync(SaveOption);
             CancelOptionCmd = new CommandSync(CancelOption);
@@ -44,7 +44,7 @@ namespace POS.WPF.Models.ViewModels
             DeleteCurrencyRateCmd = new CommandAsync(DeleteCurrencyRate);
             CheckAllCurrencyRateCmd = new CommandParam(CheckAllCurrencyRate);
             OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
-            LoadCurrencyRatesCmd = new CommandAsyncParam(LoadCurrencyRates);
+            LoadCurrencyRatesCmd = new CommandAsync(LoadCurrencyRates);
             SaveCurrencyRateCmd = new CommandAsync(SaveCurrencyRate);
             CancelCurrencyRateCmd = new CommandSync(CancelCurrencyRate);
 
@@ -72,8 +72,8 @@ namespace POS.WPF.Models.ViewModels
 
         public CommandAsync DeleteCurrencyRateCmd { get; set; }
         public CommandParam CheckAllCurrencyRateCmd { get; set; }
+        public CommandAsync LoadCurrencyRatesCmd { get; set; }
         public CommandAsyncParam OpenCurrencyFormCmd { get; set; }
-        public CommandAsyncParam LoadCurrencyRatesCmd { get; set; }
         public CommandAsync SaveCurrencyRateCmd { get; set; }
         public CommandSync CancelCurrencyRateCmd { get; set; }
 
@@ -82,6 +82,22 @@ namespace POS.WPF.Models.ViewModels
         {
             get => _headerContext;
             set => SetValue(ref _headerContext, value);
+        }
+
+        private int _selectedTab;
+        public int SelectedTab
+        {
+            get { return _selectedTab; }
+            set { SetValue(ref _selectedTab, value); }
+        }
+
+        private async Task TabChanged(object e)
+        {
+            var args = (SelectionChangedEventArgs)e;
+            var name = ((FrameworkElement)args.OriginalSource).Name;
+            if (name != "Tabs") return;
+
+            if (SelectedTab == 1) await LoadOptions();
         }
 
         private SettingEM _currentSetting = new SettingEM();
@@ -288,6 +304,8 @@ namespace POS.WPF.Models.ViewModels
             });
         }
 
+        // ============== Currency Rate Section ==============
+
         private IEnumerable<CurrencyRateEM> _currencyRates = Enumerable.Empty<CurrencyRateEM>();
         public IEnumerable<CurrencyRateEM> CurrencyRates
         {
@@ -298,51 +316,25 @@ namespace POS.WPF.Models.ViewModels
             }
         }
 
-        private async Task TabChanged(object e)
+        private async Task LoadCurrencyRates()
         {
-            var args = (SelectionChangedEventArgs)e;
-            var name = ((FrameworkElement)args.OriginalSource).Name;
-            if (name != "Tabs") return;
-
-            if (SelectedTab == 2) await LoadCurrencyRates(true);
+            await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
+            {
+                await GetCurrencyRates();
+                args.Session.Close();
+            },
+            null);
         }
 
-        private async Task LoadCurrencyRates(object showLoading)
+        private async Task GetCurrencyRates()
         {
-            var LoadThem = async () =>
-            {
-                var data = await _currencyRateRepo.GetList(SelectedCurrencyId);
-                CurrencyRates = _mapper.Map<IEnumerable<CurrencyRateEM>>(data);
-            };
-
-            if ((bool)showLoading == false)
-            {
-                await LoadThem();
-            }
-            else
-            {
-                await DialogHost.Show(new LoadingDialog(), "SettingsDH", async (sender, args) =>
-                {
-                    await LoadThem();
-                    args.Session.Close();
-                },
-                null);
-            }
+            var data = await _currencyRateRepo.GetList(SelectedCurrencyId, SelectedRateDate);
+            CurrencyRates = _mapper.Map<IEnumerable<CurrencyRateEM>>(data);
         }
 
         public IList<OptionValueDTO> CurrencyList => OptionValues
             .Where(v => v.TypeCode == "CRC" && v.IsDeleted == false && v.IsDefault == false)
             .ToList();
-
-        private OptionValueDTO _selectedCurrency;
-        public OptionValueDTO SelectedCurrency
-        {
-            get { return _selectedCurrency; }
-            set
-            {
-                SetValue(ref _selectedCurrency, value);
-            }
-        }
 
         private int? _selectedCurrencyId;
         public int? SelectedCurrencyId
@@ -351,11 +343,11 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _selectedCurrencyId, value); }
         }
 
-        private int _selectedTab;
-        public int SelectedTab
+        private DateTime? _selectedRateDate = DateTime.Now;
+        public DateTime? SelectedRateDate
         {
-            get { return _selectedTab; }
-            set { SetValue(ref _selectedTab, value); }
+            get { return _selectedRateDate; }
+            set { SetValue(ref _selectedRateDate, value); }
         }
 
         private CurrencyRateEM _currentCurrencyRate = new CurrencyRateEM();
@@ -404,7 +396,7 @@ namespace POS.WPF.Models.ViewModels
             data.UpdatedDate = DateTime.Now;
 
             await _currencyRateRepo.Create(data);
-            await LoadCurrencyRates(false);
+            await GetCurrencyRates();
 
             IsCurrencyRateLoading = false;
             CurrentCurrencyRate = new CurrencyRateEM();
@@ -430,7 +422,7 @@ namespace POS.WPF.Models.ViewModels
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
                 await _currencyRateRepo.Delete(ids);
-                await LoadCurrencyRates(false);
+                await GetCurrencyRates();
                 args.Session.Close(false);
             });
         }

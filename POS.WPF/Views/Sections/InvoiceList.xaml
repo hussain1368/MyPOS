@@ -49,6 +49,7 @@
                     Margin="10,0"
                     materialDesign:HintAssist.Hint="Date"
                     materialDesign:TextFieldAssist.HasClearButton="True"
+                    Language="en-GB"
                     SelectedDate="{Binding IssueDate}" />
             </WrapPanel>
             <WrapPanel HorizontalAlignment="Right">

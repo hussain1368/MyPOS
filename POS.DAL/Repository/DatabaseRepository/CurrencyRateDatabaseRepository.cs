@@ -20,16 +20,16 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         private readonly IMapper _mapper;
 
-        public async Task<IEnumerable<CurrencyRateDTO>> GetList(int? currencyId)
+        public async Task<IEnumerable<CurrencyRateDTO>> GetList(int? currencyId, DateTime? date)
         {
-            await Task.Delay(5000);
             var query = dbContext.CurrencyRates.Where(r => r.IsDeleted == false);
-            if (currencyId != null)
-            {
-                query = query.Where(r => r.CurrencyId == currencyId);
-            }
+
+            if (currencyId != null) query = query.Where(r => r.CurrencyId == currencyId);
+            if (date != null) query = query.Where(r => r.RateDate.Date == date.Value.Date);
+
             return await query
                 .ProjectTo<CurrencyRateDTO>(_mapper.ConfigurationProvider)
+                .OrderByDescending(r => r.RateDate)
                 .ToListAsync();
         }
 
