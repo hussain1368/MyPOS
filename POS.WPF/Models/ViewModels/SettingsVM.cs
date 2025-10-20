@@ -41,6 +41,8 @@ namespace POS.WPF.Models.ViewModels
             CheckAllCmd = new CommandParam(CheckAll);
             DeleteOptionsCmd = new CommandAsync(DeleteOptions);
 
+            DeleteCurrencyRateCmd = new CommandAsync(DeleteCurrencyRate);
+            CheckAllCurrencyRateCmd = new CommandParam(CheckAllCurrencyRate);
             OpenCurrencyFormCmd = new CommandAsyncParam(OpenCurrencyForm);
             LoadCurrencyRatesCmd = new CommandAsyncParam(LoadCurrencyRates);
             SaveCurrencyRateCmd = new CommandAsync(SaveCurrencyRate);
@@ -68,6 +70,8 @@ namespace POS.WPF.Models.ViewModels
         public CommandAsync DeleteOptionsCmd { get; set; }
         public CommandAsyncParam TabChangedCmd { get; set; }
 
+        public CommandAsync DeleteCurrencyRateCmd { get; set; }
+        public CommandParam CheckAllCurrencyRateCmd { get; set; }
         public CommandAsyncParam OpenCurrencyFormCmd { get; set; }
         public CommandAsyncParam LoadCurrencyRatesCmd { get; set; }
         public CommandAsync SaveCurrencyRateCmd { get; set; }
@@ -365,7 +369,11 @@ namespace POS.WPF.Models.ViewModels
         public bool IsCurrencyRateLoading
         {
             get { return _isCurrencyRateLoading; }
-            set { SetValue(ref _isCurrencyRateLoading, value); }
+            set
+            {
+                SetValue(ref _isCurrencyRateLoading, value);
+                OnPropertyChanged(nameof(CurrencyRateButtonsEnabled));
+            }
         }
 
         private async Task OpenCurrencyForm(object id)
@@ -396,11 +404,37 @@ namespace POS.WPF.Models.ViewModels
             data.UpdatedDate = DateTime.Now;
 
             await _currencyRateRepo.Create(data);
+            await LoadCurrencyRates(false);
+
+            IsCurrencyRateLoading = false;
             CurrentCurrencyRate = new CurrencyRateEM();
 
-            await LoadCurrencyRates(false);
-            IsCurrencyRateLoading = false;
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
+
+        private void CheckAllCurrencyRate(object isChecked)
+        {
+            bool _isChecked = (bool)isChecked;
+            foreach (var obj in CurrencyRates) obj.IsChecked = _isChecked;
+        }
+
+        private async Task DeleteCurrencyRate()
+        {
+            var ids = CurrencyRates.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
+            if (ids.Length == 0) return;
+            string message = $"Are you sure to delete ({ids.Length}) records?";
+            var view = new ConfirmDialog(new MyDialogVM { Message = message });
+            var obj = await DialogHost.Show(view, "SettingsDH", null, async (sender, args) =>
+            {
+                if (args.Parameter is bool param && param == false) return;
+                args.Cancel();
+                args.Session.UpdateContent(new LoadingDialog());
+                await _currencyRateRepo.Delete(ids);
+                await LoadCurrencyRates(false);
+                args.Session.Close(false);
+            });
+        }
+
+        public bool CurrencyRateButtonsEnabled => !IsCurrencyRateLoading;
     }
 }

@@ -22,6 +22,7 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task<IEnumerable<CurrencyRateDTO>> GetList(int? currencyId)
         {
+            await Task.Delay(5000);
             var query = dbContext.CurrencyRates.Where(r => r.IsDeleted == false);
             if (currencyId != null)
             {

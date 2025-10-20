@@ -17,5 +17,6 @@ namespace POS.DAL.DTO
         public bool IsDeleted { get; set; }
 
         public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }

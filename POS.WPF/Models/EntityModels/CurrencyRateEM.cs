@@ -85,5 +85,6 @@ namespace POS.WPF.Models.EntityModels
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
         public string CurrencyName { get; set; }
+        public string CurrencyCode { get; set; }
     }
 }
