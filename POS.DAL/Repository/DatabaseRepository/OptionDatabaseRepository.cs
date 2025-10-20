@@ -103,20 +103,6 @@ namespace POS.DAL.Repository.DatabaseRepository
             .ToListAsync();
         }
 
-        //public async Task<SettingDTO> GetActiveSetting()
-        //{
-        //    var setting = await dbContext.Settings.FirstOrDefaultAsync(s => s.IsActive);
-        //    return new SettingDTO
-        //    {
-        //        Id = setting.Id,
-        //        LayoutName = setting.LayoutName,
-        //        Language = setting.Language,
-        //        AppTitle = setting.AppTitle,
-        //        CalendarType = setting.CalendarType,
-        //        IsActive = setting.IsActive,
-        //    };
-        //}
-
         public SettingDTO GetActiveSetting()
         {
             var setting = dbContext.Settings.FirstOrDefault(s => s.IsActive);

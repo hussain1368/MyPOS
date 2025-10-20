@@ -62,7 +62,7 @@ namespace POS.WPF.Models.ViewModels
                 {
                     Text = _t["Users"],
                     IconKind = PackIconKind.Account,
-                    ViewModel = null
+                    ViewModel = services.GetRequiredService<UsersVM>()
                 },
                 new MenuItemEM
                 {

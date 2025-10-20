@@ -41,7 +41,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Pages\Users.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\Transactions.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Sections\UserForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Sections\UserList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Sections\TransactionForm.xaml.cs">

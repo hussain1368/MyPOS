@@ -1,14 +1,8 @@
-﻿// This is free and unencumbered software released into the public domain.
-// For more information, please refer to <http://unlicense.org/>
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-// Newer code should use Microsoft.Xaml.Behaviors
 using Microsoft.Xaml.Behaviors;
-// Older code uses System.Windows.Interactivity
-//using System.Windows.Interactivity;
 
 namespace POS.WPF.Common
 {

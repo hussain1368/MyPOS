@@ -25,6 +25,9 @@
             <DataTemplate DataType="{x:Type viewModels:InvoicesVM}">
                 <pages:Invoices />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:UsersVM}">
+                <pages:Users />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SettingsVM}">
                 <pages:Settings />
             </DataTemplate>
