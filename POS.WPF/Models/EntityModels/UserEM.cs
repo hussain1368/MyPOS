@@ -1,4 +1,5 @@
-﻿using POS.WPF.Validators.ModelValidators;
+﻿using MaterialDesignThemes.Wpf;
+using POS.WPF.Validators.ModelValidators;
 
 namespace POS.WPF.Models.EntityModels
 {
@@ -49,5 +50,9 @@ namespace POS.WPF.Models.EntityModels
         }
 
         public bool IsDeleted { get; set; }
+
+        public PackIconKind IsActiveIcon => IsDeleted ? PackIconKind.CloseThick : PackIconKind.CheckBold;
+
+        public bool IsUsernameReadOnly => Id != 0;
     }
 }

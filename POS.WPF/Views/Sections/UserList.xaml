@@ -14,7 +14,7 @@
         <Behaviors:EventTrigger EventName="Loaded" SourceName="UsersGrid">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
         </Behaviors:EventTrigger>
-        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="PartnerTypeCombo">
+        <Behaviors:EventTrigger EventName="SelectionChanged" SourceName="UserRoleDrp">
             <Behaviors:InvokeCommandAction Command="{Binding LoadListCmd}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
@@ -30,17 +30,19 @@
             Margin="0,0,0,10"
             LastChildFill="False">
             <ComboBox
-                x:Name="PartnerTypeCombo"
+                x:Name="UserRoleDrp"
                 Grid.Row="1"
                 Grid.Column="0"
                 Width="150"
-                materialDesign:HintAssist.Hint="Partner Type"
+                materialDesign:HintAssist.Hint="User Role"
                 materialDesign:TextFieldAssist.HasClearButton="True"
-                DisplayMemberPath="Name"
                 DockPanel.Dock="Left"
-                ItemsSource="{Binding PartnerTypeList}"
-                SelectedValue="{Binding PartnerTypeId}"
-                SelectedValuePath="Id" />
+                SelectedValue="{Binding SelectedUserRole}"
+                SelectedValuePath="Tag">
+                <ComboBoxItem Tag="Simple">Simple User</ComboBoxItem>
+                <ComboBoxItem Tag="Admin">Admin</ComboBoxItem>
+            </ComboBox>
+
             <Button
                 Margin="10,0,0,0"
                 Command="{Binding DeleteCmd}"
@@ -49,8 +51,8 @@
                 Style="{StaticResource MaterialDesignRaisedAccentButton}" />
             <Button
                 Margin="10,0,0,0"
-                Command="{Binding LoadListCmd}"
-                Content="Search"
+                Command="{Binding RestoreCmd}"
+                Content="Restore"
                 DockPanel.Dock="Right"
                 Style="{StaticResource MaterialDesignRaisedButton}" />
         </DockPanel>
@@ -90,6 +92,15 @@
                     Binding="{Binding UserRole}"
                     Header="Role"
                     IsReadOnly="True" />
+
+                <DataGridTemplateColumn Header="Active" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <materialDesign:PackIcon HorizontalAlignment="Center" Kind="{Binding IsActiveIcon}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

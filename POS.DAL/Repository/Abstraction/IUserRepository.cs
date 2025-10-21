@@ -10,9 +10,9 @@ namespace POS.DAL.Repository.Abstraction
         Task<UserDTO> Login(string username, string password);
         Task UpdatePassword(int id, string password);
         Task Update(UserDTO data);
-        Task DeleteUsers(int[] ids);
-        Task RestoreUsers(int[] ids);
-        Task<UserResult> GetList();
+        Task Delete(int[] ids);
+        Task Restore(int[] ids);
+        Task<UserResult> GetList(string role);
         Task<UserDTO> GetById(int id);
     }
 }

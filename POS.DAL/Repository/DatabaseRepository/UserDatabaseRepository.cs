@@ -20,7 +20,7 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var user = new AppUser
             {
-                Username = data.Username,
+                Username = data.Username.ToLower(),
                 Password = data.Password,
                 DisplayName = data.DisplayName,
                 UserRole = data.UserRole,
@@ -72,10 +72,13 @@ namespace POS.DAL.Repository.DatabaseRepository
             return user;
         }
 
-        public async Task<UserResult> GetList()
+        public async Task<UserResult> GetList(string role)
         {
-            var users = await dbContext.AppUsers.AsNoTracking()
-                .Select(u => new UserDTO
+            var query = dbContext.AppUsers.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(role)) query = query.Where(u => u.UserRole == role);
+
+            var users = await query.Select(u => new UserDTO
                 {
                     Id = u.Id,
                     Username = u.Username,
@@ -106,13 +109,13 @@ namespace POS.DAL.Repository.DatabaseRepository
             };
         }
 
-        public async Task DeleteUsers(int[] ids)
+        public async Task Delete(int[] ids)
         {
             var rows = await dbContext.AppUsers.Where(m => ids.Any(id => m.Id == id))
                 .ExecuteUpdateAsync(m => m.SetProperty(m => m.IsDeleted, true));
         }
 
-        public async Task RestoreUsers(int[] ids)
+        public async Task Restore(int[] ids)
         {
             var rows = await dbContext.AppUsers.Where(m => ids.Any(id => m.Id == id))
                 .ExecuteUpdateAsync(m => m.SetProperty(m => m.IsDeleted, false));

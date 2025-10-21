@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,42 +9,38 @@ using POS.WPF.Views.Sections;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
 using POS.DAL.Repository.Abstraction;
-using AutoMapper;
+using System.Text.RegularExpressions;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class UsersVM : BaseBindable
     {
-        public UsersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper, IUserRepository userRepo)
+        public UsersVM(IUserRepository userRepo)
         {
-            _partnerRepo = partnerRepo;
-            _optionRepo = optionRepo;
             _userRepo = userRepo;
-            _mapper = mapper;
 
-            LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
+            SuggestUsernameCmd = new CommandSync(SuggestUsername);
             SaveCmd = new CommandAsync(SaveForm);
             CancelCmd = new CommandSync(CancelForm);
             CheckAllCmd = new CommandParam(CheckAll);
             DeleteCmd = new CommandAsync(DeleteRows);
+            RestoreCmd = new CommandAsync(RestoreRows);
         }
 
         private const string dialogHostId = "UsersDH";
 
-        private readonly IPartnerRepository _partnerRepo;
-        private readonly IOptionRepository _optionRepo;
         private readonly IUserRepository _userRepo;
-        private readonly IMapper _mapper;
 
-        public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }
         public CommandAsyncParam ShowFormCmd { get; set; }
+        public CommandSync SuggestUsernameCmd { get; set; }
         public CommandAsync SaveCmd { get; set; }
         public CommandSync CancelCmd { get; set; }
         public CommandParam CheckAllCmd { get; set; }
         public CommandAsync DeleteCmd { get; set; }
+        public CommandAsync RestoreCmd { get; set; }
 
         public HeaderBarVM Header => new HeaderBarVM
         {
@@ -54,26 +49,18 @@ namespace POS.WPF.Models.ViewModels
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
 
-        private IList<OptionValueDTO> _comboOptions;
-        public IList<OptionValueDTO> ComboOptions
+        private UserEM _currentUser = new UserEM();
+        public UserEM CurrentUser
         {
-            get { return _comboOptions; }
-            set
-            {
-                _comboOptions = value;
-                OnPropertyChanged(nameof(CurrencyList));
-                OnPropertyChanged(nameof(PartnerTypeList));
-            }
+            get { return _currentUser; }
+            set { SetValue(ref _currentUser, value); }
         }
 
-        public IList<OptionValueDTO> CurrencyList => ComboOptions?.Where(op => op.TypeCode == "CRC").ToList();
-        public IList<OptionValueDTO> PartnerTypeList => ComboOptions?.Where(op => op.TypeCode == "ATYP").ToList();
-
-        private PartnerEM _currentPartner = new PartnerEM();
-        public PartnerEM CurrentPartner
+        private string _selectedUserRole;
+        public string SelectedUserRole
         {
-            get { return _currentPartner; }
-            set { SetValue(ref _currentPartner, value); }
+            get { return _selectedUserRole; }
+            set { SetValue(ref _selectedUserRole, value); }
         }
 
         private ObservableCollection<UserEM> _usersList;
@@ -81,13 +68,6 @@ namespace POS.WPF.Models.ViewModels
         {
             get { return _usersList; }
             set { SetValue(ref _usersList, value); }
-        }
-
-        private int? _partnerTypeId;
-        public int? PartnerTypeId
-        {
-            get { return _partnerTypeId; }
-            set { SetValue(ref _partnerTypeId, value); }
         }
 
         private bool _isLoading;
@@ -111,11 +91,6 @@ namespace POS.WPF.Models.ViewModels
             set => SetValue(ref _pageCount, value);
         }
 
-        private async Task LoadOptions()
-        {
-            ComboOptions = await _optionRepo.OptionsAll();
-        }
-
         private async Task LoadList()
         {
             await DialogHost.Show(new LoadingDialog(), dialogHostId, async (sender, args) =>
@@ -128,7 +103,7 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var result = await _userRepo.GetList();
+            var result = await _userRepo.GetList(SelectedUserRole);
             var _data = result.Users.Select(u => new UserEM
             {
                 Id = u.Id,
@@ -137,52 +112,72 @@ namespace POS.WPF.Models.ViewModels
                 UserRole = u.UserRole,
                 IsDeleted = u.IsDeleted,
             });
-
             UsersList = new ObservableCollection<UserEM>(_data);
-            //PageCount = result.PageCount;
         }
 
         private async Task ShowForm(object id)
         {
-            CurrentPartner = new PartnerEM();
-            await DialogHost.Show(new PartnerForm(), dialogHostId, async (sender, args)=>
+            CurrentUser = new UserEM();
+            await DialogHost.Show(new UserForm(), dialogHostId, async (sender, args)=>
             {
                 if (id != null)
                 {
                     IsLoading = true;
-                    var obj = await _partnerRepo.GetById((int)id);
-                    CurrentPartner = _mapper.Map<PartnerEM>(obj);
+                    var obj = await _userRepo.GetById((int)id);
+                    CurrentUser = new UserEM
+                    {
+                        Id = obj.Id,
+                        DisplayName = obj.DisplayName,
+                        Username = obj.Username,
+                        UserRole = obj.UserRole,
+                    };
                     IsLoading = false;
                 }
             },
             null);
         }
 
+        private void SuggestUsername()
+        {
+            if (string.IsNullOrEmpty(CurrentUser.DisplayName) || CurrentUser.Id != 0) return;
+            var username = CurrentUser.DisplayName.ToLower().Replace(" ", "_");
+            username = Regex.Replace(username, @"[^a-zA-Z0-9_]", "");
+            username = username.Substring(0, Math.Min(16, username.Length));
+            CurrentUser.Username = username;
+        }
+
         private void CancelForm()
         {
-            CurrentPartner = new PartnerEM();
+            CurrentUser = new UserEM();
             DialogHost.CloseDialogCommand.Execute(null, null);
         }
 
         private async Task SaveForm()
         {
-            CurrentPartner.ValidateModel();
-            if (CurrentPartner.HasErrors) return;
+            CurrentUser.ValidateModel();
+            if (CurrentUser.HasErrors) return;
 
             IsLoading = true;
-            var data = _mapper.Map<PartnerDTO>(CurrentPartner);
+            var data = new UserDTO
+            {
+                Id = CurrentUser.Id,
+                DisplayName = CurrentUser.DisplayName,
+                Username = CurrentUser.Username,
+                Password = CurrentUser.Password,
+                UserRole = CurrentUser.UserRole,
+            };
             data.IsDeleted = false;
             data.UpdatedBy = 1;
             data.UpdatedDate = DateTime.Now;
 
-            if (CurrentPartner.Id == 0)
+            if (CurrentUser.Id == 0)
             {
-                await _partnerRepo.Create(data);
-                CurrentPartner = new PartnerEM();
+                await _userRepo.Create(data);
+                CurrentUser = new UserEM();
             }
             else
             {
-                await _partnerRepo.Update(data);
+                await _userRepo.Update(data);
             }
             await GetList();
             IsLoading = false;
@@ -206,10 +201,23 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await _partnerRepo.Delete(ids);
+                await _userRepo.Delete(ids);
                 await GetList();
                 args.Session.Close(false);
             });
+        }
+
+        private async Task RestoreRows()
+        {
+            var ids = UsersList.Where(m => m.IsChecked).Select(m => m.Id).ToArray();
+            if (ids.Length == 0) return;
+
+            var obj = await DialogHost.Show(new LoadingDialog(), dialogHostId, async (sender, args) =>
+            {
+                await _userRepo.Restore(ids);
+                await GetList();
+                args.Session.Close(false);
+            }, null);
         }
     }
 }
