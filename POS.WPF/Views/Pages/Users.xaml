@@ -11,11 +11,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Behaviors:Interaction.Triggers>
-        <Behaviors:EventTrigger EventName="Loaded" SourceName="PageGrid">
-            <Behaviors:InvokeCommandAction Command="{Binding LoadOptionsCmd}" />
-        </Behaviors:EventTrigger>
-    </Behaviors:Interaction.Triggers>
     <Grid x:Name="PageGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

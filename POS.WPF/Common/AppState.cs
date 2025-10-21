@@ -17,7 +17,13 @@ namespace POS.WPF.Common
         private readonly IUserRepository userRepo;
         private readonly IOptionRepository optionsRepo;
 
-        private UserDTO _currentUser = new UserDTO { DisplayName = "Hussain Hussaini", UserRole="Simple" };
+        private UserDTO _currentUser = new UserDTO
+        {
+            Id = 1,
+            DisplayName = "Hussain Hussaini",
+            UserRole = "Admin"
+        };
+
         public UserDTO CurrentUser
         {
             get { return _currentUser; }

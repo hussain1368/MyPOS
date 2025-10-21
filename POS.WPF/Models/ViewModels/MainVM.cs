@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using POS.WPF.Commands;
 using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
+using POS.WPF.Views.Sections;
 using System;
 using System.Collections.ObjectModel;
 
@@ -16,6 +17,16 @@ namespace POS.WPF.Models.ViewModels
             ViewChangedCmd = new CommandSync(() =>
             {
                 BodyContent = MenuItems[SelectedIndex].ViewModel;
+            });
+
+            OpenPasswordFormCmd = new CommandAsync(async () =>
+            {
+                var passwordVM = services.GetRequiredService<ChangePasswordVM>();
+                var passwordWindow = new ChangePassword
+                {
+                    DataContext = passwordVM
+                };
+                await DialogHost.Show(passwordWindow, "MainWindowDH");
             });
 
             this.appState = appState;
@@ -78,6 +89,7 @@ namespace POS.WPF.Models.ViewModels
         private readonly IStringLocalizer<Labels> _t;
 
         public CommandSync ViewChangedCmd { get; set; }
+        public CommandAsync OpenPasswordFormCmd { get; set; }
 
         private BaseBindable _bodyContent;
         public BaseBindable BodyContent

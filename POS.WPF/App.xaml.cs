@@ -59,6 +59,7 @@ namespace POS.WPF
             services.AddScoped<InvoicesVM>();
             services.AddScoped<InvoiceFormVM>();
             services.AddScoped<UsersVM>();
+            services.AddScoped<ChangePasswordVM>();
             services.AddScoped<SettingsVM>();
 
             services.AddTransient<LoginWindow>();

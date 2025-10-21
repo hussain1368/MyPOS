@@ -4,7 +4,6 @@ using POS.DAL.Domain;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,11 +46,17 @@ namespace POS.DAL.Repository.DatabaseRepository
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdatePassword(int id, string password)
+        public async Task UpdatePassword(int id, string currentPassword, string newPassword)
         {
-            var user = await dbContext.AppUsers.FindAsync(id);
+            var user = await dbContext.AppUsers.FirstOrDefaultAsync(u => u.Id == id);
+            await dbContext.Entry(user).ReloadAsync();
             if (user == null) return;
-            user.Password = hasher.HashPassword(user, password);
+
+            var result = hasher.VerifyHashedPassword(user, user.Password, currentPassword);
+            if (result != PasswordVerificationResult.Success) 
+                throw new ApplicationException("Current password is wrong!");
+
+            user.Password = hasher.HashPassword(user, newPassword);
             await dbContext.SaveChangesAsync();
         }
 

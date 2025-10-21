@@ -86,5 +86,11 @@ namespace POS.WPF.Models
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propName));
         }
+
+        public void AddManualError(string propName, string errorMessage)
+        {
+            valResult.Errors.Add(new ValidationFailure(propName, errorMessage));
+            OnErrorsChanged(propName);
+        }
     }
 }

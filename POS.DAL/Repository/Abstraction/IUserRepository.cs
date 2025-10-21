@@ -8,7 +8,7 @@ namespace POS.DAL.Repository.Abstraction
     {
         Task Create(UserDTO data);
         Task<UserDTO> Login(string username, string password);
-        Task UpdatePassword(int id, string password);
+        Task UpdatePassword(int id, string currentPassword, string newPassword);
         Task Update(UserDTO data);
         Task Delete(int[] ids);
         Task Restore(int[] ids);
