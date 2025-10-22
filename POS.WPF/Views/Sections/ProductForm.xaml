@@ -289,6 +289,7 @@
 
         <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
             <Button
+                Width="110"
                 Margin="10,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
@@ -296,12 +297,13 @@
                 Save
             </Button>
             <Button
+                Width="110"
                 Margin="0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Command="{Binding CancelCmd}">
-                Cancel
-            </Button>
+                Command="{Binding CancelCmd}"
+                Content="Reset Form"
+                Style="{StaticResource MaterialDesignOutlinedButton}" />
         </WrapPanel>
     </StackPanel>
 </UserControl>

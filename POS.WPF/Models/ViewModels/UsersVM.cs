@@ -10,6 +10,9 @@ using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
 using POS.DAL.Repository.Abstraction;
 using System.Text.RegularExpressions;
+using POS.DAL.Common;
+using POS.WPF.Common;
+using System.Windows;
 
 namespace POS.WPF.Models.ViewModels
 {
@@ -170,15 +173,32 @@ namespace POS.WPF.Models.ViewModels
             data.UpdatedBy = 1;
             data.UpdatedDate = DateTime.Now;
 
-            if (CurrentUser.Id == 0)
+            try
             {
-                await _userRepo.Create(data);
-                CurrentUser = new UserEM();
+
+                if (CurrentUser.Id == 0)
+                {
+                    await _userRepo.Create(data);
+                    CurrentUser = new UserEM();
+                }
+                else
+                {
+                    await _userRepo.Update(data);
+                }
             }
-            else
+            catch(MyException ex)
             {
-                await _userRepo.Update(data);
+                CurrentUser.AddManualError(nameof(CurrentUser.Username), ex.Message);
+                IsLoading = false;
+                return;
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToMessage(), "System error occurred");
+                IsLoading = false;
+                return;
+            }
+
             await GetList();
             IsLoading = false;
             DialogHost.CloseDialogCommand.Execute(null, null);

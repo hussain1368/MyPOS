@@ -23,6 +23,7 @@ namespace POS.DAL.Repository.DatabaseRepository
         public async Task Create(ProductDTO data)
         {
             var model = mapper.Map<Product>(data);
+            if (string.IsNullOrWhiteSpace(data.Code)) model.Code = GenerateCode();
             await dbContext.Products.AddAsync(model);
             await dbContext.SaveChangesAsync();
         }
@@ -31,7 +32,13 @@ namespace POS.DAL.Repository.DatabaseRepository
         {
             var model = await dbContext.Products.FindAsync(data.Id);
             mapper.Map(data, model);
+            if (string.IsNullOrWhiteSpace(data.Code)) model.Code = GenerateCode();
             await dbContext.SaveChangesAsync();
+        }
+
+        private string GenerateCode()
+        {
+            return $"{DateTime.Now.DayOfYear}{new Random().Next(100_000_000, 900_000_000)}";
         }
 
         public async Task<ProductDTO> GetById(int id)

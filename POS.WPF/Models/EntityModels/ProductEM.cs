@@ -18,7 +18,7 @@ namespace POS.WPF.Models.EntityModels
         public string Code
         {
             get { return _code; }
-            set { SetAndValidate(ref _code, value); }
+            set { SetValue(ref _code, value); }
         }
 
         private string _name;

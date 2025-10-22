@@ -118,6 +118,13 @@ namespace POS.WPF.Models.ViewModels
             set { SetValue(ref _sourceId, value); }
         }
 
+        private DateTime? _searchDate;
+        public DateTime? SearchDate
+        {
+            get { return _searchDate; }
+            set { SetValue(ref _searchDate, value); }
+        }
+
         private bool _isLoading;
         public bool IsLoading
         {
@@ -145,9 +152,24 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await transactionRepo.GetList(TransactionType, PartnerId, SourceId);
-            var _data = mapper.Map<IEnumerable<TransactionEM>>(data);
+            var data = await transactionRepo.GetList(TransactionType, PartnerId, SourceId, SearchDate, PageIndex);
+            var _data = mapper.Map<IEnumerable<TransactionEM>>(data.Transactions);
             TransactionList = new ObservableCollection<TransactionEM>(_data);
+            PageCount = data.PageCount;
+        }
+
+        private int _pageIndex = 1;
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set => SetValue(ref _pageIndex, value);
+        }
+
+        private int _pageCount = 0;
+        public int PageCount
+        {
+            get => _pageCount;
+            set => SetValue(ref _pageCount, value);
         }
 
         private async Task ShowForm(object id)

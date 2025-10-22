@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using POS.DAL.Domain;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,9 +40,13 @@ namespace POS.DAL.Repository.DatabaseRepository
             return mapper.Map<TransactionDTO>(model);
         }
 
-        public async Task<IEnumerable<TransactionDTO>> GetList(byte? transactionType = null, int? partnerId = null, int? sourceId = null)
+        public async Task<TransactionResult> GetList(byte? transactionType = null, 
+            int? partnerId = null, 
+            int? sourceId = null,
+            DateTime? date = null,
+            int page = 1)
         {
-            var query = dbContext.Transactions.Where(m => !m.IsDeleted);
+            var query = dbContext.Transactions.AsNoTracking().Where(m => !m.IsDeleted);
 
             if (transactionType.HasValue)
                 query = query.Where(m => m.TransactionType == transactionType);
@@ -50,8 +54,18 @@ namespace POS.DAL.Repository.DatabaseRepository
                 query = query.Where(m => m.PartnerId == partnerId);
             if (sourceId.HasValue)
                 query = query.Where(m => m.SourceId == sourceId);
+            if (date.HasValue)
+                query = query.Where(m => m.Date.Date == date.Value.Date);
 
-            return await query.ProjectTo<TransactionDTO>(mapper.ConfigurationProvider).ToListAsync();
+            var rowCount = await query.CountAsync();
+            var pageCount = Math.Ceiling((double)rowCount / pageSize);
+
+            var data = await query.ProjectTo<TransactionDTO>(mapper.ConfigurationProvider)
+                .OrderByDescending(p => p.Date)
+                .Skip((page - 1) * pageSize).Take(pageSize)
+                .ToListAsync();
+
+            return new TransactionResult { Transactions = data, PageCount = (int)pageCount };
         }
 
         public async Task Delete(int[] ids)

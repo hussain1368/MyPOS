@@ -49,22 +49,10 @@ namespace POS.WPF.Models
             ValidateField(propName);
         }
 
-        //protected async Task SetAndValidateAsync<F>(ref F prop, F value, [CallerMemberName] string propName = "")
-        //{
-        //    SetValue(ref prop, value, propName);
-        //    await ValidateFieldAsync(propName);
-        //}
-        // deal with later *********
-
         public void ValidateModel()
         {
             valResult = validator.Validate(model);
             NotifyFieldsErrorsChanged(valResult);
-            //foreach (var prop in valResult.Errors.Select(err => err.PropertyName))
-            //{
-            //    OnErrorsChanged(prop);
-            //}
-            //OnPropertyChanged(nameof(HasErrors));
         }
 
         public async Task ValidateModelAsync()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using POS.DAL.Common;
 using POS.DAL.Domain;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
@@ -17,6 +18,9 @@ namespace POS.DAL.Repository.DatabaseRepository
 
         public async Task Create(UserDTO data)
         {
+            var any = await dbContext.AppUsers.AnyAsync(u => u.Username == data.Username.ToLower());
+            if (any) throw new MyException("The username is already taken!");
+
             var user = new AppUser
             {
                 Username = data.Username.ToLower(),
@@ -27,6 +31,7 @@ namespace POS.DAL.Repository.DatabaseRepository
                 UpdatedDate = data.UpdatedDate,
                 IsDeleted = false,
             };
+
             user.Password = hasher.HashPassword(user, data.Password);
             await dbContext.AppUsers.AddAsync(user);
             await dbContext.SaveChangesAsync();

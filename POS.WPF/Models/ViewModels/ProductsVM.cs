@@ -189,7 +189,6 @@ namespace POS.WPF.Models.ViewModels
         private async Task SaveForm()
         {
             await CurrentProduct.ValidateModelAsync();
-            //CurrentProduct.ValidateModel();
             if (CurrentProduct.HasErrors) return;
 
             if (string.IsNullOrWhiteSpace(CurrentProduct.Code))
