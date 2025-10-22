@@ -348,6 +348,17 @@ namespace POS.WPF.Models.ViewModels
         {
             await DialogHost.Show(new LoadingDialog(), dialogHost, async (sender, args) =>
             {
+                if (!CurrencyList.Any())
+                {
+                    var currencies = await _optionRepo.OptionsByTypeCode("CRC");
+                    CurrencyList = currencies.Select(c => new OptionValueDTO
+                    {
+                        Id = c.Id,
+                        Code = c.Code,
+                        Name = c.Name,
+                    });
+                }
+
                 await GetCurrencyRates();
                 args.Session.Close();
             },
@@ -360,9 +371,12 @@ namespace POS.WPF.Models.ViewModels
             CurrencyRates = _mapper.Map<IEnumerable<CurrencyRateEM>>(data);
         }
 
-        public IList<OptionValueDTO> CurrencyList => OptionValues
-            .Where(v => v.TypeCode == "CRC" && v.IsDeleted == false && v.IsDefault == false)
-            .ToList();
+        private IEnumerable<OptionValueDTO> _currencyList = Enumerable.Empty<OptionValueDTO>();
+        public IEnumerable<OptionValueDTO> CurrencyList
+        {
+            get => _currencyList;
+            set => SetValue(ref _currencyList, value);
+        }
 
         private int? _selectedCurrencyId;
         public int? SelectedCurrencyId
