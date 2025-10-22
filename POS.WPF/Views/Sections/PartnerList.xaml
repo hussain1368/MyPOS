@@ -47,12 +47,6 @@
                 Content="Delete"
                 DockPanel.Dock="Right"
                 Style="{StaticResource MaterialDesignRaisedAccentButton}" />
-            <Button
-                Margin="10,0,0,0"
-                Command="{Binding LoadListCmd}"
-                Content="Search"
-                DockPanel.Dock="Right"
-                Style="{StaticResource MaterialDesignRaisedButton}" />
         </DockPanel>
 
         <DataGrid

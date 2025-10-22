@@ -27,10 +27,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel
+        <DockPanel
             Grid.Row="0"
             Margin="0,0,0,10"
-            Orientation="Horizontal">
+            LastChildFill="False">
             <ComboBox
                 x:Name="CategoryCombo"
                 Grid.Row="1"
@@ -40,19 +40,17 @@
                 materialDesign:HintAssist.Hint="{loc:Labels Category}"
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 DisplayMemberPath="Name"
+                DockPanel.Dock="Left"
                 ItemsSource="{Binding CategoryList}"
                 SelectedValue="{Binding CategoryId}"
                 SelectedValuePath="Id" />
             <Button
-                Margin="0,0,10,0"
-                Command="{Binding LoadListCmd}"
-                Content="{loc:Labels Search}" />
-            <Button
-                Margin="0,0,10,0"
+                Margin="10,0,0,0"
                 Command="{Binding DeleteCmd}"
                 Content="{loc:Labels Delete}"
+                DockPanel.Dock="Right"
                 Style="{StaticResource MyAccentButton}" />
-        </StackPanel>
+        </DockPanel>
 
         <DataGrid
             x:Name="ListGrid"

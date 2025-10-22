@@ -8,7 +8,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid MinWidth="500" Margin="20">
+    <Grid MinWidth="500" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -104,10 +104,15 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
             <Button
+                Width="80"
                 Margin="10,0"
                 Command="{Binding SaveCmd}"
                 Content="Save" />
-            <Button Command="{Binding CancelCmd}" Content="Cancel" />
+            <Button
+                Width="80"
+                Command="{Binding CancelCmd}"
+                Content="Cancel"
+                Style="{StaticResource MaterialDesignOutlinedButton}" />
         </StackPanel>
     </Grid>
 </UserControl>

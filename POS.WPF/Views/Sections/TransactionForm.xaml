@@ -20,7 +20,7 @@
     <UserControl.Resources>
         <conv:RadioToEnumConverter x:Key="RadioConverter" />
     </UserControl.Resources>
-    <Grid MinWidth="500" Margin="10">
+    <Grid MinWidth="550" Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />

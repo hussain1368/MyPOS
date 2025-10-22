@@ -395,15 +395,18 @@
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
                     <Button
+                        Width="110"
                         Margin="10,0"
                         HorizontalAlignment="Right"
                         Command="{Binding SaveCmd}"
                         Content="Save" />
                     <Button
+                        Width="110"
                         Margin="0"
                         HorizontalAlignment="Right"
                         Command="{Binding CancelCmd}"
-                        Content="Cancel" />
+                        Content="Reset Form"
+                        Style="{StaticResource MaterialDesignOutlinedButton}" />
                 </StackPanel>
             </Grid>
 
