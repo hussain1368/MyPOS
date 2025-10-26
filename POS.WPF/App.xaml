@@ -31,6 +31,9 @@
             <DataTemplate DataType="{x:Type viewModels:SettingsVM}">
                 <pages:Settings />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ReportsVM}">
+                <pages:Reports />
+            </DataTemplate>
             <!--  styles  -->
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources />

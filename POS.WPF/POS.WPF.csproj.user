@@ -43,6 +43,12 @@
     <Compile Update="Views\Sections\SettingsTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Sections\SingleNumberCard.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Sections\TopFiveCard.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Shared\ConfirmDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

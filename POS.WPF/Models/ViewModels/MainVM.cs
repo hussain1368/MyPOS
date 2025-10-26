@@ -67,7 +67,7 @@ namespace POS.WPF.Models.ViewModels
                 {
                     Text = _t["Reports"],
                     IconKind = PackIconKind.Poll,
-                    ViewModel = null
+                    ViewModel = services.GetRequiredService<ReportsVM>()
                 },
                 new MenuItemEM
                 {

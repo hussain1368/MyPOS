@@ -5,6 +5,7 @@
     xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:beh="clr-namespace:POS.WPF.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:POS.WPF.Views.Sections"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:my="clr-namespace:POS.WPF.Controls"
@@ -12,33 +13,60 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid>
-        <FlowDocumentReader>
-            <FlowDocument>
-                <Paragraph>This is a paragraph</Paragraph>
-                <Table>
-                    <Table.Columns>
-                        <TableColumn />
-                        <TableColumn />
-                        <TableColumn />
-                    </Table.Columns>
-                    <TableRowGroup>
-                        <TableRow Background="LightGray">
-                            <TableCell>
-                                <Paragraph>
-                                    <Run Text="Name" />
-                                </Paragraph>
-                            </TableCell>
-                            <TableCell>
-                                <Paragraph>Category</Paragraph>
-                            </TableCell>
-                            <TableCell>
-                                <Paragraph>Price</Paragraph>
-                            </TableCell>
-                        </TableRow>
-                    </TableRowGroup>
-                </Table>
-            </FlowDocument>
-        </FlowDocumentReader>
-    </Grid>
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <local:SingleNumberCard
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="15,15,0,15"
+                DataContext="{Binding TotalSale}" />
+
+            <local:SingleNumberCard
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="15,15,0,15"
+                DataContext="{Binding TotalExpense}" />
+
+            <local:SingleNumberCard
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="15,15,0,15"
+                DataContext="{Binding CurrentBalance}" />
+
+            <local:SingleNumberCard
+                Grid.Row="0"
+                Grid.Column="3"
+                Margin="15"
+                DataContext="{Binding TotalProfit}" />
+
+            <!--  row 2  -->
+
+            <local:TopFiveCard
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="15,0,0,15"
+                DataContext="{Binding BestProducts}" />
+
+            <local:TopFiveCard
+                Grid.Row="1"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="15,0,15,15"
+                DataContext="{Binding BestCustomers}" />
+
+        </Grid>
+    </StackPanel>
 </UserControl>

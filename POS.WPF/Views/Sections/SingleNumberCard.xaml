@@ -1,0 +1,65 @@
+﻿<UserControl
+    x:Class="POS.WPF.Views.Sections.SingleNumberCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:POS.WPF.Views.Sections"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <materialDesign:Card Padding="10" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <TextBlock
+                    DockPanel.Dock="Top"
+                    FontFamily="Calibri"
+                    FontSize="14"
+                    FontStyle="Italic"
+                    Foreground="#234C6A"
+                    Text="{Binding Title}" />
+                <Line
+                    Margin="0,5,0,0"
+                    DockPanel.Dock="Top"
+                    Stretch="Fill"
+                    Stroke="Gray"
+                    StrokeThickness="2"
+                    X1="0"
+                    X2="1"
+                    Y1="0"
+                    Y2="0" />
+                <Viewbox
+                    MaxHeight="60"
+                    HorizontalAlignment="Left"
+                    DockPanel.Dock="Bottom"
+                    Stretch="Uniform">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        FontFamily="Calibri"
+                        FontSize="38"
+                        FontStyle="Italic"
+                        FontWeight="Bold"
+                        Foreground="#234C6A"
+                        Text="{Binding Number, StringFormat='N0'}"
+                        TextAlignment="Left" />
+                </Viewbox>
+            </StackPanel>
+            <Viewbox Grid.Column="1" MaxWidth="80">
+
+                <materialDesign:PackIcon
+                    Width="90"
+                    Height="90"
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Top"
+                    Foreground="#234C6A"
+                    Kind="{Binding IconKind}" />
+            </Viewbox>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>
