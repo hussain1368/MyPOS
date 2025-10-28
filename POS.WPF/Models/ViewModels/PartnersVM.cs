@@ -1,26 +1,28 @@
-﻿using System;
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
+using POS.DAL.DTO;
+using POS.DAL.Repository.Abstraction;
+using POS.WPF.Commands;
+using POS.WPF.Common;
+using POS.WPF.Models.EntityModels;
+using POS.WPF.Views.Sections;
+using POS.WPF.Views.Shared;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using MaterialDesignThemes.Wpf;
-using POS.DAL.DTO;
-using POS.WPF.Commands;
-using POS.WPF.Views.Sections;
-using POS.WPF.Models.EntityModels;
-using POS.WPF.Views.Shared;
-using POS.DAL.Repository.Abstraction;
-using AutoMapper;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class PartnersVM : BaseBindable
     {
-        public PartnersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper)
+        public PartnersVM(IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper, AppState appState)
         {
             _partnerRepo = partnerRepo;
             _optionRepo = optionRepo;
             _mapper = mapper;
+            _appState = appState;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
@@ -31,6 +33,7 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
+        private readonly AppState _appState;
         private readonly IPartnerRepository _partnerRepo;
         private readonly IOptionRepository _optionRepo;
         private readonly IMapper _mapper;
@@ -46,7 +49,7 @@ namespace POS.WPF.Models.ViewModels
         public HeaderBarVM Header => new HeaderBarVM
         {
             HeaderText = "Partners List",
-            IconKind = "Add",
+            IconKind = PackIconKind.Add,
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
 
@@ -160,7 +163,7 @@ namespace POS.WPF.Models.ViewModels
             IsLoading = true;
             var data = _mapper.Map<PartnerDTO>(CurrentPartner);
             data.IsDeleted = false;
-            data.UpdatedBy = 1;
+            data.UpdatedBy = _appState.CurrentUserId;
             data.UpdatedDate = DateTime.Now;
 
             if (CurrentPartner.Id == 0)

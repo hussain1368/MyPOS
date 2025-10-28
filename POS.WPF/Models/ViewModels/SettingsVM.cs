@@ -434,7 +434,7 @@ namespace POS.WPF.Models.ViewModels
             IsCurrencyRateLoading = true;
             var data = _mapper.Map<CurrencyRateDTO>(CurrentCurrencyRate);
             data.IsDeleted = false;
-            data.UpdatedBy = 1;
+            data.UpdatedBy = _appState.CurrentUserId;
             data.UpdatedDate = DateTime.Now;
 
             await _currencyRateRepo.Create(data);

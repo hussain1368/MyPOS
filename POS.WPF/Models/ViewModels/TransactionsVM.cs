@@ -1,27 +1,29 @@
-﻿using System;
+﻿using AutoMapper;
+using MaterialDesignThemes.Wpf;
+using POS.DAL.DTO;
+using POS.DAL.Repository.Abstraction;
+using POS.WPF.Commands;
+using POS.WPF.Common;
+using POS.WPF.Models.EntityModels;
+using POS.WPF.Views.Sections;
+using POS.WPF.Views.Shared;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using MaterialDesignThemes.Wpf;
-using POS.DAL.DTO;
-using POS.WPF.Commands;
-using POS.WPF.Views.Sections;
-using POS.WPF.Models.EntityModels;
-using POS.WPF.Views.Shared;
-using POS.DAL.Repository.Abstraction;
-using AutoMapper;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class TransactionsVM : BaseBindable
     {
-        public TransactionsVM(ITransactionRepository transactionRepo, IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper)
+        public TransactionsVM(ITransactionRepository transactionRepo, IPartnerRepository partnerRepo, IOptionRepository optionRepo, IMapper mapper, AppState appState)
         {
-            this.transactionRepo = transactionRepo;
-            this.partnerRepo = partnerRepo;
-            this.optionRepo = optionRepo;
-            this.mapper = mapper;
+            _transactionRepo = transactionRepo;
+            _partnerRepo = partnerRepo;
+            _optionRepo = optionRepo;
+            _mapper = mapper;
+            _appState = appState;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             LoadListCmd = new CommandAsync(LoadList);
@@ -33,10 +35,11 @@ namespace POS.WPF.Models.ViewModels
             DeleteCmd = new CommandAsync(DeleteRows);
         }
 
-        private readonly ITransactionRepository transactionRepo;
-        private readonly IPartnerRepository partnerRepo;
-        private readonly IOptionRepository optionRepo;
-        private readonly IMapper mapper;
+        private readonly AppState _appState;
+        private readonly ITransactionRepository _transactionRepo;
+        private readonly IPartnerRepository _partnerRepo;
+        private readonly IOptionRepository _optionRepo;
+        private readonly IMapper _mapper;
 
         public CommandAsync LoadOptionsCmd { get; set; }
         public CommandAsync LoadListCmd { get; set; }
@@ -50,7 +53,7 @@ namespace POS.WPF.Models.ViewModels
         public HeaderBarVM Header => new HeaderBarVM
         {
             HeaderText = "Transactions List",
-            IconKind = "Add",
+            IconKind = PackIconKind.Add,
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
 
@@ -134,10 +137,10 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task LoadOptions()
         {
-            ComboOptions = await optionRepo.OptionsAll();
+            ComboOptions = await _optionRepo.OptionsAll();
 
-            WalletsList = await optionRepo.GetWalletsList();
-            PartnersList = await partnerRepo.GetList();
+            WalletsList = await _optionRepo.GetWalletsList();
+            PartnersList = await _partnerRepo.GetList();
         }
 
         private async Task LoadList()
@@ -152,8 +155,8 @@ namespace POS.WPF.Models.ViewModels
 
         private async Task GetList()
         {
-            var data = await transactionRepo.GetList(TransactionType, PartnerId, SourceId, SearchDate, PageIndex);
-            var _data = mapper.Map<IEnumerable<TransactionEM>>(data.Transactions);
+            var data = await _transactionRepo.GetList(TransactionType, PartnerId, SourceId, SearchDate, PageIndex);
+            var _data = _mapper.Map<IEnumerable<TransactionEM>>(data.Transactions);
             TransactionList = new ObservableCollection<TransactionEM>(_data);
             PageCount = data.PageCount;
         }
@@ -180,8 +183,8 @@ namespace POS.WPF.Models.ViewModels
                 if (id != null)
                 {
                     IsLoading = true;
-                    var obj = await transactionRepo.GetById((int)id);
-                    CurrentTransaction = mapper.Map<TransactionEM>(obj);
+                    var obj = await _transactionRepo.GetById((int)id);
+                    CurrentTransaction = _mapper.Map<TransactionEM>(obj);
                     IsLoading = false;
                 }
             },
@@ -201,20 +204,20 @@ namespace POS.WPF.Models.ViewModels
 
             IsLoading = true;
 
-            var data = mapper.Map<TransactionDTO>(CurrentTransaction);
+            var data = _mapper.Map<TransactionDTO>(CurrentTransaction);
 
             data.IsDeleted = false;
-            data.UpdatedBy = 1;
+            data.UpdatedBy = _appState.CurrentUserId;
             data.UpdatedDate = DateTime.Now;
 
             if (CurrentTransaction.Id == 0)
             {
-                await transactionRepo.Create(data);
+                await _transactionRepo.Create(data);
                 CurrentTransaction = new TransactionEM();
             }
             else
             {
-                await transactionRepo.Update(data);
+                await _transactionRepo.Update(data);
             }
             await GetList();
             IsLoading = false;
@@ -255,7 +258,7 @@ namespace POS.WPF.Models.ViewModels
                 if (args.Parameter is bool param && param == false) return;
                 args.Cancel();
                 args.Session.UpdateContent(new LoadingDialog());
-                await transactionRepo.Delete(ids);
+                await _transactionRepo.Delete(ids);
                 await GetList();
                 args.Session.Close(false);
             });

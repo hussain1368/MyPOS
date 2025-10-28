@@ -3,6 +3,7 @@ using MaterialDesignThemes.Wpf;
 using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
+using POS.WPF.Common;
 using POS.WPF.Enums;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
@@ -22,13 +23,15 @@ namespace POS.WPF.Models.ViewModels
             IOptionRepository optionRepo,
             IPartnerRepository partnerRepo,
             IInvoiceRepository invoiceRepo,
-            IMapper mapper)
+            IMapper mapper,
+            AppState appState)
         {
             _productRepo = productRepo;
             _optionRepo = optionRepo;
             _partnerRepo = partnerRepo;
             _invoiceRepo = invoiceRepo;
             _mapper = mapper;
+            _appState = appState;
 
             LoadOptionsCmd = new CommandAsync(LoadOptions);
             FindByNameInputCmd = new CommandAsync(FindByName);
@@ -54,6 +57,7 @@ namespace POS.WPF.Models.ViewModels
             });
         }
 
+        private readonly AppState _appState;
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepo;
         private readonly IOptionRepository _optionRepo;
@@ -262,7 +266,7 @@ namespace POS.WPF.Models.ViewModels
                 var data = _mapper.Map<InvoiceDTO>(CurrentInvoice);
                 data.SerialNum = "INV00000345";
                 data.InvoiceType = (byte)InvoiceType;
-                data.UpdatedBy = 1;
+                data.UpdatedBy = _appState.CurrentUserId;
                 data.UpdatedDate = DateTime.Now;
                 data.CurrencyId = InvoiceItems.First().CurrencyId;
 

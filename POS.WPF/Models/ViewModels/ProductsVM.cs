@@ -1,30 +1,34 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using AutoMapper;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Localization;
 using POS.DAL.DTO;
+using POS.DAL.Repository.Abstraction;
 using POS.WPF.Commands;
+using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Shared;
-using POS.DAL.Repository.Abstraction;
-using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class ProductsVM : BaseBindable
     {
-        public ProductsVM(IMapper mapper, 
-            IProductRepository productRepo, 
-            IOptionRepository optionRepo, 
-            IStringLocalizer<Labels> t)
+        public ProductsVM(IMapper mapper,
+            IProductRepository productRepo,
+            IOptionRepository optionRepo,
+            IStringLocalizer<Labels> t,
+            AppState appState)
         {
             _mapper = mapper;
             _productRepo = productRepo;
             _optionRepo = optionRepo;
+            _appState = appState;
             _t = t;
+
             MsgContext = new MessageVM();
 
             LoadListCmd = new CommandAsync(async () =>
@@ -56,20 +60,21 @@ namespace POS.WPF.Models.ViewModels
             HeaderContext = new HeaderBarVM
             {
                 HeaderText = t["ListOfProducts"],
-                IconKind = "Add",
+                IconKind = PackIconKind.Add,
                 ButtonCmd = new CommandAsync(async () =>
                 {
                     if (TransitionerIndex == 0) await ShowForm(null);
                     else
                     {
                         HeaderContext.HeaderText = t["ListOfProducts"];
-                        HeaderContext.IconKind = "Add";
+                        HeaderContext.IconKind = PackIconKind.Add;
                         TransitionerIndex--;
                     }
                 })
             };
         }
 
+        private readonly AppState _appState;
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepo;
         private readonly IOptionRepository _optionRepo;
@@ -170,7 +175,7 @@ namespace POS.WPF.Models.ViewModels
         {
             TransitionerIndex++;
             HeaderContext.HeaderText = _t["ProductDetails"];
-            HeaderContext.IconKind = "ArrowBack";
+            HeaderContext.IconKind = PackIconKind.ArrowBack;
 
             if (id == null)
             {
@@ -221,7 +226,7 @@ namespace POS.WPF.Models.ViewModels
             var data = _mapper.Map<ProductDTO>(CurrentProduct);
             data.CurrencyId = CurrentProduct.CurrencyId ?? DefaultCurrency.Id;
             data.UpdatedDate = DateTime.Now;
-            data.UpdatedBy = 1;
+            data.UpdatedBy = _appState.CurrentUserId;
             data.IsDeleted = false;
 
             if (CurrentProduct.Id == 0)

@@ -28,7 +28,7 @@ namespace POS.WPF.Models.ViewModels
             HeaderContext = new HeaderBarVM
             {
                 HeaderText = "Sale and Purchase",
-                IconKind = "ArrowBack",
+                IconKind = PackIconKind.ArrowBack,
                 IsButtonVisible = false,
                 ButtonCmd = new CommandSync(() =>
                 {

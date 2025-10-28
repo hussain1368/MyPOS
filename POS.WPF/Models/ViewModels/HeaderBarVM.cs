@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using MaterialDesignThemes.Wpf;
+using System.Windows;
 using System.Windows.Input;
 
 namespace POS.WPF.Models.ViewModels
@@ -12,8 +13,8 @@ namespace POS.WPF.Models.ViewModels
             set => SetValue(ref _headerText, value);
         }
 
-        private string _iconKind;
-        public string IconKind
+        private PackIconKind _iconKind;
+        public PackIconKind IconKind
         {
             get => _iconKind;
             set => SetValue(ref _iconKind, value);

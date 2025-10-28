@@ -88,7 +88,7 @@ namespace POS.WPF.Models.ViewModels
             IsLoading = true;
             try
             {
-                await _userRepo.UpdatePassword(_appState.CurrentUser.Id, Model.CurrentPassword, Model.NewPassword);
+                await _userRepo.UpdatePassword(_appState.CurrentUserId, Model.CurrentPassword, Model.NewPassword);
             }
             catch (ApplicationException ex)
             {

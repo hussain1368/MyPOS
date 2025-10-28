@@ -18,9 +18,10 @@ namespace POS.WPF.Models.ViewModels
 {
     public class UsersVM : BaseBindable
     {
-        public UsersVM(IUserRepository userRepo)
+        public UsersVM(IUserRepository userRepo, AppState appState)
         {
             _userRepo = userRepo;
+            _appState = appState;
 
             LoadListCmd = new CommandAsync(LoadList);
             ShowFormCmd = new CommandAsyncParam(ShowForm);
@@ -34,6 +35,7 @@ namespace POS.WPF.Models.ViewModels
 
         private const string dialogHostId = "UsersDH";
 
+        private readonly AppState _appState;
         private readonly IUserRepository _userRepo;
 
         public CommandAsync LoadListCmd { get; set; }
@@ -48,7 +50,7 @@ namespace POS.WPF.Models.ViewModels
         public HeaderBarVM Header => new HeaderBarVM
         {
             HeaderText = "Users List",
-            IconKind = "Add",
+            IconKind = PackIconKind.Add,
             ButtonCmd = new CommandAsyncParam(ShowForm)
         };
 
@@ -170,7 +172,7 @@ namespace POS.WPF.Models.ViewModels
                 UserRole = CurrentUser.UserRole,
             };
             data.IsDeleted = false;
-            data.UpdatedBy = 1;
+            data.UpdatedBy = _appState.CurrentUserId;
             data.UpdatedDate = DateTime.Now;
 
             try

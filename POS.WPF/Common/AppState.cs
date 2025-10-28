@@ -1,4 +1,5 @@
-﻿using POS.DAL.DTO;
+﻿using POS.DAL.Common;
+using POS.DAL.DTO;
 using POS.DAL.Repository.Abstraction;
 using POS.WPF.Models;
 using System.Globalization;
@@ -33,6 +34,8 @@ namespace POS.WPF.Common
                 OnPropertyChanged(nameof(IsLoggedIn));
             }
         }
+
+        public int CurrentUserId => CurrentUser?.Id ?? throw new MyException("No logged in user");
 
         private SettingDTO _settings;
         public SettingDTO Settings

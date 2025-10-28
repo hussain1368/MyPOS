@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using POS.WPF.Commands;
 using POS.WPF.Common;
 using POS.WPF.Models.EntityModels;
@@ -8,17 +9,24 @@ namespace POS.WPF.Models.ViewModels
 {
     public class LoginVM : BaseBindable, ICloseWindow
     {
-        public LoginVM(AppState appState, MainVM mainVM)
+        public LoginVM(AppState appState, IServiceProvider services)
         {
-            this.appState = appState;
-            this.mainVM = mainVM;
+            _appState = appState;
+            _services = services;
+
             LoginCmd = new CommandAsync(Login);
+            ResetCmd = new CommandSync(() =>
+            {
+                User = new LoginEM();
+                ErrorMessage = null;
+            });
         }
 
-        private readonly AppState appState;
-        private readonly MainVM mainVM;
+        private readonly AppState _appState;
+        private readonly IServiceProvider _services;
 
         public CommandAsync LoginCmd { get; set; }
+        public CommandSync ResetCmd { get; set; }
 
         private LoginEM _user = new LoginEM();
         public LoginEM User
@@ -41,9 +49,11 @@ namespace POS.WPF.Models.ViewModels
                 ErrorMessage = null;
                 User.ValidateModel();
                 if (User.HasErrors) return;
-                await appState.Login(User.Username, User.Password);
-                var mainWindow = new MainWindow(mainVM);
-                mainWindow.Show();
+                await _appState.Login(User.Username, User.Password);
+
+                var window = _services.GetRequiredService<MainWindow>();
+                window.Show();
+
                 Close?.Invoke();
             }
             catch(ApplicationException e)
