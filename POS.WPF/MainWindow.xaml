@@ -62,10 +62,13 @@
                     <materialDesign:DrawerHost RightDrawerCloseOnClickAway="False">
                         <materialDesign:DrawerHost.RightDrawerContent>
                             <Grid Width="260" Background="#ced6e0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
                                 <Button
                                     Width="25"
                                     Height="25"
-                                    Margin="5"
+                                    Margin="10"
                                     Padding="0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
@@ -77,32 +80,9 @@
                                         Height="25"
                                         Kind="Close" />
                                 </Button>
-                                <Border
-                                    Margin="10"
-                                    Padding="2"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
-                                    CornerRadius="5"
-                                    Cursor="Hand">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon
-                                            Width="20"
-                                            Height="15"
-                                            Margin="0"
-                                            Foreground="Black"
-                                            Kind="Logout" />
-                                        <TextBlock
-                                            Margin="0,0,5,2"
-                                            FontSize="12"
-                                            FontWeight="Medium"
-                                            Foreground="Black"
-                                            Text="Logout" />
-                                    </StackPanel>
-                                </Border>
+
                                 <!--  panel content here later  -->
-                                <Border Margin="10,50,10,10">
+                                <Border Margin="10,40,10,10">
                                     <Calendar />
                                 </Border>
                             </Grid>

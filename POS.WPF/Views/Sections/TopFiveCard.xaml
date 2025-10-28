@@ -43,7 +43,8 @@
                                     DockPanel.Dock="Right"
                                     FontFamily="Calibri"
                                     FontSize="14"
-                                    Text="{Binding Total}" />
+                                    FontWeight="Bold"
+                                    Text="{Binding Total, StringFormat='N0'}" />
                             </DockPanel>
                             <ProgressBar
                                 Grid.Row="3"

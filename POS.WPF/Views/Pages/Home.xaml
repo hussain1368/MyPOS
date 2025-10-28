@@ -13,60 +13,60 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <StackPanel>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadNumbersCmd}" />
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Border>
 
-            <local:SingleNumberCard
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="15,15,0,15"
-                DataContext="{Binding TotalSale}" />
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <local:SingleNumberCard
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="15,15,0,15"
-                DataContext="{Binding TotalExpense}" />
+                <local:SingleNumberCard
+                    Grid.Column="0"
+                    Margin="15,15,0,15"
+                    DataContext="{Binding TotalSale}" />
 
-            <local:SingleNumberCard
-                Grid.Row="0"
+                <local:SingleNumberCard
+                    Grid.Column="1"
+                    Margin="15,15,0,15"
+                    DataContext="{Binding TotalExpense}" />
+
+                <!--<local:SingleNumberCard
                 Grid.Column="2"
                 Margin="15,15,0,15"
-                DataContext="{Binding CurrentBalance}" />
+                DataContext="{Binding CurrentBalance}" />-->
 
-            <local:SingleNumberCard
-                Grid.Row="0"
-                Grid.Column="3"
-                Margin="15"
-                DataContext="{Binding TotalProfit}" />
+                <local:SingleNumberCard
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    Margin="15"
+                    DataContext="{Binding CurrentBalance}" />
+            </Grid>
 
-            <!--  row 2  -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <local:TopFiveCard
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Margin="15,0,0,15"
-                DataContext="{Binding BestProducts}" />
+                <local:TopFiveCard
+                    Grid.Column="0"
+                    Margin="15,0,0,15"
+                    DataContext="{Binding BestProducts}" />
 
-            <local:TopFiveCard
-                Grid.Row="1"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
-                Margin="15,0,15,15"
-                DataContext="{Binding BestCustomers}" />
-
-        </Grid>
-    </StackPanel>
+                <local:TopFiveCard
+                    Grid.Column="1"
+                    Margin="15,0,15,15"
+                    DataContext="{Binding BestCustomers}" />
+            </Grid>
+        </StackPanel>
+    </Border>
 </UserControl>

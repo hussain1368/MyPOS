@@ -1,92 +1,92 @@
 ﻿using MaterialDesignThemes.Wpf;
+using POS.DAL.Repository.Abstraction;
+using POS.WPF.Commands;
+using POS.WPF.Models.EntityModels;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace POS.WPF.Models.ViewModels
 {
     public class HomeVM : BaseBindable
     {
-        public HomeVM()
+        public HomeVM(IReportsRepository reportsRepo)
         {
-            TotalSale = new SingleNumberCard
+            _reportsRepo = reportsRepo;
+
+            SetUpTheCards();
+
+            LoadNumbersCmd = new CommandAsync(LoadNumbers);
+        }
+
+        private readonly IReportsRepository _reportsRepo;
+
+        public CommandAsync LoadNumbersCmd { get; set; }
+
+        private async Task LoadNumbers()
+        {
+            var totals = await _reportsRepo.GetTotals();
+
+            TotalSale.Number = totals.TotalSales;
+            TotalExpense.Number = totals.TotalExpenses;
+            CurrentBalance.Number = totals.CurrentBalance;
+
+            var bestProducts = totals.BestProducts.Select(r => new TopFiveItem
+            {
+                Name = r.ProductName,
+                Total = r.TotalQuantitySold,
+                Percent = r.PercentageOfTotalSales,
+            });
+
+            var bestCustomers = totals.BestCustomers.Select(r => new TopFiveItem
+            {
+                Name = r.PartnerName,
+                Total = r.TotalPurchases,
+                Percent = r.PercentageOfTotalPurchases,
+            });
+
+            BestProducts.Items = new ObservableCollection<TopFiveItem>(bestProducts);
+            BestCustomers.Items = new ObservableCollection<TopFiveItem>(bestCustomers);
+        }
+
+        private void SetUpTheCards()
+        {
+            TotalSale = new SingleNumberCardEM
             {
                 Title = "Total Sale",
                 IconKind = PackIconKind.CashPlus,
-                Number = 124_000,
             };
 
-            TotalExpense = new SingleNumberCard
+            TotalExpense = new SingleNumberCardEM
             {
                 Title = "Total Expense",
                 IconKind = PackIconKind.CashMinus,
-                Number = 86_000,
             };
 
-            CurrentBalance = new SingleNumberCard
+            CurrentBalance = new SingleNumberCardEM
             {
                 Title = "Current Balance",
                 IconKind = PackIconKind.Cash,
-                Number = 52_000,
             };
 
-            TotalProfit = new SingleNumberCard
-            {
-                Title = "Total Profit",
-                IconKind = PackIconKind.Finance,
-                Number = 78_600,
-            };
-
-            BestProducts = new TopFiveCardVM
+            BestProducts = new TopFiveCardEM
             {
                 Title = "Best Selling Products",
                 IconKind = PackIconKind.BarcodeScan,
-                Items = new ObservableCollection<TopTenItem>
-                {
-                    new TopTenItem { Name = "ASUS ROG Ally", Total = 150, Percent = 30 },
-                    new TopTenItem { Name = "iPhone 17 Pro Max", Total = 120, Percent = 24 },
-                    new TopTenItem { Name = "Samsung Galaxy S Ultra", Total = 100, Percent = 20 },
-                    new TopTenItem { Name = "Lenovo Notebook", Total = 80, Percent = 16 },
-                    new TopTenItem { Name = "Oneplus Nord CE", Total = 50, Percent = 10 },
-                }
             };
 
-            BestCustomers = new TopFiveCardVM
+            BestCustomers = new TopFiveCardEM
             {
                 Title = "Best Customers",
                 IconKind = PackIconKind.AccountMultiple,
-                Items = new ObservableCollection<TopTenItem>
-                {
-                    new TopTenItem { Name = "Abdullah Haidari", Total = 150, Percent = 30 },
-                    new TopTenItem { Name = "Aziz Saeidi", Total = 120, Percent = 24 },
-                    new TopTenItem { Name = "Hashem Karimi", Total = 100, Percent = 20 },
-                    new TopTenItem { Name = "Naser Poyan", Total = 80, Percent = 16 },
-                    new TopTenItem { Name = "Elaha Naderi", Total = 50, Percent = 10 },
-                }
             };
         }
 
-        public SingleNumberCard TotalSale { get; set; }
+        public SingleNumberCardEM TotalSale { get; set; }
+        public SingleNumberCardEM TotalExpense { get; set; }
+        public SingleNumberCardEM CurrentBalance { get; set; }
 
-        public SingleNumberCard TotalExpense { get; set; }
-
-        public SingleNumberCard CurrentBalance { get; set; }
-
-        public SingleNumberCard TotalProfit { get; set; }
-
-        public TopFiveCardVM BestProducts { get; set; }
-        public TopFiveCardVM BestCustomers { get; set; }
-    }
-
-    public class TopTenItem
-    {
-        public string Name { get; set; }
-        public int Total { get; set; }
-        public int Percent { get; set; }
-    }
-
-    public class TopFiveCardVM
-    {
-        public string Title { get; set; }
-        public PackIconKind IconKind { get; set; }
-        public ObservableCollection<TopTenItem> Items { get; set; }
+        public TopFiveCardEM BestProducts { get; set; }
+        public TopFiveCardEM BestCustomers { get; set; }
     }
 }

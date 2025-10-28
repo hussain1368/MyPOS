@@ -44,6 +44,7 @@ namespace POS.WPF
             services.AddScoped<ITransactionRepository, TransactionDatabaseRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceDatabaseRepository>();
             services.AddScoped<ICurrencyRateRepository, CurrencyRateDatabaseRepository>();
+            services.AddScoped<IReportsRepository, ReportsDatabaseRepository>();
 
             services.AddLogging();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
