@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MaterialDesignThemes.Wpf;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace POS.WPF.Models
@@ -16,6 +17,16 @@ namespace POS.WPF.Models
         {
             prop = value;
             OnPropertyChanged(propName);
+        }
+
+        protected DialogSession dialogSession { get; set; }
+
+        public void PageLeaving()
+        {
+            if (dialogSession != null)
+            {
+                if (!dialogSession.IsEnded) dialogSession?.Close(false);
+            }
         }
     }
 }

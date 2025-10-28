@@ -196,7 +196,7 @@ namespace POS.WPF.Models.ViewModels
                 if (InvoiceItems.First().CurrencyId != product.CurrencyId)
                 {
                     var message = "All products in the invoice must be of the same currency";
-                    DialogHost.Show(new AlertDialog(new MyDialogVM { Message = message }), "FormDialogHost");
+                    DialogHost.Show(new AlertDialog(new MyDialogVM { Message = message }), "FormDialogHost", (s, a) => dialogSession = a.Session, null);
                     SearchValue = string.Empty;
                     ProductsList = Enumerable.Empty<ProductItemDTO>();
                     return;

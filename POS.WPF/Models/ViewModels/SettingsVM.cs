@@ -288,7 +288,7 @@ namespace POS.WPF.Models.ViewModels
                     TypeId = SelectedType?.Id ?? 0
                 };
             }
-            await DialogHost.Show(new OptionForm(), dialogHost);
+            await DialogHost.Show(new OptionForm(), dialogHost, (s, a) => dialogSession = a.Session, null);
         }
 
         private void CheckAllOptions(object isChecked)
@@ -306,16 +306,16 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) options?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, dialogHost, null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, dialogHost, (s, a) => dialogSession = a.Session, async (s, a) =>
             {
-                if (args.Parameter is bool param && param == false) return;
-                args.Cancel();
-                args.Session.UpdateContent(new LoadingDialog());
+                if (a.Parameter is bool param && param == false) return;
+                a.Cancel();
+                a.Session.UpdateContent(new LoadingDialog());
 
                 await _optionRepo.DeleteOptions(ids);
                 await GetOptionsValues();
 
-                args.Session.Close(false);
+                a.Session.Close(false);
             });
         }
 
@@ -417,7 +417,7 @@ namespace POS.WPF.Models.ViewModels
                 CurrencyId = SelectedCurrencyId,
                 RateDate = DateTime.Now,
             };
-            await DialogHost.Show(new CurrencyRateForm(), dialogHost);
+            await DialogHost.Show(new CurrencyRateForm(), dialogHost, (s, a) => dialogSession = a.Session, null);
         }
 
         private void CancelCurrencyRate()
@@ -458,14 +458,14 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, dialogHost, null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, dialogHost, (s, a) => dialogSession = a.Session, async (s, a) =>
             {
-                if (args.Parameter is bool param && param == false) return;
-                args.Cancel();
-                args.Session.UpdateContent(new LoadingDialog());
+                if (a.Parameter is bool param && param == false) return;
+                a.Cancel();
+                a.Session.UpdateContent(new LoadingDialog());
                 await _currencyRateRepo.Delete(ids);
                 await GetCurrencyRates();
-                args.Session.Close(false);
+                a.Session.Close(false);
             });
         }
 

@@ -26,6 +26,7 @@ namespace POS.WPF.Models.ViewModels
             LogoutCmd = new CommandAsync(Logout);
             ViewChangedCmd = new CommandSync(() =>
             {
+                BodyContent.PageLeaving();
                 BodyContent = MenuItems[SelectedIndex].ViewModel;
             });
         }

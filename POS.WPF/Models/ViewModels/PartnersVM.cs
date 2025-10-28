@@ -138,6 +138,7 @@ namespace POS.WPF.Models.ViewModels
             CurrentPartner = new PartnerEM();
             await DialogHost.Show(new PartnerForm(), "PartnersDH", async (sender, args)=>
             {
+                dialogSession = args.Session;
                 if (id != null)
                 {
                     IsLoading = true;
@@ -192,14 +193,14 @@ namespace POS.WPF.Models.ViewModels
             if (ids.Length == 0) return;
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "PartnersDH", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, "PartnersDH", (s, a) => dialogSession = a.Session, async (s, a) =>
             {
-                if (args.Parameter is bool param && param == false) return;
-                args.Cancel();
-                args.Session.UpdateContent(new LoadingDialog());
+                if (a.Parameter is bool param && param == false) return;
+                a.Cancel();
+                a.Session.UpdateContent(new LoadingDialog());
                 await _partnerRepo.Delete(ids);
                 await GetList();
-                args.Session.Close(false);
+                a.Session.Close(false);
             });
         }
     }

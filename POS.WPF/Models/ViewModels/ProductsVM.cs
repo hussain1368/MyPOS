@@ -252,14 +252,14 @@ namespace POS.WPF.Models.ViewModels
             }
             string message = $"Are you sure to delete ({ids.Length}) records?";
             var view = new ConfirmDialog(new MyDialogVM { Message = message });
-            var obj = await DialogHost.Show(view, "GridDialog", null, async (sender, args) =>
+            var obj = await DialogHost.Show(view, "GridDialog", (s, a) => dialogSession = a.Session, async (s, a) =>
             {
-                if (args.Parameter is bool param && param == false) return;
-                args.Cancel();
-                args.Session.UpdateContent(new LoadingDialog());
+                if (a.Parameter is bool param && param == false) return;
+                a.Cancel();
+                a.Session.UpdateContent(new LoadingDialog());
                 await _productRepo.Delete(ids);
                 await LoadList();
-                args.Session.Close(false);
+                a.Session.Close(false);
                 await MsgContext.ShowSuccess($"{ids.Length} records deleted successfully!");
             });
         }
