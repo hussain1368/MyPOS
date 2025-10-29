@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace POS.DAL.Domain;
 
 public partial class POSContext : DbContext
 {
-    public POSContext()
-    {
-    }
-
-    public POSContext(DbContextOptions<POSContext> options)
-        : base(options)
-    {
-    }
+    public POSContext(DbContextOptions<POSContext> options) : base(options) { }
 
     public virtual DbSet<Partner> Partners { get; set; }
 
@@ -38,9 +29,6 @@ public partial class POSContext : DbContext
     public virtual DbSet<Wallet> Wallets { get; set; }
 
     public virtual DbSet<Warehouse> Warehouses { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=LAPTOP-L8T1DF78\\SQL17;Database=POS;User ID=sa;Password=welcome;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

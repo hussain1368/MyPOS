@@ -9,6 +9,7 @@ using System.Threading;
 using POS.DAL.Repository.Abstraction;
 using POS.DAL.Repository.DatabaseRepository;
 using POS.WPF.Models.Mappings;
+using Microsoft.EntityFrameworkCore;
 
 namespace POS.WPF
 {
@@ -19,7 +20,7 @@ namespace POS.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            Configuration = new ConfigurationBuilder().AddJsonFile("settings.json").Build();
 
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
@@ -36,7 +37,7 @@ namespace POS.WPF
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<POSContext>(ServiceLifetime.Transient);
+            services.AddDbContext<POSContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("default")), ServiceLifetime.Transient);
             services.AddScoped<IUserRepository, UserDatabaseRepository>();
             services.AddScoped<IOptionRepository, OptionDatabaseRepository>();
             services.AddScoped<IProductRepository, ProductDatabaseRepository>();

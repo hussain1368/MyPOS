@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace POS.WPF.Common
+namespace POS.WPF.Common.ControlHelper
 {
     interface ICloseWindow
     {

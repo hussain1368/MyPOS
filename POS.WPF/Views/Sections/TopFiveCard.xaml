@@ -48,7 +48,7 @@
                             </DockPanel>
                             <ProgressBar
                                 Grid.Row="3"
-                                Height="10"
+                                Height="6"
                                 Margin="0"
                                 Value="{Binding Percent}" />
                         </StackPanel>

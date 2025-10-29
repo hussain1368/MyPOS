@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Microsoft.Xaml.Behaviors;
 
-namespace POS.WPF.Common
+namespace POS.WPF.Common.ControlHelper
 {
     public class DropDownButtonBehavior : Behavior<Button>
     {
@@ -14,10 +14,10 @@ namespace POS.WPF.Common
         protected override void OnAttached()
         {
             base.OnAttached();
-            AssociatedObject.AddHandler(Button.ClickEvent, new RoutedEventHandler(AssociatedObject_Click), true);
+            AssociatedObject.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(AssociatedObject_Click), true);
         }
 
-        void AssociatedObject_Click(object sender, System.Windows.RoutedEventArgs e)
+        void AssociatedObject_Click(object sender, RoutedEventArgs e)
         {
             Button source = sender as Button;
             if (source != null && source.ContextMenu != null)
@@ -40,7 +40,7 @@ namespace POS.WPF.Common
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            AssociatedObject.RemoveHandler(Button.ClickEvent, new RoutedEventHandler(AssociatedObject_Click));
+            AssociatedObject.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(AssociatedObject_Click));
         }
 
         void ContextMenu_Closed(object sender, RoutedEventArgs e)

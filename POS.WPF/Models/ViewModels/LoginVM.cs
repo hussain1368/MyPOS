@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using POS.WPF.Commands;
 using POS.WPF.Common;
+using POS.WPF.Common.ControlHelper;
 using POS.WPF.Models.EntityModels;
 
 namespace POS.WPF.Models.ViewModels

@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
 
-namespace POS.WPF.Common
+namespace POS.WPF.Common.ControlHelper
 {
     public class DatePickerClearButtonBehavior : Behavior<DatePicker>
     {
@@ -67,7 +67,7 @@ namespace POS.WPF.Common
             // Defensive template tweaks
             try
             {
-                _clearButton.ClickMode = System.Windows.Controls.ClickMode.Release;
+                _clearButton.ClickMode = ClickMode.Release;
                 _clearButton.Focusable = false;
                 _clearButton.IsTabStop = false;
             }

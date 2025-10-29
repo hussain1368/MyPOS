@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using POS.WPF.Commands;
 using POS.WPF.Common;
+using POS.WPF.Common.ControlHelper;
 using POS.WPF.Models.EntityModels;
 using POS.WPF.Views.Sections;
 using POS.WPF.Views.Shared;
