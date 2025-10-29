@@ -203,7 +203,7 @@
                                 <Image
                                     Width="25"
                                     Height="25"
-                                    Source="/barcodeo.png"
+                                    Source="Assets/scanner.png"
                                     Stretch="Uniform" />
                             </Border>
                             <StackPanel
@@ -228,7 +228,7 @@
                         </StackPanel>
                         <Image
                             Height="110"
-                            Source="/Abuly.jpg"
+                            Source="Assets/Abuly.jpg"
                             Stretch="UniformToFill" />
                         <ListView
                             x:Name="SideMenu"

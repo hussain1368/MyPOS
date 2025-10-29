@@ -7,13 +7,11 @@
     <ApplicationIcon>Assets/pos.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Abuly.jpg" />
+  <!--<ItemGroup>
     <None Remove="barcodef.png" />
-    <None Remove="barcodeo.png" />
     <None Remove="barcodew.png" />
     <None Remove="barcodeb.png" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.0.1" />
@@ -33,13 +31,11 @@
     <ProjectReference Include="..\POS.DAL\POS.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Abuly.jpg" />
+  <!--<ItemGroup>
     <Resource Include="barcodef.png" />
-    <Resource Include="barcodeo.png" />
     <Resource Include="barcodew.png" />
     <Resource Include="barcodeb.png" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <Compile Update="Views\Pages\Reports.xaml.cs">
@@ -78,18 +74,12 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\Abuly.jpg">
+    <Content Include="Assets\Abuly.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\barcodeb.png">
+    </Content>
+    <Content Include="Assets\scanner.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\barcodew.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\pos.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>

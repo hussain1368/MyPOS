@@ -92,7 +92,7 @@
         <Grid Grid.Column="1">
             <Grid.Background>
                 <ImageBrush
-                    ImageSource="/Abuly.jpg"
+                    ImageSource="Assets/Abuly.jpg"
                     Opacity=".6"
                     Stretch="UniformToFill" />
             </Grid.Background>
