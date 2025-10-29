@@ -10,6 +10,7 @@ using POS.DAL.Repository.Abstraction;
 using POS.DAL.Repository.DatabaseRepository;
 using POS.WPF.Models.Mappings;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace POS.WPF
 {
@@ -20,19 +21,26 @@ namespace POS.WPF
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Configuration = new ConfigurationBuilder().AddJsonFile("settings.json").Build();
+            try
+            {
+                Configuration = new ConfigurationBuilder().AddJsonFile("settings.json").Build();
 
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
-            ServiceProvider = serviceCollection.BuildServiceProvider();
-            ServiceLocator.SetLocatorProvider(ServiceProvider);
+                var serviceCollection = new ServiceCollection();
+                ConfigureServices(serviceCollection);
+                ServiceProvider = serviceCollection.BuildServiceProvider();
+                ServiceLocator.SetLocatorProvider(ServiceProvider);
 
-            var state = ServiceProvider.GetRequiredService<AppState>();
-            state.LoadSettings();
+                var state = ServiceProvider.GetRequiredService<AppState>();
+                state.LoadSettings();
 
-            var window = ServiceProvider.GetRequiredService<LoginWindow>();
-            //var window = ServiceProvider.GetRequiredService<MainWindow>();
-            window.Show();
+                var window = ServiceProvider.GetRequiredService<LoginWindow>();
+                //var window = ServiceProvider.GetRequiredService<MainWindow>();
+                window.Show();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToMessage(), "System error occurred");
+            }
         }
 
         private void ConfigureServices(IServiceCollection services)

@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "default": "Data Source=C:\\MyCode\\MyPOS\\POS.db"
+    "default": "Data Source=C:\\MyCode\\MyPOS\\Publish\\POS.db"
   }
 }

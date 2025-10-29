@@ -9,7 +9,7 @@ namespace POS.WPF.Common
         public POSContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<POSContext>();
-            optionsBuilder.UseSqlite(@"Data Source=C:\MyCode\MyPOS\POS.db");
+            optionsBuilder.UseSqlite(@"Data Source=C:\MyCode\POS.db");
 
             return new POSContext(optionsBuilder.Options);
         }
