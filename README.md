@@ -4,6 +4,7 @@
 
 I have developed this project to showcase my WPF and MVVM coding skills. The project is still under development and is not ready to use in production. I have developed this project in C# and have used following tools and techniques in this project.
 
+- .NET 9 and WPF as framework
 - SQLite as DBMS for the purpose of portability and simplicity
 - Entity Framework Core as ORM
 - MVVM pattern and two way data binding for separating UI from business logic
