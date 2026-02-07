@@ -21,6 +21,6 @@ The POS project contains the following functional modules.
 - User management
 - Settings
 
-Here you can see the screenshot from the Purchase registration page. You can download and run the exe file without any installation required from the releases section.
+Here you can see the screenshot from the Sale registration page. You can download and run the exe file without any installation required from the releases section.
 
 ![Purchase page](./purchase-page.png)
